@@ -3,11 +3,19 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { updateSalaryAction } from '@/app/actions/employee';
+import { Search } from 'lucide-react';
 
 export default function PayrollOperationsTable({ initialEmployees }: { initialEmployees: any[] }) {
   const [employees, setEmployees] = useState(initialEmployees);
   const [editingSalaries, setEditingSalaries] = useState<Record<string, number>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredEmployees = employees.filter(emp => {
+    const term = searchQuery.toLowerCase();
+    const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
+    return fullName.includes(term);
+  });
 
   const handleSalaryChange = (id: string, value: string) => {
     const parsed = parseFloat(value);
@@ -60,8 +68,22 @@ export default function PayrollOperationsTable({ initialEmployees }: { initialEm
   };
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="w-full text-left border-collapse">
+    <div className="bg-white border border-slate-200 shadow-sm rounded-xl flex flex-col w-full overflow-hidden">
+      <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+        <div className="relative w-full max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input 
+            type="text" 
+            placeholder="Search employees by name..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
+          />
+        </div>
+      </div>
+
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-left border-collapse bg-white">
         <thead>
           <tr className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
             <th className="px-4 py-3 font-semibold">Employee Name</th>
@@ -72,7 +94,7 @@ export default function PayrollOperationsTable({ initialEmployees }: { initialEm
           </tr>
         </thead>
         <tbody className="text-sm divide-y divide-slate-100">
-          {employees.map((emp) => {
+          {filteredEmployees.map((emp) => {
             const min = emp.position?.min_salary || 0;
             const max = emp.position?.max_salary || 0;
             const currentEditing = editingSalaries[emp.id];
@@ -137,15 +159,16 @@ export default function PayrollOperationsTable({ initialEmployees }: { initialEm
               </tr>
             );
           })}
-          {employees.length === 0 && (
+          {filteredEmployees.length === 0 && (
             <tr>
               <td colSpan={5} className="px-4 py-8 text-center text-slate-400">
-                No active personnel found.
+                No active personnel match your search.
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

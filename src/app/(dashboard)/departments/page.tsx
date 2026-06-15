@@ -15,6 +15,7 @@ export default async function DepartmentsPage() {
 
   const departments = await prisma.department.findMany({
     include: {
+      positions: true,
       _count: {
         select: { positions: true }
       }
@@ -34,10 +35,6 @@ export default async function DepartmentsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col mb-2">
-        <h1 className="text-3xl font-bold text-slate-800">Departments</h1>
-      </div>
-
       <DepartmentRegistry initialDepartments={departments} role={session.role} />
       
       <div className="pt-8">

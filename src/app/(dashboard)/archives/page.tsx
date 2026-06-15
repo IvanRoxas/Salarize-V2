@@ -32,7 +32,7 @@ export default async function ArchivesPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Data Retention Archives</h1>
+          <h1 className="text-3xl font-bold text-slate-800">System Archives</h1>
         </div>
       </div>
 

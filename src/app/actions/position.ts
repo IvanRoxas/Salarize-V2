@@ -13,6 +13,7 @@ export async function createPositionAction(formData: FormData) {
 
   const title = formData.get('title') as string;
   const department_id = formData.get('department_id') as string;
+  const icon = formData.get('icon') as string || 'Briefcase';
   const base_salary = Number(formData.get('base_salary'));
   const min_salary = Number(formData.get('min_salary'));
   const max_salary = Number(formData.get('max_salary'));
@@ -29,7 +30,7 @@ export async function createPositionAction(formData: FormData) {
     if (existingPosition) return { success: false, message: 'A job position with this title already exists.' };
 
     const newPosition = await prisma.position.create({
-      data: { title, department_id, base_salary, min_salary, max_salary },
+      data: { title, department_id, icon, base_salary, min_salary, max_salary },
     });
 
     await prisma.auditLog.create({
@@ -60,6 +61,7 @@ export async function updatePositionAction(formData: FormData) {
   const id = formData.get('id') as string;
   const title = formData.get('title') as string;
   const department_id = formData.get('department_id') as string;
+  const icon = formData.get('icon') as string || 'Briefcase';
   const base_salary = Number(formData.get('base_salary'));
   const min_salary = Number(formData.get('min_salary'));
   const max_salary = Number(formData.get('max_salary'));
@@ -77,7 +79,7 @@ export async function updatePositionAction(formData: FormData) {
 
     const updatedPosition = await prisma.position.update({
       where: { id },
-      data: { title, department_id, base_salary, min_salary, max_salary },
+      data: { title, department_id, icon, base_salary, min_salary, max_salary },
     });
 
     await prisma.auditLog.create({

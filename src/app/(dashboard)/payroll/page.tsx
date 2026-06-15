@@ -24,7 +24,7 @@ export default async function PayrollPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col mb-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col mb-8 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold text-slate-800">Salary and Operations</h1>
         <div className="mt-4 sm:mt-0 flex gap-3">
           <DownloadPdfReportButton />

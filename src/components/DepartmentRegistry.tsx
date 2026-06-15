@@ -1,66 +1,167 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Edit2, Layers } from 'lucide-react';
+import { Plus, Edit2, Layers, X, Search, Building, Users, Monitor, Shield, Code, Calculator, Cpu, Globe, Briefcase } from 'lucide-react';
 import CreateDepartmentModal from './CreateDepartmentModal';
 import EditDepartmentModal from './EditDepartmentModal';
+
+const IconMap: Record<string, any> = {
+  Building, Users, Monitor, Shield, Layers, Code, Calculator, Cpu, Globe, Briefcase
+};
+
+const ColorMap: Record<string, { border: string, hover: string, text: string, bg: string, btnTextHover: string, btnBgHover: string, btnRingHover: string }> = {
+  violet: { border: 'border-t-violet-500', hover: 'hover:border-violet-300', text: 'text-violet-600', bg: 'bg-violet-50', btnTextHover: 'hover:text-violet-600', btnBgHover: 'hover:bg-violet-50', btnRingHover: 'hover:ring-violet-400' },
+  emerald: { border: 'border-t-emerald-500', hover: 'hover:border-emerald-300', text: 'text-emerald-600', bg: 'bg-emerald-50', btnTextHover: 'hover:text-emerald-600', btnBgHover: 'hover:bg-emerald-50', btnRingHover: 'hover:ring-emerald-400' },
+  amber: { border: 'border-t-amber-500', hover: 'hover:border-amber-300', text: 'text-amber-600', bg: 'bg-amber-50', btnTextHover: 'hover:text-amber-600', btnBgHover: 'hover:bg-amber-50', btnRingHover: 'hover:ring-amber-400' },
+  rose: { border: 'border-t-rose-500', hover: 'hover:border-rose-300', text: 'text-rose-600', bg: 'bg-rose-50', btnTextHover: 'hover:text-rose-600', btnBgHover: 'hover:bg-rose-50', btnRingHover: 'hover:ring-rose-400' },
+  blue: { border: 'border-t-blue-500', hover: 'hover:border-blue-300', text: 'text-blue-600', bg: 'bg-blue-50', btnTextHover: 'hover:text-blue-600', btnBgHover: 'hover:bg-blue-50', btnRingHover: 'hover:ring-blue-400' },
+  slate: { border: 'border-t-slate-500', hover: 'hover:border-slate-300', text: 'text-slate-600', bg: 'bg-slate-50', btnTextHover: 'hover:text-slate-600', btnBgHover: 'hover:bg-slate-50', btnRingHover: 'hover:ring-slate-400' },
+};
 
 export default function DepartmentRegistry({ initialDepartments, role }: { initialDepartments: any[], role: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDept, setSelectedDept] = useState<any>(null);
+  const [positionsModalDept, setPositionsModalDept] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredDepartments = initialDepartments.filter(dept => {
+    const term = searchQuery.toLowerCase();
+    return dept.name.toLowerCase().includes(term) || (dept.description && dept.description.toLowerCase().includes(term));
+  });
 
   return (
     <div className="space-y-6">
-      {role === 'SUPER_ADMIN' && (
-        <div className="flex justify-end">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Department</span>
-          </button>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
+        <h1 className="text-3xl font-bold text-slate-800">Departments</h1>
+        <div className="flex items-center gap-4">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Search departments..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
+            />
+          </div>
+          {role === 'SUPER_ADMIN' && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Department</span>
+            </button>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {initialDepartments.map((dept) => (
-          <div key={dept.id} className="border-t-4 border-t-violet-500 bg-white shadow-sm rounded-lg p-6 hover:border-violet-300 transition-all duration-300 flex flex-col h-full border border-slate-100 group relative">
-            
-            {role === 'SUPER_ADMIN' && (
-              <button 
-                onClick={() => setSelectedDept(dept)}
-                className="absolute top-4 right-4 text-slate-300 hover:text-violet-600 hover:bg-violet-50 p-2 rounded-full transition-all duration-200 transform hover:scale-110 cursor-pointer"
-                title="Edit Department"
-              >
-                <Edit2 className="w-5 h-5" />
-              </button>
-            )}
+        {filteredDepartments.map((dept) => {
+          const DeptIcon = IconMap[dept.icon || 'Building'] || Building;
+          const colorTheme = ColorMap[dept.color || 'violet'] || ColorMap.violet;
 
-            <div className="mb-4 pr-10">
-              <h3 className="text-xl font-bold text-slate-800 leading-tight">{dept.name}</h3>
-              <p className="text-slate-500 text-sm mt-2 line-clamp-2">{dept.description || 'No description provided.'}</p>
-            </div>
+          return (
+            <div key={dept.id} className={`border-t-4 ${colorTheme.border} bg-white shadow-sm rounded-lg p-6 ${colorTheme.hover} transition-all duration-300 flex flex-col h-full border border-slate-100 group relative`}>
+              
+              {role === 'SUPER_ADMIN' && (
+                <button 
+                  onClick={() => setSelectedDept(dept)}
+                  className={`absolute top-4 right-4 text-slate-300 ${colorTheme.btnTextHover} ${colorTheme.btnBgHover} hover:ring-2 ${colorTheme.btnRingHover} hover:ring-offset-1 p-2 rounded-full transition-all duration-200 transform hover:scale-110 cursor-pointer`}
+                  title="Edit Department"
+                >
+                  <Edit2 className="w-5 h-5" />
+                </button>
+              )}
 
-            <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-slate-600 text-sm">
-              <div className="flex items-center">
-                <Layers className="w-5 h-5 text-violet-400 mr-2" />
-                <span className="font-medium text-slate-700">
-                  {dept._count.positions} Job {dept._count.positions === 1 ? 'Position' : 'Positions'}
-                </span>
+              <div className="mb-4 pr-10 flex items-start space-x-3">
+                <div className={`mt-1 p-2 rounded-lg ${colorTheme.bg} ${colorTheme.text}`}>
+                  <DeptIcon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-800 leading-tight">{dept.name}</h3>
+                  <p className="text-slate-500 text-sm mt-1 line-clamp-2">{dept.description || 'No description provided.'}</p>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-sm">
+                <div 
+                  className={`flex items-center p-2 -ml-2 rounded-md transition-colors ${role === 'SUPER_ADMIN' || role === 'HR_MANAGER' ? `cursor-pointer ${colorTheme.bg} text-slate-600 ${colorTheme.text}` : 'text-slate-600'}`}
+                  onClick={() => {
+                    if (role === 'SUPER_ADMIN' || role === 'HR_MANAGER') {
+                      setPositionsModalDept(dept);
+                    }
+                  }}
+                >
+                  <Layers className={`w-5 h-5 mr-2 ${role === 'SUPER_ADMIN' || role === 'HR_MANAGER' ? colorTheme.text : 'text-slate-400'}`} />
+                  <span className="font-medium">
+                    {dept._count.positions} Job {dept._count.positions === 1 ? 'Position' : 'Positions'}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {initialDepartments.length === 0 && (
+          );
+        })}
+        {filteredDepartments.length === 0 && (
           <div className="col-span-full py-12 text-center text-slate-400 bg-white rounded-lg border border-slate-200 border-dashed">
-            No departments created yet.
+            No departments match your search.
           </div>
         )}
       </div>
 
       {isModalOpen && <CreateDepartmentModal onClose={() => setIsModalOpen(false)} />}
       {selectedDept && <EditDepartmentModal department={selectedDept} role={role} onClose={() => setSelectedDept(null)} />}
+
+      {positionsModalDept && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <h3 className="font-bold text-lg text-slate-800">
+                Positions in {positionsModalDept.name}
+              </h3>
+              <button onClick={() => setPositionsModalDept(null)} className="p-1 hover:bg-slate-200 rounded-full text-slate-500 transition-colors cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-0 overflow-auto">
+              <table className="w-full text-left border-collapse">
+                <thead className="sticky top-0 bg-white shadow-sm">
+                  <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                    <th className="px-6 py-3 font-semibold">Title</th>
+                    <th className="px-6 py-3 font-semibold">Base Salary</th>
+                    <th className="px-6 py-3 font-semibold">Salary Range</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm divide-y divide-slate-100 text-slate-700">
+                  {positionsModalDept.positions && positionsModalDept.positions.length > 0 ? (
+                    positionsModalDept.positions.map((pos: any) => (
+                      <tr key={pos.id} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 font-medium text-slate-800">{pos.title}</td>
+                        <td className="px-6 py-4 font-medium text-emerald-600">₱{pos.base_salary.toLocaleString()}</td>
+                        <td className="px-6 py-4 text-xs text-slate-500">
+                          ₱{pos.min_salary.toLocaleString()} - ₱{pos.max_salary.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-8 text-center text-slate-400">No positions assigned to this department yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button 
+                onClick={() => setPositionsModalDept(null)}
+                className="px-4 py-2 bg-white border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,8 +1,10 @@
 import prisma from '@/lib/prisma';
 import SuperAdminActionCenter from './SuperAdminActionCenter';
 import Link from 'next/link';
+import { getSession } from '@/app/actions/auth';
 
 export default async function SuperAdminDashboard() {
+  const session = await getSession();
   const [
     totalEmployees,
     activeStaff,
@@ -27,6 +29,10 @@ export default async function SuperAdminDashboard() {
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
+        <h1 className="text-3xl font-bold text-slate-800">Welcome, {session?.username}!</h1>
+      </div>
+
       {/* Top Row: KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { X } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 
 const maskPII = (firstName: string | null, lastName: string | null) => {
   const first = firstName ? firstName.charAt(0) + '***' : '***';
@@ -14,6 +14,7 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
   const [departmentFilter, setDepartmentFilter] = useState('All');
   const [yearFilter, setYearFilter] = useState('All');
   const [monthFilter, setMonthFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -57,9 +58,18 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
       } else if (yearFilter !== 'All' || monthFilter !== 'All') {
         return false;
       }
+      
+      if (searchQuery) {
+        const term = searchQuery.toLowerCase();
+        const first = (staff.first_name || '').toLowerCase();
+        const last = (staff.last_name || '').toLowerCase();
+        const full = `${first} ${last}`;
+        if (!full.includes(term)) return false;
+      }
+      
       return true;
     });
-  }, [archivedRecords, departmentFilter, yearFilter, monthFilter]);
+  }, [archivedRecords, departmentFilter, yearFilter, monthFilter, searchQuery]);
 
   const totalPages = Math.ceil(filteredRecords.length / itemsPerPage) || 1;
   const paginatedRecords = filteredRecords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -111,6 +121,20 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
             <option value="All">Filter by Month (All)</option>
             {uniqueMonths.map(month => <option key={month} value={month}>{month}</option>)}
           </select>
+        </div>
+
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input 
+            type="text" 
+            placeholder="Search by name..." 
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
+          />
         </div>
       </div>
 

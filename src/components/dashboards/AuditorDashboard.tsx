@@ -1,7 +1,9 @@
 import prisma from '@/lib/prisma';
-import { AlertCircle, FileBarChart2, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { AlertCircle, FileBarChart2 } from 'lucide-react';
 import GenerateComplianceReportButton from '@/components/GenerateComplianceReportButton';
 import HealthCheckConsole from '@/components/dashboards/HealthCheckConsole';
+import AuditorKPICards from '@/components/dashboards/AuditorKPICards';
+import { getSession } from '@/app/actions/auth';
 
 function getRelativeTime(date: Date) {
   const diff = Date.now() - date.getTime();
@@ -16,6 +18,7 @@ function getRelativeTime(date: Date) {
 }
 
 export default async function AuditorDashboard() {
+  const session = await getSession();
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   
@@ -34,7 +37,9 @@ export default async function AuditorDashboard() {
     latestLog,
     deletesLast30Days,
     latestDelete,
-    criticalAlertsCount
+    criticalAlertsCount,
+    recentLogs,
+    criticalAlerts
   ] = await Promise.all([
     prisma.auditLog.count(),
     prisma.employee.findMany({
@@ -44,7 +49,7 @@ export default async function AuditorDashboard() {
     }),
     prisma.auditLog.findMany({
       where: {
-        action: { in: ['UPDATE_SALARY', 'DELETE_EMPLOYEE', 'CLEARED_LOGS', 'REVOKE ROLE'] }
+        action: { in: ['UPDATE_SALARY', 'DELETE_EMPLOYEE', 'DELETE EMPLOYEE', 'CLEARED_LOGS', 'REVOKE ROLE', 'UNAUTHORIZED'] }
       },
       orderBy: { timestamp: 'desc' },
       take: 5
@@ -70,9 +75,20 @@ export default async function AuditorDashboard() {
     }),
     prisma.auditLog.count({
       where: {
-        action: { in: ['DELETE_EMPLOYEE', 'DELETE EMPLOYEE', 'UNAUTHORIZED', 'REVOKE ROLE'] },
+        action: { in: ['UPDATE_SALARY', 'DELETE_EMPLOYEE', 'DELETE EMPLOYEE', 'CLEARED_LOGS', 'REVOKE ROLE', 'UNAUTHORIZED'] },
         timestamp: { gte: twentyFourHoursAgo }
       }
+    }),
+    prisma.auditLog.findMany({
+      orderBy: { timestamp: 'desc' },
+      take: 10
+    }),
+    prisma.auditLog.findMany({
+      where: {
+        action: { in: ['UPDATE_SALARY', 'DELETE_EMPLOYEE', 'DELETE EMPLOYEE', 'CLEARED_LOGS', 'REVOKE ROLE', 'UNAUTHORIZED'] },
+        timestamp: { gte: twentyFourHoursAgo }
+      },
+      orderBy: { timestamp: 'desc' }
     })
   ]);
 
@@ -95,62 +111,23 @@ export default async function AuditorDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Auditor Dashboard</h1>
-          {/* Subtitle if requested: <p className="text-sm text-slate-500 mt-1">Independent Oversight and Security Monitoring</p> */}
+          <h1 className="text-3xl font-bold text-slate-800">Welcome, {session?.username}!</h1>
         </div>
         <GenerateComplianceReportButton />
       </div>
 
-      {/* Top Row: KPIs (3-Column Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-violet-600 flex flex-col justify-between">
-          <div>
-            <p className="text-sm font-medium text-slate-500 mb-1">Total Audit Logs</p>
-            <span className="text-4xl font-bold text-slate-800">{totalLogs}</span>
-            <p className="text-sm font-medium text-emerald-600 mt-2">+{logsLast7Days} in the last 7 days</p>
-          </div>
-          <p className="text-xs text-slate-400 mt-4">
-            Latest event: {latestLog ? getRelativeTime(new Date(latestLog.timestamp)) : 'N/A'}
-          </p>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-orange-500 flex flex-col justify-between">
-          <div>
-            <p className="text-sm font-medium text-slate-500 mb-1">Deleted Records</p>
-            <span className="text-4xl font-bold text-slate-800">{archivedRecords.length}</span>
-            <p className="text-sm font-medium text-orange-500 mt-2">{deletesLast30Days} archived this month</p>
-          </div>
-          <p className="text-xs text-slate-400 mt-4">
-            Most recent: {latestDelete?.deleted_at ? new Date(latestDelete.deleted_at).toLocaleDateString() : 'N/A'}
-          </p>
-        </div>
-
-        {criticalAlertsCount > 0 ? (
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-red-600 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center space-x-2 mb-1">
-                <AlertTriangle className="w-4 h-4 text-red-600" />
-                <p className="text-sm font-medium text-slate-500">Active Alerts</p>
-              </div>
-              <span className="text-4xl font-bold text-red-600">{criticalAlertsCount}</span>
-              <p className="text-sm font-medium text-red-600 mt-2">Action Required: Critical Events Detected</p>
-            </div>
-            <p className="text-xs text-slate-400 mt-4">Past 24 hours</p>
-          </div>
-        ) : (
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center space-x-2 mb-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <p className="text-sm font-medium text-slate-500">Active Alerts</p>
-              </div>
-              <span className="text-4xl font-bold text-emerald-600">0</span>
-              <p className="text-sm font-medium text-emerald-600 mt-2">System Stable: No Anomalies</p>
-            </div>
-            <p className="text-xs text-slate-400 mt-4">Past 24 hours</p>
-          </div>
-        )}
-      </div>
+      <AuditorKPICards 
+        totalLogs={totalLogs}
+        logsLast7Days={logsLast7Days}
+        latestLogDate={latestLog ? latestLog.timestamp.toISOString() : null}
+        archivedRecordsCount={archivedRecords.length}
+        deletesLast30Days={deletesLast30Days}
+        latestDeleteDate={latestDelete?.deleted_at ? latestDelete.deleted_at.toISOString() : null}
+        criticalAlertsCount={criticalAlertsCount}
+        recentLogs={recentLogs}
+        deletedRecords={archivedRecords.slice(0, 10)}
+        criticalAlerts={criticalAlerts}
+      />
 
       {/* Tier 2: Health Check Console (Full Width) */}
       <HealthCheckConsole 

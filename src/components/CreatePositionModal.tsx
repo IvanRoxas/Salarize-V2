@@ -1,9 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import toast from 'react-hot-toast';
-import { X } from 'lucide-react';
+import { X, User, Users, Shield, Briefcase, Calculator, Code, Monitor, Wrench, Headphones, Truck, Lightbulb, PenTool } from 'lucide-react';
 import { createPositionAction } from '@/app/actions/position';
+
+const ICONS = [
+  { name: 'User', component: User },
+  { name: 'Users', component: Users },
+  { name: 'Shield', component: Shield },
+  { name: 'Briefcase', component: Briefcase },
+  { name: 'Calculator', component: Calculator },
+  { name: 'Code', component: Code },
+  { name: 'Monitor', component: Monitor },
+  { name: 'Wrench', component: Wrench },
+  { name: 'Headphones', component: Headphones },
+  { name: 'Truck', component: Truck },
+  { name: 'Lightbulb', component: Lightbulb },
+  { name: 'PenTool', component: PenTool },
+];
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -19,6 +35,8 @@ function SubmitButton() {
 }
 
 export default function CreatePositionModal({ departments, onClose }: { departments: any[], onClose: () => void }) {
+  const [selectedIcon, setSelectedIcon] = useState('Briefcase');
+
   const handleCreate = async (formData: FormData) => {
     const result = await createPositionAction(formData);
     if (result.success) {
@@ -101,6 +119,30 @@ export default function CreatePositionModal({ departments, onClose }: { departme
                   />
                 </div>
               </div>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <label className="block text-sm font-medium text-slate-700">Position Icon</label>
+              <div className="grid grid-cols-6 gap-2">
+                {ICONS.map((icon) => {
+                  const IconComponent = icon.component;
+                  return (
+                    <button
+                      key={icon.name}
+                      type="button"
+                      onClick={() => setSelectedIcon(icon.name)}
+                      className={`p-2 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
+                        selectedIcon === icon.name 
+                          ? 'bg-violet-100 text-violet-600 ring-2 ring-violet-500 ring-offset-1' 
+                          : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                      }`}
+                    >
+                      <IconComponent className="w-4 h-4" />
+                    </button>
+                  );
+                })}
+              </div>
+              <input type="hidden" name="icon" value={selectedIcon} />
             </div>
 
             <div className="pt-4">

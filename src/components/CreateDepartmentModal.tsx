@@ -1,9 +1,32 @@
 'use client';
 
+import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import toast from 'react-hot-toast';
-import { X, Plus } from 'lucide-react';
+import { X, Building, Users, Monitor, Shield, Layers, Code, Calculator, Cpu, Globe, Briefcase } from 'lucide-react';
 import { createDepartmentAction } from '@/app/actions/department';
+
+const ICONS = [
+  { name: 'Building', component: Building },
+  { name: 'Users', component: Users },
+  { name: 'Monitor', component: Monitor },
+  { name: 'Shield', component: Shield },
+  { name: 'Layers', component: Layers },
+  { name: 'Code', component: Code },
+  { name: 'Calculator', component: Calculator },
+  { name: 'Cpu', component: Cpu },
+  { name: 'Globe', component: Globe },
+  { name: 'Briefcase', component: Briefcase },
+];
+
+const COLORS = [
+  { name: 'violet', bg: 'bg-violet-500', ring: 'ring-violet-500' },
+  { name: 'emerald', bg: 'bg-emerald-500', ring: 'ring-emerald-500' },
+  { name: 'amber', bg: 'bg-amber-500', ring: 'ring-amber-500' },
+  { name: 'rose', bg: 'bg-rose-500', ring: 'ring-rose-500' },
+  { name: 'blue', bg: 'bg-blue-500', ring: 'ring-blue-500' },
+  { name: 'slate', bg: 'bg-slate-500', ring: 'ring-slate-500' },
+];
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -19,6 +42,9 @@ function SubmitButton() {
 }
 
 export default function CreateDepartmentModal({ onClose }: { onClose: () => void }) {
+  const [selectedIcon, setSelectedIcon] = useState('Building');
+  const [selectedColor, setSelectedColor] = useState('violet');
+
   const handleCreate = async (formData: FormData) => {
     const result = await createDepartmentAction(formData);
     if (result.success) {
@@ -59,6 +85,48 @@ export default function CreateDepartmentModal({ onClose }: { onClose: () => void
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer resize-none" 
               />
             </div>
+            
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-slate-700">Department Icon</label>
+              <div className="grid grid-cols-5 gap-2">
+                {ICONS.map((icon) => {
+                  const IconComponent = icon.component;
+                  return (
+                    <button
+                      key={icon.name}
+                      type="button"
+                      onClick={() => setSelectedIcon(icon.name)}
+                      className={`p-2 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
+                        selectedIcon === icon.name 
+                          ? 'bg-violet-100 text-violet-600 ring-2 ring-violet-500 ring-offset-1' 
+                          : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                      }`}
+                    >
+                      <IconComponent className="w-5 h-5" />
+                    </button>
+                  );
+                })}
+              </div>
+              <input type="hidden" name="icon" value={selectedIcon} />
+            </div>
+
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-slate-700">Theme Color</label>
+              <div className="flex gap-3">
+                {COLORS.map((color) => (
+                  <button
+                    key={color.name}
+                    type="button"
+                    onClick={() => setSelectedColor(color.name)}
+                    className={`w-8 h-8 rounded-full ${color.bg} transition-all cursor-pointer ${
+                      selectedColor === color.name ? `ring-2 ${color.ring} ring-offset-2 scale-110` : 'hover:scale-110'
+                    }`}
+                  />
+                ))}
+              </div>
+              <input type="hidden" name="color" value={selectedColor} />
+            </div>
+
             <div className="pt-4">
               <SubmitButton />
             </div>

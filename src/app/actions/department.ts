@@ -13,6 +13,8 @@ export async function createDepartmentAction(formData: FormData) {
 
   const name = formData.get('name') as string;
   const description = formData.get('description') as string;
+  const icon = formData.get('icon') as string || 'Building';
+  const color = formData.get('color') as string || 'violet';
 
   if (!name) {
     return { success: false, message: 'Department name is required.' };
@@ -23,7 +25,7 @@ export async function createDepartmentAction(formData: FormData) {
     if (existing) return { success: false, message: 'A department with this name already exists.' };
 
     const newDept = await prisma.department.create({
-      data: { name, description },
+      data: { name, description, icon, color },
     });
 
     await prisma.auditLog.create({
@@ -54,6 +56,8 @@ export async function updateDepartmentAction(formData: FormData) {
   const id = formData.get('id') as string;
   const name = formData.get('name') as string;
   const description = formData.get('description') as string;
+  const icon = formData.get('icon') as string || 'Building';
+  const color = formData.get('color') as string || 'violet';
 
   if (!id || !name) {
     return { success: false, message: 'Department name is required.' };
@@ -65,7 +69,7 @@ export async function updateDepartmentAction(formData: FormData) {
 
     const updatedDept = await prisma.department.update({
       where: { id },
-      data: { name, description },
+      data: { name, description, icon, color },
     });
 
     await prisma.auditLog.create({

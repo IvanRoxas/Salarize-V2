@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, ShieldAlert, Trash2 } from 'lucide-react';
+import { Plus, ShieldAlert, Trash2, Search } from 'lucide-react';
 import SystemAdminModal from './SystemAdminModal';
 import ConfirmModal from './ConfirmModal';
 import { revokeAdminAccessAction } from '@/app/actions/admin';
@@ -10,6 +10,11 @@ import toast from 'react-hot-toast';
 export default function AdminRegistry({ initialAdmins, currentAdminId }: { initialAdmins: any[], currentAdminId: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredAdmins = initialAdmins.filter(admin => 
+    admin.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleRevoke = async () => {
     if (!adminToDelete) return;
@@ -40,17 +45,27 @@ export default function AdminRegistry({ initialAdmins, currentAdminId }: { initi
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Role</span>
-        </button>
-      </div>
-
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-4 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Search roles by username..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
+            />
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer whitespace-nowrap"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Role</span>
+          </button>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -62,7 +77,7 @@ export default function AdminRegistry({ initialAdmins, currentAdminId }: { initi
               </tr>
             </thead>
             <tbody className="text-[14px] divide-y divide-slate-50">
-              {initialAdmins.map((admin) => (
+              {filteredAdmins.map((admin) => (
                 <tr key={admin.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4 font-medium text-slate-800 flex items-center space-x-3">
                     <ShieldAlert className="w-5 h-5 text-slate-400" />
@@ -85,7 +100,7 @@ export default function AdminRegistry({ initialAdmins, currentAdminId }: { initi
                   </td>
                 </tr>
               ))}
-              {initialAdmins.length === 0 && (
+              {filteredAdmins.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-6 py-12 text-center text-slate-400">
                     No system roles found.
