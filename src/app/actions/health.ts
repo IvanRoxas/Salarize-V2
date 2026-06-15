@@ -1,9 +1,10 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { secureAction } from '@/lib/security';
 
 export async function revalidateDashboardData() {
-  try {
+  return secureAction(null, null, async () => {
     const [employeeCount, auditLogCount] = await Promise.all([
       prisma.employee.count(),
       prisma.auditLog.count()
@@ -15,12 +16,5 @@ export async function revalidateDashboardData() {
       employeeCount,
       auditLogCount
     };
-  } catch (error) {
-    return {
-      success: false,
-      timestamp: new Date().toISOString(),
-      employeeCount: 0,
-      auditLogCount: 0
-    };
-  }
+  });
 }

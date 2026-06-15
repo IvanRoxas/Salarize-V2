@@ -71,10 +71,7 @@ export default function EmployeeRegistry({
 
   const isAuditor = role === 'AUDITOR';
 
-  const maskName = (first: string, last: string) => {
-    if (!isAuditor) return `${first} ${last}`;
-    return `${first.charAt(0)}*** ${last.charAt(0)}**`;
-  };
+
 
   return (
     <div className="relative">
@@ -106,7 +103,7 @@ export default function EmployeeRegistry({
               {paginatedEmployees.map((emp) => (
                 <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="font-semibold text-slate-800">{maskName(emp.first_name, emp.last_name)}</div>
+                    <div className="font-semibold text-slate-800">{emp.first_name} {emp.last_name}</div>
                     <div className="text-xs text-slate-400">{emp.gender}</div>
                   </td>
                   <td className="px-6 py-4 text-slate-500">{emp.email}</td>

@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export default async function DashboardTrafficCop() {
   const session = await getSession();
 
-  if (session?.role === 'SUPER_ADMIN') {
+  if (session?.role === 'SUPER_ADMIN' || session?.role === 'ADMIN') {
     return <SuperAdminDashboard />;
   }
 

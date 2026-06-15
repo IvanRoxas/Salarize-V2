@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import { getSession } from '@/app/actions/auth';
 import { redirect } from 'next/navigation';
-import ArchivesTable from '@/components/ArchivesTable';
+import AuditLogsTable from '@/components/AuditLogsTable';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,19 +13,9 @@ export default async function ArchivesPage() {
     redirect('/');
   }
 
-  const archivedRecords = await prisma.employee.findMany({
-    where: { deleted_at: { not: null } },
-    orderBy: { deleted_at: 'desc' },
-    include: { position: { include: { department: true } } },
-  });
-
-  const auditLogs = await prisma.auditLog.findMany({
-    where: { action: 'DELETE EMPLOYEE' }
-  });
-
-  const departments = await prisma.department.findMany({
-    select: { name: true },
-    orderBy: { name: 'asc' }
+  const archivedLogs = await prisma.auditLog.findMany({
+    where: { is_archived: true },
+    orderBy: { timestamp: 'desc' },
   });
 
   return (
@@ -33,10 +23,13 @@ export default async function ArchivesPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-800">System Archives</h1>
+          <p className="text-slate-500 mt-1">Massive data table of all archived audit logs.</p>
         </div>
       </div>
 
-      <ArchivesTable archivedRecords={archivedRecords} auditLogs={auditLogs} departments={departments} />
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <AuditLogsTable logs={archivedLogs} />
+      </div>
     </div>
   );
 }

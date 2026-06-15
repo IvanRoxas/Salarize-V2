@@ -10,6 +10,7 @@ export default function AuditLogsTable({ logs }: { logs: any[] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [actionFilter, setActionFilter] = useState('All');
   const [actorFilter, setActorFilter] = useState('All');
+  const [dateFilter, setDateFilter] = useState('All Time');
   const [searchQuery, setSearchQuery] = useState('');
 
   const uniqueActions = useMemo(() => Array.from(new Set(logs.map(l => l.action))).filter(Boolean), [logs]);
@@ -31,9 +32,18 @@ export default function AuditLogsTable({ logs }: { logs: any[] }) {
         }
       }
       
+      if (dateFilter !== 'All Time') {
+        const logDate = new Date(log.timestamp);
+        const now = new Date();
+        const diffDays = (now.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24);
+        if (dateFilter === 'Last 24 Hours' && diffDays > 1) return false;
+        if (dateFilter === 'Last 7 Days' && diffDays > 7) return false;
+        if (dateFilter === 'Last 30 Days' && diffDays > 30) return false;
+      }
+      
       return true;
     });
-  }, [logs, actionFilter, actorFilter, searchQuery]);
+  }, [logs, actionFilter, actorFilter, dateFilter, searchQuery]);
 
   const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -62,6 +72,16 @@ export default function AuditLogsTable({ logs }: { logs: any[] }) {
             {uniqueActors.map((actor: any) => (
               <option key={actor} value={actor}>{actor}</option>
             ))}
+          </select>
+          <select
+            value={dateFilter}
+            onChange={(e) => { setDateFilter(e.target.value); setCurrentPage(1); }}
+            className="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer bg-white"
+          >
+            <option value="All Time">All Time</option>
+            <option value="Last 24 Hours">Last 24 Hours</option>
+            <option value="Last 7 Days">Last 7 Days</option>
+            <option value="Last 30 Days">Last 30 Days</option>
           </select>
         </div>
 

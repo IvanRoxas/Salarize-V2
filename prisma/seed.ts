@@ -11,12 +11,14 @@ async function main() {
   await prisma.position.deleteMany();
   await prisma.admin.deleteMany();
 
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashSuperAdmin = await bcrypt.hash('SuperAdmin@2026', 10);
+  const hashHrManager = await bcrypt.hash('HrManager@2026', 10);
+  const hashAuditor = await bcrypt.hash('Auditor@2026', 10);
 
   const adminsData = [
-    { username: 'superadmin', role: 'SUPER_ADMIN', password_hash: hashedPassword },
-    { username: 'hrmanager', role: 'HR_MANAGER', password_hash: hashedPassword },
-    { username: 'auditor', role: 'AUDITOR', password_hash: hashedPassword },
+    { username: 'superadmin', role: 'SUPER_ADMIN', password_hash: hashSuperAdmin },
+    { username: 'hrmanager', role: 'HR_MANAGER', password_hash: hashHrManager },
+    { username: 'auditor', role: 'AUDITOR', password_hash: hashAuditor },
   ];
 
   const createdAdmins = [];

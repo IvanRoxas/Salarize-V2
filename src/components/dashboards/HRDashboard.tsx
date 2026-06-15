@@ -3,6 +3,7 @@ import Link from 'next/link';
 import DashboardCharts from '@/components/DashboardCharts';
 import HRActionCenter from './HRActionCenter';
 import { getSession } from '@/app/actions/auth';
+import { IconMap, ColorMap } from '@/lib/theme';
 
 export default async function HRDashboard() {
   const session = await getSession();
@@ -97,7 +98,7 @@ export default async function HRDashboard() {
               <thead>
                 <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                   <th className="px-6 py-3 font-semibold">Name</th>
-                  <th className="px-6 py-3 font-semibold">Position</th>
+                  <th className="px-6 py-3 font-semibold">Position and Department</th>
                   <th className="px-6 py-3 font-semibold">Status</th>
                   <th className="px-6 py-3 font-semibold">Date Added</th>
                 </tr>
@@ -106,7 +107,27 @@ export default async function HRDashboard() {
                 {recentHires.map((emp) => (
                   <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 font-medium">{emp.first_name} {emp.last_name}</td>
-                    <td className="px-6 py-4">{emp.position?.title || 'Unassigned'}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-slate-800 font-medium">{emp.position?.title || 'Unassigned'}</span>
+                        {(() => {
+                          const deptName = emp.position?.department?.name;
+                          if (!deptName) return <span className="text-slate-500 text-xs mt-1">N/A</span>;
+                          
+                          const iconName = emp.position?.department?.icon || 'Building';
+                          const colorName = emp.position?.department?.color || 'slate';
+                          const DeptIcon = IconMap[iconName] || IconMap['Building'];
+                          const colorTheme = ColorMap[colorName] || ColorMap['slate'];
+
+                          return (
+                            <div className={`flex items-center space-x-1 mt-1 ${colorTheme.text}`}>
+                              <DeptIcon className="w-3.5 h-3.5" />
+                              <span className="text-xs font-medium">{deptName}</span>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusStyle(emp.status)}`}>
                         {emp.status || 'Unknown'}

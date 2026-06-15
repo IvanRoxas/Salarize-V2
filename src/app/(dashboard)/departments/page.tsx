@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export default async function DepartmentsPage() {
   const session = await getSession();
 
-  if (!session || (session.role !== 'SUPER_ADMIN' && session.role !== 'HR_MANAGER')) {
+  if (!session || (session.role !== 'SUPER_ADMIN' && session.role !== 'ADMIN' && session.role !== 'HR_MANAGER')) {
     redirect('/');
   }
 

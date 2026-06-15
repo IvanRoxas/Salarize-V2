@@ -51,7 +51,7 @@ export default function EditDepartmentModal({
   role: string;
   onClose: () => void;
 }) {
-  const isSuperAdmin = role === 'SUPER_ADMIN';
+  const isSuperAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(department.icon || 'Building');
   const [selectedColor, setSelectedColor] = useState(department.color || 'violet');

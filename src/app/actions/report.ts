@@ -1,18 +1,10 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { getSession } from '@/app/actions/auth';
-import { checkAccess } from '@/lib/security';
+import { secureAction } from '@/lib/security';
 
 export async function generatePayrollReport() {
-  const session = await getSession();
-
-  // Strict RBAC Verification via Security Matrix
-  if (!session || !checkAccess(session.role as string, 'PAYROLL_OPERATIONS', 'READ')) {
-    return { success: false, message: '403 Forbidden: Insufficient privileges to export payroll.' };
-  }
-
-  try {
+  return secureAction('PAYROLL_OPERATIONS', 'READ', async (session) => {
     const activeEmployees = await prisma.employee.findMany({
       where: { 
         status: 'Active',
@@ -23,10 +15,9 @@ export async function generatePayrollReport() {
     });
 
     if (activeEmployees.length === 0) {
-      return { success: false, message: 'No active personnel found to export.' };
+      return { success: false, message: 'Validation Error: No active personnel found to export.' };
     }
 
-    // Generate CSV Structure
     const headers = ['First Name', 'Last Name', 'Position', 'Actual Salary (PHP)'];
     const rows = activeEmployees.map(emp => [
       `"${emp.first_name}"`,
@@ -40,7 +31,6 @@ export async function generatePayrollReport() {
       ...rows.map(row => row.join(','))
     ].join('\n');
 
-    // Security Audit Hook
     await prisma.auditLog.create({
       data: {
         admin_id: (session.id || session.username) as string,
@@ -53,20 +43,11 @@ export async function generatePayrollReport() {
     });
 
     return { success: true, csv: csvContent };
-  } catch (error) {
-    console.error('Export Error:', error);
-    return { success: false, message: 'Failed to generate payroll report due to an internal error.' };
-  }
+  });
 }
 
 export async function generateDepartmentalPdfData() {
-  const session = await getSession();
-
-  if (!session || !checkAccess(session.role as string, 'PAYROLL_OPERATIONS', 'READ')) {
-    return { success: false, message: '403 Forbidden: Insufficient privileges.' };
-  }
-
-  try {
+  return secureAction('PAYROLL_OPERATIONS', 'READ', async (session) => {
     const activeEmployees = await prisma.employee.findMany({
       where: { status: 'Active', deleted_at: null },
       include: { position: { include: { department: true } } },
@@ -74,7 +55,7 @@ export async function generateDepartmentalPdfData() {
     });
 
     if (activeEmployees.length === 0) {
-      return { success: false, message: 'No active personnel found to export.' };
+      return { success: false, message: 'Validation Error: No active personnel found to export.' };
     }
 
     const grouped: Record<string, any[]> = {};
@@ -96,8 +77,5 @@ export async function generateDepartmentalPdfData() {
     });
 
     return { success: true, data: grouped };
-  } catch (error) {
-    console.error('Export Error:', error);
-    return { success: false, message: 'Failed to generate payroll report.' };
-  }
+  });
 }

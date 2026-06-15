@@ -42,11 +42,6 @@ export default function SalaryRegistry({ initialEmployees, role }: { initialEmpl
   const isAuditor = role === 'AUDITOR';
   const isHR = role === 'HR_MANAGER';
 
-  const maskName = (first: string, last: string) => {
-    if (!isAuditor) return `${first} ${last}`;
-    return `${first[0]}*** ${last[0]}**`;
-  };
-
   return (
     <div className="relative">
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -68,11 +63,11 @@ export default function SalaryRegistry({ initialEmployees, role }: { initialEmpl
               {initialEmployees.map((emp) => (
                 <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4 font-semibold text-slate-800">
-                    {maskName(emp.first_name, emp.last_name)}
+                    {emp.first_name} {emp.last_name}
                   </td>
                   <td className="px-6 py-4 text-slate-600">{emp.position?.title || 'Unknown'}</td>
                   <td className="px-6 py-4 font-bold text-slate-800">
-                    ₱ {isHR ? '***,***.00' : emp.actual_salary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ₱ {emp.actual_salary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadge(emp.status)}`}>

@@ -49,8 +49,7 @@ export async function addPosition(formData: FormData) {
       data: { title, department_id: department, base_salary, min_salary, max_salary } 
     });
     await logAudit("CREATE_POSITION", null, null, JSON.stringify({ title: pos.title, base_salary: pos.base_salary }));
-    revalidatePath('/');
-    revalidatePath('/employees');
+    revalidatePath('/', 'layout');
     return { success: true, message: `Position "${title}" added.` };
   } catch (e: any) {
     if (e.code === 'P2002') return { success: false, message: "This position already exists." };
@@ -65,8 +64,9 @@ export async function deletePosition(id: string) {
     if (pos) {
       await logAudit("DELETE_POSITION", null, pos.title, null);
     }
-    revalidatePath('/');
-    revalidatePath('/employees');
+    revalidatePath('/departments');
+    revalidatePath('/manage-employees');
+    revalidatePath('/', 'layout');
     return { success: true, message: "Position deleted." };
   } catch {
     return { success: false, message: "Cannot delete: position may be in use." };
@@ -106,11 +106,9 @@ export async function addEmployee(formData: FormData) {
       data: { first_name, last_name, email, gender, position_id, actual_salary, status } 
     });
 
-    await logAudit("CREATE_EMPLOYEE", emp.id, null, JSON.stringify({ email: emp.email, position: position.title, actual_salary: emp.actual_salary }));
+    await logAudit("CREATE_EMPLOYEE", `${emp.first_name} ${emp.last_name}`, null, JSON.stringify({ email: emp.email, position: position.title, actual_salary: emp.actual_salary }));
 
-    revalidatePath('/personnel');
-    revalidatePath('/payroll');
-    revalidatePath('/salary');
+    revalidatePath('/', 'layout');
     return { success: true, message: "Employee added successfully!" };
   } catch (error: any) {
     if (error.code === 'P2002') return { success: false, message: "An employee with this email already exists." };
@@ -119,6 +117,20 @@ export async function addEmployee(formData: FormData) {
 }
 
 export async function deleteEmployee(id: string) {
+  const session = await getSession();
+  if (session?.role === 'AUDITOR') {
+    await prisma.auditLog.create({
+      data: {
+        admin_id: session.id as string,
+        admin_name: session.username as string,
+        action: '403_FORBIDDEN',
+        target_employee: `Employee ID: ${id}`,
+        old_value: 'Attempted ARCHIVE',
+        new_value: 'BLOCKED',
+      },
+    });
+    throw new Error('403 Forbidden');
+  }
   try {
     const emp = await prisma.employee.findUnique({ where: { id } });
     if (!emp) return { success: false, message: "Employee not found." };
@@ -128,11 +140,9 @@ export async function deleteEmployee(id: string) {
       data: { deleted_at: new Date(), status: 'Terminated' } 
     });
 
-    await logAudit("SOFT_DELETE_EMPLOYEE", id, emp.status, "Terminated");
+    await logAudit("ARCHIVE_EMPLOYEE", `${emp.first_name} ${emp.last_name}`, emp.status, "Terminated");
 
-    revalidatePath('/personnel');
-    revalidatePath('/payroll');
-    revalidatePath('/salary');
+    revalidatePath('/', 'layout');
     return { success: true, message: "Employee terminated." };
   } catch {
     return { success: false, message: "Failed to terminate employee." };
@@ -140,6 +150,20 @@ export async function deleteEmployee(id: string) {
 }
 
 export async function updateSalaryOrStatus(id: string, formData: FormData) {
+  const session = await getSession();
+  if (session?.role === 'AUDITOR') {
+    await prisma.auditLog.create({
+      data: {
+        admin_id: session.id as string,
+        admin_name: session.username as string,
+        action: '403_FORBIDDEN',
+        target_employee: `Employee ID: ${id}`,
+        old_value: 'Attempted UPDATE_SALARY/STATUS',
+        new_value: 'BLOCKED',
+      },
+    });
+    throw new Error('403 Forbidden');
+  }
   try {
     const salaryRaw = formData.get('actual_salary')?.toString() || formData.get('salary')?.toString();
     const status = formData.get('status')?.toString();
@@ -166,12 +190,9 @@ export async function updateSalaryOrStatus(id: string, formData: FormData) {
 
     await prisma.employee.update({ where: { id }, data: dataToUpdate });
 
-    await logAudit("UPDATE_EMPLOYEE", id, JSON.stringify({ actual_salary: emp.actual_salary, status: emp.status }), JSON.stringify(dataToUpdate));
+    await logAudit("UPDATE_EMPLOYEE", `${emp.first_name} ${emp.last_name}`, JSON.stringify({ actual_salary: emp.actual_salary, status: emp.status }), JSON.stringify(dataToUpdate));
 
-    revalidatePath('/');
-    revalidatePath('/salary');
-    revalidatePath('/payroll');
-    revalidatePath('/personnel');
+    revalidatePath('/', 'layout');
     return { success: true, message: "Record updated successfully!" };
   } catch {
     return { success: false, message: "Failed to update record." };
@@ -206,5 +227,60 @@ export async function getPayrollBreakdown() {
     return { success: true, data };
   } catch {
     return { success: false, message: "Failed to fetch breakdown." };
+  }
+}
+
+// --- AUDIT ACTIONS ---
+export async function acknowledgeAlertsAction() {
+  const session = await getSession();
+  if (session?.role !== 'AUDITOR') {
+    throw new Error('403 Forbidden: Only Auditors can acknowledge alerts.');
+  }
+  
+  await prisma.auditLog.create({
+    data: {
+      admin_id: session.id as string,
+      admin_name: session.username as string,
+      action: 'ACKNOWLEDGE_ALERTS',
+      target_employee: 'System Alert Reset',
+      old_value: 'null',
+      new_value: 'Acknowledged',
+    }
+  });
+  
+  revalidatePath('/', 'layout');
+  return { success: true };
+}
+
+export async function archiveAllHistoryAction() {
+  const session = await getSession();
+  if (session?.role !== 'AUDITOR') {
+    throw new Error('403 Forbidden: Insufficient privileges to archive history. Only the Auditor is permitted to archive system logs.');
+  }
+
+  try {
+    await prisma.auditLog.updateMany({
+      where: { is_archived: false },
+      data: { is_archived: true },
+    });
+    
+    // Create an audit log for the archiving action itself
+    await prisma.auditLog.create({
+      data: {
+        admin_id: session.id as string,
+        admin_name: session.username as string,
+        action: 'ARCHIVE_HISTORY',
+        target_employee: 'System Logs',
+        old_value: 'Active',
+        new_value: 'Archived',
+        is_archived: false, // The new log itself remains active
+      }
+    });
+
+    revalidatePath('/', 'layout');
+    return { success: true, message: 'All active history has been archived.' };
+  } catch (error) {
+    console.error('Archive History Error:', error);
+    return { success: false, message: 'Failed to archive history.' };
   }
 }

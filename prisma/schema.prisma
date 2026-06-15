@@ -11,7 +11,8 @@ model Admin {
   id            String   @id @default(uuid())
   username      String   @unique
   password_hash String
-  role          String   // "SUPER_ADMIN", "HR_MANAGER", "AUDITOR"
+  role          String   @default("UNASSIGNED") // "SUPER_ADMIN", "HR_MANAGER", "AUDITOR", "UNASSIGNED"
+  status        String   @default("PENDING")    // "PENDING", "APPROVED", "SUSPENDED"
   created_at    DateTime @default(now())
 }
 
@@ -62,4 +63,5 @@ model AuditLog {
   old_value       String?
   new_value       String?
   timestamp       DateTime @default(now())
+  is_archived     Boolean  @default(false)
 }

@@ -1,26 +1,36 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { getSession } from '@/app/actions/auth';
+import { secureAction } from '@/lib/security';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+
+const departmentSchema = z.object({
+  name: z.string().min(2, "Department name must be at least 2 characters."),
+  description: z.string().optional().default(''),
+  icon: z.string().optional().default('Building'),
+  color: z.string().optional().default('violet')
+});
+
+const updateDepartmentSchema = departmentSchema.extend({
+  id: z.string().min(1, "Department ID is required.")
+});
 
 export async function createDepartmentAction(formData: FormData) {
-  const session = await getSession();
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsed = departmentSchema.safeParse({
+      name: formData.get('name'),
+      description: formData.get('description'),
+      icon: formData.get('icon'),
+      color: formData.get('color')
+    });
 
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+    if (!parsed.success) {
+      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+    }
 
-  const name = formData.get('name') as string;
-  const description = formData.get('description') as string;
-  const icon = formData.get('icon') as string || 'Building';
-  const color = formData.get('color') as string || 'violet';
+    const { name, description, icon, color } = parsed.data;
 
-  if (!name) {
-    return { success: false, message: 'Department name is required.' };
-  }
-
-  try {
     const existing = await prisma.department.findUnique({ where: { name } });
     if (existing) return { success: false, message: 'A department with this name already exists.' };
 
@@ -39,31 +49,27 @@ export async function createDepartmentAction(formData: FormData) {
       },
     });
 
-    revalidatePath('/departments');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Department successfully created.' };
-  } catch (error: any) {
-    console.error('Create Department Error:', error);
-    return { success: false, message: 'Database error occurred while creating the department.' };
-  }
+  });
 }
 
 export async function updateDepartmentAction(formData: FormData) {
-  const session = await getSession();
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsed = updateDepartmentSchema.safeParse({
+      id: formData.get('id'),
+      name: formData.get('name'),
+      description: formData.get('description'),
+      icon: formData.get('icon'),
+      color: formData.get('color')
+    });
 
-  const id = formData.get('id') as string;
-  const name = formData.get('name') as string;
-  const description = formData.get('description') as string;
-  const icon = formData.get('icon') as string || 'Building';
-  const color = formData.get('color') as string || 'violet';
+    if (!parsed.success) {
+      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+    }
 
-  if (!id || !name) {
-    return { success: false, message: 'Department name is required.' };
-  }
+    const { id, name, description, icon, color } = parsed.data;
 
-  try {
     const existing = await prisma.department.findUnique({ where: { id } });
     if (!existing) return { success: false, message: 'Department not found.' };
 
@@ -83,29 +89,30 @@ export async function updateDepartmentAction(formData: FormData) {
       },
     });
 
-    revalidatePath('/departments');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Department successfully updated.' };
-  } catch (error: any) {
-    console.error('Update Department Error:', error);
-    return { success: false, message: 'Database error occurred while updating the department.' };
-  }
+  });
 }
 
 export async function deleteDepartmentAction(id: string) {
-  const session = await getSession();
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsedId = z.string().min(1).safeParse(id);
+    if (!parsedId.success) {
+      return { success: false, message: 'Validation Error: Invalid ID.' };
+    }
 
-  try {
-    const existing = await prisma.department.findUnique({ where: { id }, include: { _count: { select: { positions: true } } } });
+    const existing = await prisma.department.findUnique({ 
+      where: { id: parsedId.data }, 
+      include: { _count: { select: { positions: true } } } 
+    });
+    
     if (!existing) return { success: false, message: 'Department not found.' };
 
     if (existing._count.positions > 0) {
-      return { success: false, message: 'Cannot delete: Department has active job positions. Reassign or delete them first.' };
+      return { success: false, message: 'Validation Error: Cannot delete: Department has active job positions. Reassign or delete them first.' };
     }
 
-    await prisma.department.delete({ where: { id } });
+    await prisma.department.delete({ where: { id: parsedId.data } });
 
     await prisma.auditLog.create({
       data: {
@@ -119,9 +126,8 @@ export async function deleteDepartmentAction(id: string) {
     });
 
     revalidatePath('/departments');
+    revalidatePath('/manage-employees');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Department successfully deleted.' };
-  } catch (error: any) {
-    console.error('Delete Department Error:', error);
-    return { success: false, message: 'Database error occurred while deleting the department.' };
-  }
+  });
 }

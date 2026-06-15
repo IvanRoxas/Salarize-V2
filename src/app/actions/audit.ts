@@ -1,53 +1,28 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { getSession } from './auth';
-import { revalidatePath } from 'next/cache';
-
-export async function clearLogsAction() {
-  const session = await getSession();
-
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    return { success: false, message: 'Unauthorized: Only Administrators can clear logs.' };
-  }
-
-  try {
-    await prisma.auditLog.deleteMany({});
-    
-    // Log the clear action itself
-    await prisma.auditLog.create({
-      data: {
-        admin_id: session.id as string,
-        admin_name: session.username as string,
-        action: 'CLEARED_LOGS',
-        target_employee: 'SYSTEM'
-      }
-    });
-
-    revalidatePath('/audit-logs');
-    return { success: true, message: 'Logs cleared successfully.' };
-  } catch (error) {
-    return { success: false, message: 'Failed to clear logs.' };
-  }
-}
+import { secureAction } from '@/lib/security';
 
 export async function generateAuditReport() {
-  const session = await getSession();
-
-  if (!session || (session.role !== 'SUPER_ADMIN' && session.role !== 'AUDITOR')) {
-    return { success: false, message: 'Unauthorized: Cannot generate compliance report.' };
-  }
-
-  try {
+  return secureAction('SECURITY_LOGS', 'READ', async (session) => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const accessActionTypes = ['LOGIN_SUCCESS', 'LOGIN_FAILED', '403_FORBIDDEN', 'UNAUTHORIZED_LOGIN_ATTEMPT', 'UNAUTHORIZED', 'REVOKE ROLE', 'CREATE_ADMIN'];
 
-    const logs = await prisma.auditLog.findMany({
-      where: { timestamp: { gte: thirtyDaysAgo } },
-      orderBy: { timestamp: 'desc' }
-    });
+    const [activeLogs, accessLogs] = await Promise.all([
+      prisma.auditLog.findMany({
+        where: { 
+          is_archived: false,
+          action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_FAILED'] }
+        },
+        orderBy: { timestamp: 'desc' }
+      }),
+      prisma.auditLog.findMany({
+        where: { action: { in: accessActionTypes } },
+        orderBy: { timestamp: 'desc' }
+      })
+    ]);
 
-    // Create Audit Log hook
     await prisma.auditLog.create({
       data: {
         admin_id: session.id as string,
@@ -61,12 +36,9 @@ export async function generateAuditReport() {
 
     return { 
       success: true, 
-      logs,
+      activeLogs,
+      accessLogs,
       auditorName: session.username
     };
-  } catch (error) {
-    console.error('Failed to generate audit report:', error);
-    return { success: false, message: 'Failed to generate audit report.' };
-  }
+  });
 }
-

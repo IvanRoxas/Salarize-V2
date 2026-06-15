@@ -74,7 +74,7 @@ export default function PositionRegistry({
               className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
             />
           </div>
-          {role === 'SUPER_ADMIN' && (
+          {(role === 'SUPER_ADMIN' || role === 'ADMIN') && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center justify-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer whitespace-nowrap w-full sm:w-auto"
@@ -121,7 +121,7 @@ export default function PositionRegistry({
                       <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">
                         {pos._count.employees} Active Personnel
                       </span>
-                      {role === 'SUPER_ADMIN' && (
+                      {(role === 'SUPER_ADMIN' || role === 'ADMIN') && (
                         <button 
                           onClick={() => setSelectedPos(pos)}
                           className="text-slate-400 hover:text-violet-600 p-2 rounded hover:bg-violet-50 cursor-pointer transition-colors"

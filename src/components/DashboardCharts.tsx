@@ -2,11 +2,12 @@
 
 import { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { HexColorMap } from '@/lib/theme';
 
 interface Position {
   id: string;
   title: string;
-  department?: { id: string, name: string } | null;
+  department?: { id: string, name: string, color?: string | null } | null;
 }
 
 interface DepartmentCount {
@@ -35,15 +36,18 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
 
   // Process Department Data
   const departmentData = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, { value: number, color: string }>();
     departmentCounts.forEach((dc) => {
       const pos = positions.find(p => p.id === dc.position_id);
       const deptName = pos?.department?.name || 'Unassigned';
-      const current = map.get(deptName) || 0;
-      map.set(deptName, current + dc._count.id);
+      const colorName = pos?.department?.color || 'slate';
+      
+      const current = map.get(deptName) || { value: 0, color: colorName };
+      current.value += dc._count.id;
+      map.set(deptName, current);
     });
     return Array.from(map.entries())
-      .map(([name, value]) => ({ name, value }))
+      .map(([name, data]) => ({ name, value: data.value, color: data.color }))
       .sort((a, b) => b.value - a.value);
   }, [departmentCounts, positions]);
 
@@ -62,18 +66,20 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
 
   // Process Position Data based on Selected Department
   const positionData = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, { value: number, color: string }>();
     departmentCounts.forEach((dc) => {
       const pos = positions.find(p => p.id === dc.position_id);
       const deptName = pos?.department?.name || 'Unassigned';
-      if (deptName === selectedDept) {
+      if (selectedDept === 'All' || deptName === selectedDept) {
         const title = pos?.title || 'Unknown Position';
-        const current = map.get(title) || 0;
-        map.set(title, current + dc._count.id);
+        const colorName = pos?.department?.color || 'slate';
+        const current = map.get(title) || { value: 0, color: colorName };
+        current.value += dc._count.id;
+        map.set(title, current);
       }
     });
     return Array.from(map.entries())
-      .map(([name, value]) => ({ name, value }))
+      .map(([name, data]) => ({ name, value: data.value, color: data.color }))
       .sort((a, b) => b.value - a.value);
   }, [departmentCounts, positions, selectedDept]);
 
@@ -101,7 +107,7 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
               </Pie>
               <Tooltip 
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
-                itemStyle={{ color: '#4c1d95', fontWeight: 'bold' }}
+                itemStyle={{ fontWeight: 'bold' }}
               />
               <Legend verticalAlign="bottom" height={36} iconType="circle" />
             </PieChart>
@@ -133,17 +139,20 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
                   cy="50%"
                   innerRadius={0}
                   outerRadius={90}
-                  paddingAngle={2}
+                  paddingAngle={0}
                   dataKey="value"
                   stroke="none"
                 >
                   {positionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={COLORS[index % COLORS.length]} 
+                    />
                   ))}
                 </Pie>
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
-                  itemStyle={{ color: '#4c1d95', fontWeight: 'bold' }}
+                  itemStyle={{ fontWeight: 'bold' }}
                 />
                 <Legend verticalAlign="bottom" height={36} iconType="circle" />
               </PieChart>

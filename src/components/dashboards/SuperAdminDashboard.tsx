@@ -55,7 +55,7 @@ export default async function SuperAdminDashboard() {
       </div>
 
       {/* Action Center - Refactored for SoD */}
-      <SuperAdminActionCenter />
+      <SuperAdminActionCenter role={session?.role as string} />
 
       {/* Bottom Row: System Activity Feed */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">

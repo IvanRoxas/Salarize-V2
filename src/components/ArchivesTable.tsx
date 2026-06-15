@@ -3,12 +3,6 @@
 import { useState, useMemo } from 'react';
 import { X, Search } from 'lucide-react';
 
-const maskPII = (firstName: string | null, lastName: string | null) => {
-  const first = firstName ? firstName.charAt(0) + '***' : '***';
-  const last = lastName ? lastName.charAt(0) + '***' : '***';
-  return `${first} ${last}`;
-};
-
 export default function ArchivesTable({ archivedRecords, auditLogs, departments }: { archivedRecords: any[], auditLogs: any[], departments: { name: string }[] }) {
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [departmentFilter, setDepartmentFilter] = useState('All');
@@ -146,7 +140,7 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                <th className="px-6 py-3 font-semibold">Masked Identity</th>
+                <th className="px-6 py-3 font-semibold">Employee Name</th>
                 <th className="px-6 py-3 font-semibold">Previous Position</th>
                 <th className="px-6 py-3 font-semibold">Termination Date</th>
                 <th className="px-6 py-3 font-semibold text-right">Action</th>
@@ -156,7 +150,7 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
               {paginatedRecords.map((staff) => (
                 <tr key={staff.id} className="hover:bg-violet-50 transition-colors group">
                   <td className="px-6 py-4 font-medium font-mono group-hover:text-violet-700">
-                    {maskPII(staff.first_name, staff.last_name)}
+                    {staff.first_name} {staff.last_name}
                   </td>
                   <td className="px-6 py-4">{staff.position?.title || 'Unknown'}</td>
                   <td className="px-6 py-4 font-medium text-red-600">
@@ -221,8 +215,8 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Masked Identity</label>
-                  <p className="font-mono text-slate-800 font-medium">{maskPII(selectedStaff.first_name, selectedStaff.last_name)}</p>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Employee Name</label>
+                  <p className="font-mono text-slate-800 font-medium">{selectedStaff.first_name} {selectedStaff.last_name}</p>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Termination Date</label>
@@ -231,7 +225,7 @@ export default function ArchivesTable({ archivedRecords, auditLogs, departments 
                   </p>
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Final Position & Department</label>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Final Position and Department</label>
                   <p className="text-slate-800 font-medium">{selectedStaff.position?.title} • {selectedStaff.position?.department?.name || 'Unknown'}</p>
                 </div>
                 <div className="col-span-2">

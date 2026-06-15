@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AlertTriangle, ShieldCheck, X } from 'lucide-react';
+import { acknowledgeAlertsAction } from '@/app/actions';
 
 interface AuditorKPICardsProps {
   totalLogs: number;
@@ -10,19 +11,17 @@ interface AuditorKPICardsProps {
   archivedRecordsCount: number;
   deletesLast30Days: number;
   latestDeleteDate: string | null;
-  criticalAlertsCount: number;
+  highRiskOperationsCount: number;
+  securityAnomaliesCount: number;
   
   // Modal Details
   recentLogs: any[];
   deletedRecords: any[];
-  criticalAlerts: any[];
+  highRiskOperations: any[];
+  securityAnomalies: any[];
 }
 
-const maskPII = (firstName: string | null, lastName: string | null) => {
-  const first = firstName ? firstName.charAt(0) + '***' : '***';
-  const last = lastName ? lastName.charAt(0) + '***' : '***';
-  return `${first} ${last}`;
-};
+
 
 export default function AuditorKPICards({
   totalLogs,
@@ -31,12 +30,22 @@ export default function AuditorKPICards({
   archivedRecordsCount,
   deletesLast30Days,
   latestDeleteDate,
-  criticalAlertsCount,
+  highRiskOperationsCount,
+  securityAnomaliesCount,
   recentLogs,
   deletedRecords,
-  criticalAlerts
+  highRiskOperations,
+  securityAnomalies
 }: AuditorKPICardsProps) {
-  const [activeModal, setActiveModal] = useState<'logs' | 'deleted' | 'alerts' | null>(null);
+  const [activeModal, setActiveModal] = useState<'logs' | 'deleted' | 'high_risk' | 'anomalies' | null>(null);
+  const [isAcknowledging, setIsAcknowledging] = useState(false);
+
+  const handleAcknowledge = async () => {
+    setIsAcknowledging(true);
+    await acknowledgeAlertsAction();
+    setActiveModal(null);
+    setIsAcknowledging(false);
+  };
 
   const getRelativeTime = (dateStr: string | null) => {
     if (!dateStr) return 'N/A';
@@ -77,49 +86,69 @@ export default function AuditorKPICards({
           </p>
         </div>
 
-        {/* Card 2: Deleted Records */}
-        <div 
-          onClick={() => setActiveModal('deleted')}
-          className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-orange-500 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
-        >
-          <div>
-            <p className="text-sm font-medium text-slate-500 mb-1">Deleted Records</p>
-            <span className="text-4xl font-bold text-slate-800">{archivedRecordsCount}</span>
-            <p className="text-sm font-medium text-orange-500 mt-2">{deletesLast30Days} archived in the last 30 days</p>
-          </div>
-          <p className="text-xs text-slate-400 mt-4">
-            Most recent: {latestDeleteDate ? new Date(latestDeleteDate).toLocaleDateString() : 'N/A'}
-          </p>
-        </div>
 
-        {/* Card 3: Active Alerts */}
-        {criticalAlertsCount > 0 ? (
+
+        {/* Card 3: High-Risk Operations */}
+        {highRiskOperationsCount > 0 ? (
           <div 
-            onClick={() => setActiveModal('alerts')}
-            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-red-600 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
+            onClick={() => setActiveModal('high_risk')}
+            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-amber-500 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
           >
             <div>
               <div className="flex items-center space-x-2 mb-1">
-                <AlertTriangle className="w-4 h-4 text-red-600" />
-                <p className="text-sm font-medium text-slate-500">Active Alerts</p>
+                <AlertTriangle className="w-4 h-4 text-amber-600" />
+                <p className="text-sm font-medium text-slate-500">High-Risk Ops</p>
               </div>
-              <span className="text-4xl font-bold text-red-600">{criticalAlertsCount}</span>
-              <p className="text-sm font-medium text-red-600 mt-2">Action required</p>
+              <span className="text-4xl font-bold text-amber-600">{highRiskOperationsCount}</span>
+              <p className="text-sm font-medium text-amber-600 mt-2">Review pending</p>
             </div>
-            <p className="text-xs text-slate-400 mt-4">Past 24 hours</p>
+            <p className="text-xs text-slate-400 mt-4">Routine actions</p>
           </div>
         ) : (
           <div 
-            onClick={() => setActiveModal('alerts')}
+            onClick={() => setActiveModal('high_risk')}
             className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
           >
             <div>
               <div className="flex items-center space-x-2 mb-1">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <p className="text-sm font-medium text-slate-500">Active Alerts</p>
+                <p className="text-sm font-medium text-slate-500">High-Risk Ops</p>
               </div>
               <span className="text-4xl font-bold text-emerald-600">0</span>
-              <p className="text-sm font-medium text-emerald-600 mt-2">System Stable: No Anomalies</p>
+              <p className="text-sm font-medium text-emerald-600 mt-2">All ops reviewed</p>
+            </div>
+            <p className="text-xs text-slate-400 mt-4">Past 24 hours</p>
+          </div>
+        )}
+
+        {/* Card 4: Security Anomalies */}
+        {securityAnomaliesCount > 0 ? (
+          <div 
+            onClick={() => setActiveModal('anomalies')}
+            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-red-600 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
+          >
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <AlertTriangle className="w-4 h-4 text-red-600" />
+                <p className="text-sm font-medium text-slate-500">Security Anomalies</p>
+              </div>
+              <span className="text-4xl font-bold text-red-600">{securityAnomaliesCount}</span>
+              <p className="text-sm font-medium text-red-600 mt-2">Action required</p>
+            </div>
+            <p className="text-xs text-slate-400 mt-4">Critical threats</p>
+          </div>
+        ) : (
+          <div 
+            onClick={() => setActiveModal('anomalies')}
+            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500 flex flex-col justify-between cursor-pointer hover:shadow-md hover:bg-slate-50 transition-all hover:-translate-y-1"
+          >
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <p className="text-sm font-medium text-slate-500">Security Anomalies</p>
+              </div>
+              <span className="text-4xl font-bold text-emerald-600">0</span>
+              <p className="text-sm font-medium text-emerald-600 mt-2">System Secure</p>
             </div>
             <p className="text-xs text-slate-400 mt-4">Past 24 hours</p>
           </div>
@@ -134,7 +163,8 @@ export default function AuditorKPICards({
               <h3 className="font-bold text-lg text-slate-800">
                 {activeModal === 'logs' && 'Recent Audit Logs (Last 10)'}
                 {activeModal === 'deleted' && 'Recently Archived Records'}
-                {activeModal === 'alerts' && 'Critical Events (Past 24h)'}
+                {activeModal === 'high_risk' && 'High-Risk Operations (Past 24h)'}
+                {activeModal === 'anomalies' && 'Security Anomalies (Past 24h)'}
               </h3>
               <button onClick={() => setActiveModal(null)} className="p-1 hover:bg-slate-200 rounded-full text-slate-500 transition-colors">
                 <X className="w-5 h-5" />
@@ -175,7 +205,7 @@ export default function AuditorKPICards({
 
                   {activeModal === 'deleted' && deletedRecords.map((emp: any) => (
                     <tr key={emp.id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4 font-medium font-mono">{maskPII(emp.first_name, emp.last_name)}</td>
+                      <td className="px-6 py-4 font-medium font-mono">{emp.first_name} {emp.last_name}</td>
                       <td className="px-6 py-4">{emp.position?.department?.name || 'Unknown'}</td>
                       <td className="px-6 py-4">{new Date(emp.deleted_at).toLocaleString()}</td>
                     </tr>
@@ -184,7 +214,19 @@ export default function AuditorKPICards({
                     <tr><td colSpan={3} className="px-6 py-8 text-center text-slate-400">No archived records found.</td></tr>
                   )}
 
-                  {activeModal === 'alerts' && criticalAlerts.map((log: any) => (
+                  {activeModal === 'high_risk' && highRiskOperations.map((log: any) => (
+                    <tr key={log.id} className="hover:bg-amber-50/50 bg-amber-50/20">
+                      <td className="px-6 py-4 text-amber-700">{new Date(log.timestamp).toLocaleString()}</td>
+                      <td className="px-6 py-4 font-medium text-slate-800">{log.admin_name}</td>
+                      <td className="px-6 py-4"><span className={getActionColor(log.action)}>{log.action}</span></td>
+                      <td className="px-6 py-4 font-mono text-xs">{log.target_employee || 'N/A'}</td>
+                    </tr>
+                  ))}
+                  {activeModal === 'high_risk' && highRiskOperations.length === 0 && (
+                    <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">No high-risk operations pending review.</td></tr>
+                  )}
+
+                  {activeModal === 'anomalies' && securityAnomalies.map((log: any) => (
                     <tr key={log.id} className="hover:bg-red-50/50 bg-red-50/20">
                       <td className="px-6 py-4 text-red-700">{new Date(log.timestamp).toLocaleString()}</td>
                       <td className="px-6 py-4 font-medium text-slate-800">{log.admin_name}</td>
@@ -192,13 +234,22 @@ export default function AuditorKPICards({
                       <td className="px-6 py-4 font-mono text-xs">{log.target_employee || 'N/A'}</td>
                     </tr>
                   ))}
-                  {activeModal === 'alerts' && criticalAlerts.length === 0 && (
-                    <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">System stable. No critical events in the past 24 hours.</td></tr>
+                  {activeModal === 'anomalies' && securityAnomalies.length === 0 && (
+                    <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">System secure. No anomalies detected.</td></tr>
                   )}
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
+              {((activeModal === 'high_risk' && highRiskOperationsCount > 0) || (activeModal === 'anomalies' && securityAnomaliesCount > 0)) ? (
+                <button 
+                  onClick={handleAcknowledge}
+                  disabled={isAcknowledging}
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-sm font-medium transition-colors"
+                >
+                  {isAcknowledging ? 'Acknowledging...' : 'Acknowledge Alerts'}
+                </button>
+              ) : <div />}
               <button 
                 onClick={() => setActiveModal(null)}
                 className="px-4 py-2 bg-white border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50"

@@ -1,31 +1,47 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { getSession } from '@/app/actions/auth';
+import { secureAction } from '@/lib/security';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+
+const positionSchema = z.object({
+  title: z.string().min(2, "Position title must be at least 2 characters."),
+  department_id: z.string().min(1, "Department ID is required."),
+  icon: z.string().optional().default('Briefcase'),
+  base_salary: z.coerce.number(),
+  min_salary: z.coerce.number(),
+  max_salary: z.coerce.number(),
+}).refine(data => data.min_salary <= data.max_salary, {
+  message: "Minimum salary cannot exceed maximum salary.",
+  path: ["min_salary"]
+}).refine(data => data.base_salary >= data.min_salary && data.base_salary <= data.max_salary, {
+  message: "Base salary must be between the min and max bounds.",
+  path: ["base_salary"]
+});
+
+const updatePositionSchema = z.intersection(
+  z.object({ id: z.string().min(1, "Position ID is required.") }),
+  positionSchema
+);
 
 export async function createPositionAction(formData: FormData) {
-  const session = await getSession();
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsed = positionSchema.safeParse({
+      title: formData.get('title'),
+      department_id: formData.get('department_id'),
+      icon: formData.get('icon'),
+      base_salary: formData.get('base_salary'),
+      min_salary: formData.get('min_salary'),
+      max_salary: formData.get('max_salary')
+    });
 
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+    if (!parsed.success) {
+      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+    }
 
-  const title = formData.get('title') as string;
-  const department_id = formData.get('department_id') as string;
-  const icon = formData.get('icon') as string || 'Briefcase';
-  const base_salary = Number(formData.get('base_salary'));
-  const min_salary = Number(formData.get('min_salary'));
-  const max_salary = Number(formData.get('max_salary'));
+    const { title, department_id, icon, base_salary, min_salary, max_salary } = parsed.data;
 
-  if (!title || !department_id || isNaN(base_salary) || isNaN(min_salary) || isNaN(max_salary)) {
-    return { success: false, message: 'All fields are required and salaries must be numeric.' };
-  }
-
-  if (min_salary > max_salary) return { success: false, message: 'Validation Error: Minimum salary cannot exceed maximum salary.' };
-  if (base_salary < min_salary || base_salary > max_salary) return { success: false, message: 'Validation Error: Base salary must be between the min and max bounds.' };
-
-  try {
     const existingPosition = await prisma.position.findUnique({ where: { title } });
     if (existingPosition) return { success: false, message: 'A job position with this title already exists.' };
 
@@ -44,36 +60,29 @@ export async function createPositionAction(formData: FormData) {
       },
     });
 
-    revalidatePath('/departments');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Job Position successfully created.' };
-  } catch (error: any) {
-    console.error('Create Position Error:', error);
-    return { success: false, message: 'Database error occurred while creating the job position.' };
-  }
+  });
 }
 
 export async function updatePositionAction(formData: FormData) {
-  const session = await getSession();
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsed = updatePositionSchema.safeParse({
+      id: formData.get('id'),
+      title: formData.get('title'),
+      department_id: formData.get('department_id'),
+      icon: formData.get('icon'),
+      base_salary: formData.get('base_salary'),
+      min_salary: formData.get('min_salary'),
+      max_salary: formData.get('max_salary')
+    });
 
-  const id = formData.get('id') as string;
-  const title = formData.get('title') as string;
-  const department_id = formData.get('department_id') as string;
-  const icon = formData.get('icon') as string || 'Briefcase';
-  const base_salary = Number(formData.get('base_salary'));
-  const min_salary = Number(formData.get('min_salary'));
-  const max_salary = Number(formData.get('max_salary'));
+    if (!parsed.success) {
+      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+    }
 
-  if (!id || !title || !department_id || isNaN(base_salary) || isNaN(min_salary) || isNaN(max_salary)) {
-    return { success: false, message: 'All fields are required and salaries must be numeric.' };
-  }
+    const { id, title, department_id, icon, base_salary, min_salary, max_salary } = parsed.data;
 
-  if (min_salary > max_salary) return { success: false, message: 'Validation Error: Minimum salary cannot exceed maximum salary.' };
-  if (base_salary < min_salary || base_salary > max_salary) return { success: false, message: 'Validation Error: Base salary must be between min and max.' };
-
-  try {
     const existingPosition = await prisma.position.findUnique({ where: { id } });
     if (!existingPosition) return { success: false, message: 'Job Position not found.' };
 
@@ -93,29 +102,29 @@ export async function updatePositionAction(formData: FormData) {
       },
     });
 
-    revalidatePath('/departments');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Job Position successfully updated.' };
-  } catch (error: any) {
-    console.error('Update Position Error:', error);
-    return { success: false, message: 'Database error occurred while updating the job position.' };
-  }
+  });
 }
 
 export async function deletePositionAction(id: string) {
-  const session = await getSession();
-  if (!session || session.role !== 'SUPER_ADMIN') {
-    throw new Error("Unauthorized: Organizational structure management is restricted to the System Architect.");
-  }
+  return secureAction('ORGANIZATIONAL_STRUCTURE', 'WRITE', async (session) => {
+    const parsedId = z.string().min(1).safeParse(id);
+    if (!parsedId.success) {
+      return { success: false, message: 'Validation Error: Invalid ID.' };
+    }
 
-  try {
-    const existingPosition = await prisma.position.findUnique({ where: { id }, include: { _count: { select: { employees: true } } } });
+    const existingPosition = await prisma.position.findUnique({ 
+      where: { id: parsedId.data }, 
+      include: { _count: { select: { employees: true } } } 
+    });
     if (!existingPosition) return { success: false, message: 'Job Position not found.' };
 
     if (existingPosition._count.employees > 0) {
-      return { success: false, message: 'Cannot delete: Job Position has active personnel. Reassign them first.' };
+      return { success: false, message: 'Validation Error: Cannot delete: Job Position has active personnel. Reassign them first.' };
     }
 
-    await prisma.position.delete({ where: { id } });
+    await prisma.position.delete({ where: { id: parsedId.data } });
 
     await prisma.auditLog.create({
       data: {
@@ -128,10 +137,7 @@ export async function deletePositionAction(id: string) {
       },
     });
 
-    revalidatePath('/departments');
+    revalidatePath('/', 'layout');
     return { success: true, message: 'Job Position successfully deleted.' };
-  } catch (error: any) {
-    console.error('Delete Position Error:', error);
-    return { success: false, message: 'Database error occurred while deleting the job position.' };
-  }
+  });
 }

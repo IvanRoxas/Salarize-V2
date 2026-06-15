@@ -5,18 +5,7 @@ import { Plus, Edit2, Layers, X, Search, Building, Users, Monitor, Shield, Code,
 import CreateDepartmentModal from './CreateDepartmentModal';
 import EditDepartmentModal from './EditDepartmentModal';
 
-const IconMap: Record<string, any> = {
-  Building, Users, Monitor, Shield, Layers, Code, Calculator, Cpu, Globe, Briefcase
-};
-
-const ColorMap: Record<string, { border: string, hover: string, text: string, bg: string, btnTextHover: string, btnBgHover: string, btnRingHover: string }> = {
-  violet: { border: 'border-t-violet-500', hover: 'hover:border-violet-300', text: 'text-violet-600', bg: 'bg-violet-50', btnTextHover: 'hover:text-violet-600', btnBgHover: 'hover:bg-violet-50', btnRingHover: 'hover:ring-violet-400' },
-  emerald: { border: 'border-t-emerald-500', hover: 'hover:border-emerald-300', text: 'text-emerald-600', bg: 'bg-emerald-50', btnTextHover: 'hover:text-emerald-600', btnBgHover: 'hover:bg-emerald-50', btnRingHover: 'hover:ring-emerald-400' },
-  amber: { border: 'border-t-amber-500', hover: 'hover:border-amber-300', text: 'text-amber-600', bg: 'bg-amber-50', btnTextHover: 'hover:text-amber-600', btnBgHover: 'hover:bg-amber-50', btnRingHover: 'hover:ring-amber-400' },
-  rose: { border: 'border-t-rose-500', hover: 'hover:border-rose-300', text: 'text-rose-600', bg: 'bg-rose-50', btnTextHover: 'hover:text-rose-600', btnBgHover: 'hover:bg-rose-50', btnRingHover: 'hover:ring-rose-400' },
-  blue: { border: 'border-t-blue-500', hover: 'hover:border-blue-300', text: 'text-blue-600', bg: 'bg-blue-50', btnTextHover: 'hover:text-blue-600', btnBgHover: 'hover:bg-blue-50', btnRingHover: 'hover:ring-blue-400' },
-  slate: { border: 'border-t-slate-500', hover: 'hover:border-slate-300', text: 'text-slate-600', bg: 'bg-slate-50', btnTextHover: 'hover:text-slate-600', btnBgHover: 'hover:bg-slate-50', btnRingHover: 'hover:ring-slate-400' },
-};
+import { IconMap, ColorMap } from '@/lib/theme';
 
 export default function DepartmentRegistry({ initialDepartments, role }: { initialDepartments: any[], role: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +33,7 @@ export default function DepartmentRegistry({ initialDepartments, role }: { initi
               className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
             />
           </div>
-          {role === 'SUPER_ADMIN' && (
+          {(role === 'SUPER_ADMIN' || role === 'ADMIN') && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center space-x-2 bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm hover:shadow active:scale-95 text-sm cursor-pointer whitespace-nowrap"
@@ -64,7 +53,7 @@ export default function DepartmentRegistry({ initialDepartments, role }: { initi
           return (
             <div key={dept.id} className={`border-t-4 ${colorTheme.border} bg-white shadow-sm rounded-lg p-6 ${colorTheme.hover} transition-all duration-300 flex flex-col h-full border border-slate-100 group relative`}>
               
-              {role === 'SUPER_ADMIN' && (
+              {(role === 'SUPER_ADMIN' || role === 'ADMIN') && (
                 <button 
                   onClick={() => setSelectedDept(dept)}
                   className={`absolute top-4 right-4 text-slate-300 ${colorTheme.btnTextHover} ${colorTheme.btnBgHover} hover:ring-2 ${colorTheme.btnRingHover} hover:ring-offset-1 p-2 rounded-full transition-all duration-200 transform hover:scale-110 cursor-pointer`}
@@ -86,14 +75,14 @@ export default function DepartmentRegistry({ initialDepartments, role }: { initi
 
               <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-sm">
                 <div 
-                  className={`flex items-center p-2 -ml-2 rounded-md transition-colors ${role === 'SUPER_ADMIN' || role === 'HR_MANAGER' ? `cursor-pointer ${colorTheme.bg} text-slate-600 ${colorTheme.text}` : 'text-slate-600'}`}
+                  className={`flex items-center p-2 -ml-2 rounded-md transition-colors ${role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'HR_MANAGER' ? `cursor-pointer ${colorTheme.bg} text-slate-600 ${colorTheme.text}` : 'text-slate-600'}`}
                   onClick={() => {
-                    if (role === 'SUPER_ADMIN' || role === 'HR_MANAGER') {
+                    if (role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'HR_MANAGER') {
                       setPositionsModalDept(dept);
                     }
                   }}
                 >
-                  <Layers className={`w-5 h-5 mr-2 ${role === 'SUPER_ADMIN' || role === 'HR_MANAGER' ? colorTheme.text : 'text-slate-400'}`} />
+                  <Layers className={`w-5 h-5 mr-2 ${role === 'SUPER_ADMIN' || role === 'ADMIN' || role === 'HR_MANAGER' ? colorTheme.text : 'text-slate-400'}`} />
                   <span className="font-medium">
                     {dept._count.positions} Job {dept._count.positions === 1 ? 'Position' : 'Positions'}
                   </span>

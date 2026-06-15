@@ -5,37 +5,57 @@ import PersonnelTable from '@/components/PersonnelTable';
 
 export const dynamic = 'force-dynamic';
 
-export default async function PersonnelPage() {
+export default async function PersonnelPage(props: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
+  const searchParams = await props.searchParams;
   const session = await getSession();
 
-  if (!session || !['SUPER_ADMIN', 'HR_MANAGER', 'AUDITOR'].includes(session.role as string)) {
+  if (!session || !['SUPER_ADMIN', 'ADMIN', 'HR_MANAGER', 'AUDITOR'].includes(session.role as string)) {
     redirect('/');
   }
+
+  const page = Number(searchParams.page) || 1;
+  const search = searchParams.search || '';
+  const dept = searchParams.dept || 'All';
+  const ITEMS_PER_PAGE = 10;
+  const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const [totalWorkforce, activePersonnel, recentlyOnboarded, employeesRaw, positions] = await Promise.all([
+  const whereClause: any = { deleted_at: null };
+  
+  if (search) {
+    whereClause.OR = [
+      { first_name: { contains: search } },
+      { last_name: { contains: search } },
+      { email: { contains: search } }
+    ];
+  }
+
+  if (dept !== 'All') {
+    whereClause.position = { department_id: dept };
+  }
+
+  const [totalWorkforce, activePersonnel, recentlyOnboarded, employeesRaw, totalFiltered, positions] = await Promise.all([
     prisma.employee.count({ where: { deleted_at: null } }),
     prisma.employee.count({ where: { status: 'Active', deleted_at: null } }),
     prisma.employee.count({ where: { created_at: { gte: thirtyDaysAgo }, deleted_at: null } }),
     prisma.employee.findMany({
-      where: { deleted_at: null },
+      where: whereClause,
       include: { position: { include: { department: true } } },
-      orderBy: { created_at: 'desc' }
+      orderBy: { created_at: 'desc' },
+      skip,
+      take: ITEMS_PER_PAGE
     }),
+    prisma.employee.count({ where: whereClause }),
     prisma.position.findMany({ orderBy: { title: 'asc' }, include: { department: true } })
   ]);
-
-  const maskPII = (name: string) => {
-    return name ? name.charAt(0) + '***' : '***';
-  };
 
   const processedEmployees = employeesRaw.map(emp => {
     return {
       ...emp,
-      first_name: session.role === 'AUDITOR' ? maskPII(emp.first_name) : emp.first_name,
-      last_name: session.role === 'AUDITOR' ? maskPII(emp.last_name) : emp.last_name,
+      first_name: emp.first_name,
+      last_name: emp.last_name,
       actual_salary: session.role === 'HR_MANAGER' ? null : emp.actual_salary,
     };
   });
@@ -62,7 +82,15 @@ export default async function PersonnelPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <PersonnelTable employees={processedEmployees} role={session.role as string} positions={positions} />
+        <PersonnelTable 
+          employees={processedEmployees} 
+          role={session.role as string} 
+          positions={positions} 
+          totalFiltered={totalFiltered}
+          initialSearch={search}
+          initialDept={dept}
+          currentPage={page}
+        />
       </div>
     </div>
   );

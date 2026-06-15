@@ -1,17 +1,52 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EditEmployeeModal from '@/components/EditEmployeeModal';
 import Pagination from '@/components/Pagination';
 import { Eye, Edit, Search } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { IconMap, ColorMap } from '@/lib/theme';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function PersonnelTable({ employees, role, positions }: { employees: any[], role: string, positions: any[] }) {
+export default function PersonnelTable({ 
+  employees, role, positions, totalFiltered, initialSearch, initialDept, currentPage 
+}: { 
+  employees: any[], role: string, positions: any[], totalFiltered: number, initialSearch: string, initialDept: string, currentPage: number 
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterDept, setFilterDept] = useState('All');
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [filterDept, setFilterDept] = useState(initialDept);
+
+  // Debounce search
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchQuery) params.set('search', searchQuery);
+      else params.delete('search');
+      params.set('page', '1');
+      router.push(`?${params.toString()}`);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, router]);
+
+  const handleDeptChange = (deptId: string) => {
+    setFilterDept(deptId);
+    const params = new URLSearchParams(searchParams.toString());
+    if (deptId !== 'All') params.set('dept', deptId);
+    else params.delete('dept');
+    params.set('page', '1');
+    router.push(`?${params.toString()}`);
+  };
+
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', page.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   const departmentsMap = new Map();
   positions.forEach(p => {
@@ -21,18 +56,8 @@ export default function PersonnelTable({ employees, role, positions }: { employe
   });
   const uniqueDepartments = Array.from(departmentsMap.values());
 
-  const filteredEmployees = employees.filter(emp => {
-    const term = searchQuery.toLowerCase();
-    const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
-    const matchesSearch = fullName.includes(term) || emp.email.toLowerCase().includes(term);
-    const matchesDept = filterDept === 'All' || emp.position?.department?.id === filterDept;
-    
-    return matchesSearch && matchesDept;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(filteredEmployees.length / ITEMS_PER_PAGE));
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedEmployees = filteredEmployees.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / ITEMS_PER_PAGE));
+  const paginatedEmployees = employees; // Already paginated from server
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -53,10 +78,7 @@ export default function PersonnelTable({ employees, role, positions }: { employe
       <div className="p-4 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row justify-between items-center gap-4">
         <select 
           value={filterDept}
-          onChange={(e) => {
-            setFilterDept(e.target.value);
-            setCurrentPage(1);
-          }}
+          onChange={(e) => handleDeptChange(e.target.value)}
           className="w-full sm:w-auto border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer bg-white"
         >
           <option value="All">All Departments</option>
@@ -71,10 +93,7 @@ export default function PersonnelTable({ employees, role, positions }: { employe
             type="text" 
             placeholder="Search personnel by name or email..." 
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
           />
         </div>
@@ -101,7 +120,22 @@ export default function PersonnelTable({ employees, role, positions }: { employe
               <td className="px-6 py-4">
                 <div className="flex flex-col">
                   <span className="text-slate-800 font-medium">{emp.position?.title || 'Unassigned'}</span>
-                  <span className="text-slate-500 text-xs">{emp.position?.department?.name || 'N/A'}</span>
+                  {(() => {
+                    const deptName = emp.position?.department?.name;
+                    if (!deptName) return <span className="text-slate-500 text-xs mt-1">N/A</span>;
+                    
+                    const iconName = emp.position?.department?.icon || 'Building';
+                    const colorName = emp.position?.department?.color || 'slate';
+                    const DeptIcon = IconMap[iconName] || IconMap['Building'];
+                    const colorTheme = ColorMap[colorName] || ColorMap['slate'];
+
+                    return (
+                      <div className={`flex items-center space-x-1 mt-1 ${colorTheme.text}`}>
+                        <DeptIcon className="w-3.5 h-3.5" />
+                        <span className="text-xs font-medium">{deptName}</span>
+                      </div>
+                    );
+                  })()}
                 </div>
               </td>
               <td className="px-6 py-4">
@@ -112,7 +146,7 @@ export default function PersonnelTable({ employees, role, positions }: { employe
                   onClick={() => setSelectedEmployee(emp)}
                   className="inline-flex items-center space-x-1 border border-violet-200 text-violet-700 hover:border-violet-600 hover:bg-violet-50 transition-colors px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer"
                 >
-                  {role === 'AUDITOR' || role === 'SUPER_ADMIN' ? (
+                  {role === 'AUDITOR' || role === 'SUPER_ADMIN' || role === 'ADMIN' ? (
                     <>
                       <Eye className="w-4 h-4" />
                       <span>View</span>
@@ -127,7 +161,7 @@ export default function PersonnelTable({ employees, role, positions }: { employe
               </td>
             </tr>
           ))}
-          {filteredEmployees.length === 0 && (
+          {paginatedEmployees.length === 0 && (
             <tr>
               <td colSpan={5} className="px-6 py-12 text-center text-slate-400">
                 No personnel records match your search.
@@ -141,7 +175,7 @@ export default function PersonnelTable({ employees, role, positions }: { employe
       <Pagination 
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
 
       {selectedEmployee && (

@@ -46,7 +46,7 @@ export default function EditPositionModal({
   role: string;
   onClose: () => void;
 }) {
-  const isSuperAdmin = role === 'SUPER_ADMIN';
+  const isSuperAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(position.icon || 'Briefcase');
 

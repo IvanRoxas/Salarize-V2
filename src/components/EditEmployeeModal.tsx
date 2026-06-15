@@ -34,7 +34,7 @@ export default function EditEmployeeModal({
 }) {
   const isAuditor = role === 'AUDITOR';
   const isHR = role === 'HR_MANAGER';
-  const isSuperAdmin = role === 'SUPER_ADMIN';
+  const isSuperAdmin = role === 'SUPER_ADMIN' || role === 'ADMIN';
 
   const initialDeptId = positions.find(p => p.id === employee.position_id)?.department_id || '';
   const [selectedDeptId, setSelectedDeptId] = useState<string>(initialDeptId);
@@ -57,7 +57,7 @@ export default function EditEmployeeModal({
 
   const selectedPosition = positions.find(p => p.id === selectedPositionId);
 
-  const maskName = (name: string) => isAuditor ? (name ? name.charAt(0) + '***' : '***') : name;
+
 
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -102,7 +102,7 @@ export default function EditEmployeeModal({
                 <input 
                   type="text" 
                   name="first_name" 
-                  defaultValue={maskName(employee.first_name)} 
+                  defaultValue={employee.first_name} 
                   disabled={isAuditor || isSuperAdmin}
                   required 
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none disabled:bg-slate-50 disabled:text-slate-500" 
@@ -113,7 +113,7 @@ export default function EditEmployeeModal({
                 <input 
                   type="text" 
                   name="last_name" 
-                  defaultValue={maskName(employee.last_name)} 
+                  defaultValue={employee.last_name} 
                   disabled={isAuditor || isSuperAdmin}
                   required 
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none disabled:bg-slate-50 disabled:text-slate-500" 

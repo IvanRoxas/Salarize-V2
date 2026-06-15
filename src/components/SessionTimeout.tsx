@@ -55,7 +55,6 @@ export default function SessionTimeout() {
         setRemainingTime((prev) => {
           if (prev <= 1) {
             if (warningInterval.current) clearInterval(warningInterval.current);
-            handleLogout();
             return 0;
           }
           return prev - 1;
@@ -69,6 +68,12 @@ export default function SessionTimeout() {
       if (warningInterval.current) clearInterval(warningInterval.current);
     };
   }, [showWarning]);
+
+  useEffect(() => {
+    if (showWarning && remainingTime === 0) {
+      handleLogout();
+    }
+  }, [remainingTime, showWarning]);
 
   if (!showWarning) return null;
 
