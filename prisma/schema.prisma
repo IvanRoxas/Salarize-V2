@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  password_hash String
+  role          String   // "SUPER_ADMIN", "HR_MANAGER", "AUDITOR"
+  created_at    DateTime @default(now())
+}
+
+model Department {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String?
+  positions   Position[]
+  created_at  DateTime   @default(now())
+}
+
+model Position {
+  id            String     @id @default(uuid())
+  title         String     @unique
+  department_id String
+  department    Department @relation(fields: [department_id], references: [id])
+  base_salary   Float
+  min_salary    Float
+  max_salary    Float
+  employees     Employee[]
+  created_at    DateTime   @default(now())
+}
+
+model Employee {
+  id           String    @id @default(uuid())
+  first_name   String
+  last_name    String
+  gender       String
+  email        String    @unique
+  position_id  String
+  position     Position  @relation(fields: [position_id], references: [id])
+  actual_salary Float
+  status       String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime? // For Soft Deletion
+}
+
+model AuditLog {
+  id              String   @id @default(uuid())
+  admin_id        String
+  admin_name      String
+  action          String
+  target_employee String?
+  old_value       String?
+  new_value       String?
+  timestamp       DateTime @default(now())
+}
