@@ -50,12 +50,11 @@ export default function ConfirmModal({
           <p className="text-slate-600 text-sm mb-6">{message}</p>
           
           {require2FA && (
-            <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-              <div className="flex items-center gap-2 mb-2">
-                <ShieldCheck className="w-4 h-4 text-violet-600" />
-                <label className="text-sm font-bold text-slate-700">Security Verification (2FA)</label>
-              </div>
-              <p className="text-xs text-slate-500 mb-3">Please enter your 6-digit authenticator code.</p>
+            <div className="group mb-8">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5 transition-colors group-focus-within:text-violet-600 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4" />
+                Authentication Code
+              </label>
               <input
                 type="text"
                 maxLength={6}
@@ -64,12 +63,14 @@ export default function ConfirmModal({
                   setCode(e.target.value.replace(/\D/g, ''));
                   setError('');
                 }}
-                className={`w-full px-4 py-2.5 text-center tracking-[0.5em] font-mono font-bold text-lg border rounded-lg focus:outline-none focus:ring-2 ${
-                  error ? 'border-red-300 focus:ring-red-500 bg-red-50 text-red-900' : 'border-slate-300 focus:ring-violet-500 bg-white'
+                className={`w-full rounded-xl px-4 py-3 text-center tracking-[0.5em] text-2xl font-bold outline-none transition-all duration-300 shadow-sm border ${
+                  error 
+                    ? 'bg-red-50/50 border-red-300 text-red-900 focus:bg-white focus:ring-4 focus:ring-red-600/10 focus:border-red-500 hover:border-red-400' 
+                    : 'bg-slate-50/50 border-slate-200 text-slate-900 focus:bg-white focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500 hover:border-violet-300'
                 }`}
-                placeholder="000000"
+                placeholder="123456"
               />
-              {error && <p className="text-red-500 text-xs mt-2 font-medium flex items-center">{error}</p>}
+              {error && <p className="text-red-500 text-xs mt-2 font-medium">{error}</p>}
             </div>
           )}
 
