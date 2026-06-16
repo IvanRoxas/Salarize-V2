@@ -34,6 +34,24 @@ input:disabled {
   cursor: not-allowed;
 }
 
+/* Dynamic Styling Classes */
+.role-btn {
+  @apply transition-all duration-300 ease-in-out cursor-pointer;
+}
+.role-btn:hover {
+  @apply transform -translate-y-1 shadow-md;
+}
+.role-btn:active {
+  @apply transform translate-y-0 shadow-sm;
+}
+
+.job-position-row {
+  @apply transition-all duration-300;
+}
+.job-position-row:hover {
+  @apply transform translate-x-2 bg-violet-50/50;
+}
+
 nextjs-portal {
   display: none !important;
 }  
