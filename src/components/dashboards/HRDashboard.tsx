@@ -29,7 +29,7 @@ export default async function HRDashboard() {
     }),
     prisma.employee.groupBy({
       by: ['position_id'],
-      where: { deleted_at: null },
+      where: { status: 'Active', deleted_at: null },
       _count: { id: true },
     }),
     prisma.position.findMany({ include: { department: true } }),
