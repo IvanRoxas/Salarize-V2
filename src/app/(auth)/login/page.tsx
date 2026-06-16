@@ -84,7 +84,7 @@ export default function LoginPage() {
       <div className="absolute top-1/4 left-1/4 w-[35rem] h-[35rem] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-violet-600/20 rounded-full blur-[100px] pointer-events-none"></div>
       
-      <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_8px_40px_rgb(0,0,0,0.5)] border border-purple-100 w-full max-w-lg p-10 relative z-10 hover:shadow-[0_15px_50px_rgba(109,40,217,0.2)] transition-shadow duration-500">
+      <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_8px_40px_rgb(0,0,0,0.5)] border border-purple-100 w-full max-w-xl p-10 relative z-10 hover:shadow-[0_15px_50px_rgba(109,40,217,0.2)] transition-shadow duration-500">
         
         {step === '2fa' ? (
           <div className="text-center mb-10 fade-in">
