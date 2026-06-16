@@ -5,6 +5,9 @@ import { Toaster } from 'react-hot-toast';
 export const metadata: Metadata = {
   title: "Salarize V2",
   description: "Modern Employee Management System",
+  icons: {
+    icon: '/icon.svg?v=2',
+  },
 };
 
 export default function RootLayout({
