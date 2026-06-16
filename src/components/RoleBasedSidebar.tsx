@@ -20,7 +20,7 @@ export default function RoleBasedSidebar({ role }: { role: string }) {
       case 'SUPER_ADMIN':
         return [
           { href: '/', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-          { href: '/personnel', label: 'Manage Employees', icon: <Users className="w-5 h-5" /> },
+          { href: '/personnel', label: 'Employees', icon: <Users className="w-5 h-5" /> },
           { href: '/departments', label: 'Departments', icon: <Briefcase className="w-5 h-5" /> },
           { href: '/admins', label: 'System Roles', icon: <Shield className="w-5 h-5" /> },
           { href: '/audit-logs', label: 'Access Logs', icon: <ShieldAlert className="w-5 h-5" /> },
@@ -29,7 +29,7 @@ export default function RoleBasedSidebar({ role }: { role: string }) {
       case 'ADMIN':
         return [
           { href: '/', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-          { href: '/personnel', label: 'Manage Employees', icon: <Users className="w-5 h-5" /> },
+          { href: '/personnel', label: 'Employees', icon: <Users className="w-5 h-5" /> },
           { href: '/departments', label: 'Departments', icon: <Briefcase className="w-5 h-5" /> },
           { href: '/audit-logs', label: 'Access Logs', icon: <ShieldAlert className="w-5 h-5" /> },
           { href: '/activity-history', label: 'Activity History', icon: <FileArchive className="w-5 h-5" /> },
