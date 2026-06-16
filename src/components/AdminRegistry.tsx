@@ -16,7 +16,7 @@ export default function AdminRegistry({
   currentAdminId: string 
 }) {
   const [adminToProcess, setAdminToProcess] = useState<any>(null);
-  const [actionType, setActionType] = useState<'approve' | 'suspend' | 'restore' | null>(null);
+  const [actionType, setActionType] = useState<'approve' | 'suspend' | 'restore' | 'editRole' | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   
   // State for inline editing in Active Roster
@@ -53,6 +53,12 @@ export default function AdminRegistry({
       result = await suspendAdminAction(adminToProcess.id);
     } else if (actionType === 'restore') {
       result = await restoreUserAccessAction(adminToProcess.id);
+    } else if (actionType === 'editRole') {
+      if (!editingRoleValue) return;
+      result = await updateAdminRoleAction(adminToProcess.id, editingRoleValue);
+      if (result.success) {
+        setEditingRoleId(null);
+      }
     }
 
     if (result?.success) {
@@ -66,16 +72,9 @@ export default function AdminRegistry({
     setActionType(null);
   };
 
+  // Replaced by 2FA execution
   const handleSaveRole = async (adminId: string) => {
-    if (!editingRoleValue) return;
-    const result = await updateAdminRoleAction(adminId, editingRoleValue);
-    if (result.success) {
-      toast.success(result.message);
-      setTimeout(() => window.location.reload(), 1000);
-    } else {
-      toast.error(result.message);
-    }
-    setEditingRoleId(null);
+    // Left empty since it's routed through ConfirmModal now
   };
 
   const getRoleBadge = (role: string) => {
@@ -230,7 +229,7 @@ export default function AdminRegistry({
                           <option value="HR_MANAGER">HR Manager</option>
                           <option value="AUDITOR">Auditor</option>
                         </select>
-                        <button onClick={() => handleSaveRole(admin.id)} className="text-emerald-600 hover:bg-emerald-50 p-1 rounded transition-colors"><Check className="w-4 h-4"/></button>
+                        <button onClick={() => { setAdminToProcess(admin); setActionType('editRole'); }} className="text-emerald-600 hover:bg-emerald-50 p-1 rounded transition-colors"><Check className="w-4 h-4"/></button>
                         <button onClick={() => setEditingRoleId(null)} className="text-slate-400 hover:bg-slate-100 p-1 rounded transition-colors"><X className="w-4 h-4"/></button>
                       </div>
                     ) : (
@@ -289,16 +288,19 @@ export default function AdminRegistry({
           title={
             actionType === 'approve' ? "Approve Access Request" :
             actionType === 'suspend' ? "Suspend Administrator" : 
+            actionType === 'editRole' ? "Confirm Role Change" :
             "Restore Access"
           }
           message={
-            actionType === 'approve' ? `Are you sure you want to approve ${adminToProcess.username} and assign them the role of ${pendingRoles[adminToProcess.id]}?` :
-            actionType === 'suspend' ? `Are you sure you want to suspend access for ${adminToProcess.username}? Their active sessions will be instantly revoked.` :
-            `Are you sure you want to restore access for ${adminToProcess.username}? They will immediately regain system access.`
+            actionType === 'approve' ? `Are you sure you want to approve ${adminToProcess.username} and assign them the role of ${pendingRoles[adminToProcess.id] || 'selected'}?` :
+            actionType === 'suspend' ? `Are you sure you want to suspend ${adminToProcess.username}? They will lose all access to the system immediately.` :
+            actionType === 'editRole' ? `Are you sure you want to change ${adminToProcess.username}'s role to ${editingRoleValue}?` :
+            `Are you sure you want to restore access for ${adminToProcess.username}?`
           }
           confirmText={
             actionType === 'approve' ? "Approve" :
             actionType === 'suspend' ? "Suspend" :
+            actionType === 'editRole' ? "Update Role" :
             "Restore"
           }
           require2FA={true}
