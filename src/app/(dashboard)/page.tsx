@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashboardTrafficCop({ searchParams }: any) {
   const session = await getSession();
-  const pageStr = await searchParams?.page;
+  const params = await searchParams;
+  const pageStr = params?.page;
   const page = pageStr ? parseInt(pageStr as string) : 1;
 
   if (session?.role === 'SUPER_ADMIN' || session?.role === 'ADMIN') {
