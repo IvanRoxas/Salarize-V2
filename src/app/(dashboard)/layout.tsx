@@ -3,7 +3,7 @@ import AdminProfile from "@/components/AdminProfile";
 import SessionTimeout from "@/components/SessionTimeout";
 import RoleBasedSidebar from "@/components/RoleBasedSidebar";
 import Link from "next/link";
-import { Briefcase, LayoutDashboard, Users } from "lucide-react";
+import { Briefcase, LayoutDashboard, Users, DollarSign } from "lucide-react";
 
 export default async function DashboardLayout({
   children,
@@ -20,8 +20,8 @@ export default async function DashboardLayout({
       <aside className="w-64 bg-slate-800 text-white flex flex-col z-10">
         <div className="p-6">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="bg-violet-600 text-white p-2 rounded-lg font-bold">
-              SZ
+            <div className="bg-violet-600 text-white p-1.5 rounded-full flex items-center justify-center shadow-sm">
+              <DollarSign className="w-6 h-6" strokeWidth={2.5} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white">Salarize</h1>
           </div>
