@@ -301,6 +301,7 @@ export default function AdminRegistry({
             actionType === 'suspend' ? "Suspend" :
             "Restore"
           }
+          require2FA={true}
           onConfirm={executeAction}
           onCancel={() => { setAdminToProcess(null); setActionType(null); }}
         />
