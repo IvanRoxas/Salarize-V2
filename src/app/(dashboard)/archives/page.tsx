@@ -13,10 +13,15 @@ export default async function ArchivesPage() {
     redirect('/');
   }
 
-  const archivedLogs = await prisma.auditLog.findMany({
-    where: { is_archived: true },
-    orderBy: { timestamp: 'desc' },
-  });
+  const [archivedLogs, admins] = await Promise.all([
+    prisma.auditLog.findMany({
+      where: { is_archived: true },
+      orderBy: { timestamp: 'desc' },
+    }),
+    prisma.admin.findMany({ select: { username: true } })
+  ]);
+
+  const registeredActors = admins.map(a => a.username);
 
   return (
     <div className="space-y-8">
@@ -27,7 +32,7 @@ export default async function ArchivesPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <AuditLogsTable logs={archivedLogs} />
+        <AuditLogsTable logs={archivedLogs} registeredActors={registeredActors} />
       </div>
     </div>
   );
