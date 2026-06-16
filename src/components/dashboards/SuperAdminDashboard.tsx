@@ -111,7 +111,7 @@ export default async function SuperAdminDashboard({ page = 1 }: { page?: number 
             </div>
             <div className="flex space-x-2">
               {page > 1 ? (
-                <Link href={`/?page=${page - 1}`} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+                <Link href={`/?page=${page - 1}`} scroll={false} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
                   Previous
                 </Link>
               ) : (
@@ -120,7 +120,7 @@ export default async function SuperAdminDashboard({ page = 1 }: { page?: number 
                 </button>
               )}
               {page < totalPages ? (
-                <Link href={`/?page=${page + 1}`} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+                <Link href={`/?page=${page + 1}`} scroll={false} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
                   Next
                 </Link>
               ) : (
