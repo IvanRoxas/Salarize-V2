@@ -52,17 +52,14 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
   }, [departmentCounts, positions]);
 
   const uniqueDepartments = useMemo(() => {
-    return Array.from(new Set(departmentData.map(d => d.name)));
-  }, [departmentData]);
-
-  // Set default selected department on mount
-  if (selectedDept === 'All' && uniqueDepartments.length > 0 && uniqueDepartments[0] !== 'Unassigned') {
-    // Select the first valid department by default, or fallback
-    const firstValid = uniqueDepartments.find(d => d !== 'Unassigned') || uniqueDepartments[0];
-    if (selectedDept !== firstValid) {
-      setSelectedDept(firstValid);
-    }
-  }
+    const depts = new Set<string>();
+    positions.forEach(p => {
+      if (p.department?.name) {
+        depts.add(p.department.name);
+      }
+    });
+    return Array.from(depts).sort();
+  }, [positions]);
 
   // Process Position Data based on Selected Department
   const positionData = useMemo(() => {
@@ -124,6 +121,7 @@ export default function DashboardCharts({ departmentCounts, positions }: Dashboa
             onChange={(e) => setSelectedDept(e.target.value)}
             className="border-2 border-violet-100 bg-violet-50 text-violet-800 font-semibold text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none cursor-pointer transition-colors"
           >
+            <option value="All">All Departments</option>
             {uniqueDepartments.map(dept => (
               <option key={dept} value={dept}>{dept}</option>
             ))}
