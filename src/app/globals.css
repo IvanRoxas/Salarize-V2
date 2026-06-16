@@ -22,6 +22,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button, 
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"]:disabled,
+input:disabled {
+  cursor: not-allowed;
+}
+
 nextjs-portal {
   display: none !important;
 }  
