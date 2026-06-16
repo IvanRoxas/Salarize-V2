@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useFormStatus } from 'react-dom';
 import { loginAction, requestAccessAction, verify2FAAction } from '@/app/actions/auth';
 import toast from 'react-hot-toast';
-import { Eye, EyeOff, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, ArrowLeft, DollarSign } from 'lucide-react';
 
 function SubmitButton({ step }: { step: 'login' | 'signup' | '2fa' }) {
   const { pending } = useFormStatus();
@@ -98,6 +98,9 @@ export default function LoginPage() {
           </div>
         ) : (
           <div className="text-center mb-10 fade-in">
+            <div className="w-16 h-16 bg-violet-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_4px_14px_0_rgba(109,40,217,0.39)]">
+              <DollarSign className="w-9 h-9" strokeWidth={2.5} />
+            </div>
             <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-violet-600 tracking-tight">Salarize</h1>
             <p className="text-slate-500 text-[15px] mt-2 font-medium">Enterprise Payroll and Management</p>
           </div>
