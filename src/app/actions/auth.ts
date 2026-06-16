@@ -194,7 +194,7 @@ export async function verify2FAAction(formData: FormData) {
     cookieStore.set('salarize_session', jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'strict',
       maxAge: 60 * 60 * 2 // 2 hours
     });
 
