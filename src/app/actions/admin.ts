@@ -127,7 +127,7 @@ export async function approveAdminAction(adminId: string, role: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id:        session.id as string,
+        admin_id:        (session.id || session.username) as string,
         admin_name:      session.username as string,
         action:          validatedRole === 'SUPER_ADMIN'
                            ? '⚠️ ELEVATED_PRIVILEGE — APPROVE ROLE'
@@ -173,7 +173,7 @@ export async function suspendAdminAction(adminId: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id: session.id as string,
+        admin_id: (session.id || session.username) as string,
         admin_name: session.username as string,
         action: 'SUSPEND ROLE',
         target_employee: `Admin ID: ${adminToSuspend.id} (${adminToSuspend.username})`,
@@ -204,7 +204,7 @@ export async function restoreUserAccessAction(adminId: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id: session.id as string,
+        admin_id: (session.id || session.username) as string,
         admin_name: session.username as string,
         action: 'RESTORE ROLE',
         target_employee: `Admin ID: ${adminToRestore.id} (${adminToRestore.username})`,
@@ -254,7 +254,7 @@ export async function updateAdminRoleAction(adminId: string, newRole: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id:        session.id as string,
+        admin_id:        (session.id || session.username) as string,
         admin_name:      session.username as string,
         action:          validatedRole === 'SUPER_ADMIN'
                            ? '⚠️ ELEVATED_PRIVILEGE — UPDATE ROLE'
