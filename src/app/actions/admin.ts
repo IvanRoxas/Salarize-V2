@@ -127,12 +127,14 @@ export async function approveAdminAction(adminId: string, role: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id: session.id as string,
-        admin_name: session.username as string,
-        action: 'APPROVE ROLE',
+        admin_id:        session.id as string,
+        admin_name:      session.username as string,
+        action:          validatedRole === 'SUPER_ADMIN'
+                           ? '⚠️ ELEVATED_PRIVILEGE — APPROVE ROLE'
+                           : 'APPROVE ROLE',
         target_employee: `Admin ID: ${adminToApprove.id} (${adminToApprove.username})`,
-        old_value: 'STATUS: PENDING',
-        new_value: `STATUS: APPROVED, ROLE: ${validatedRole}`,
+        old_value:       'STATUS: PENDING',
+        new_value:       `STATUS: APPROVED, ROLE: ${validatedRole}`,
       },
     });
 
@@ -252,12 +254,14 @@ export async function updateAdminRoleAction(adminId: string, newRole: string) {
 
     await prisma.auditLog.create({
       data: {
-        admin_id: session.id as string,
-        admin_name: session.username as string,
-        action: 'UPDATE ROLE',
+        admin_id:        session.id as string,
+        admin_name:      session.username as string,
+        action:          validatedRole === 'SUPER_ADMIN'
+                           ? '⚠️ ELEVATED_PRIVILEGE — UPDATE ROLE'
+                           : 'UPDATE ROLE',
         target_employee: `Admin ID: ${adminToEdit.id} (${adminToEdit.username})`,
-        old_value: `ROLE: ${adminToEdit.role}`,
-        new_value: `ROLE: ${validatedRole}`,
+        old_value:       `ROLE: ${adminToEdit.role}`,
+        new_value:       `ROLE: ${validatedRole}`,
       },
     });
 

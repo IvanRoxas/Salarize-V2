@@ -17,7 +17,8 @@ export default async function HRDashboard() {
     positions,
     pendingOnboarding,
     newHiresThisMonth,
-    onboardingQueue
+    onboardingQueue,
+    departments
   ] = await Promise.all([
     prisma.employee.count({ where: { status: 'Active', deleted_at: null } }),
     prisma.employee.findMany({
@@ -47,7 +48,8 @@ export default async function HRDashboard() {
       include: { position: true },
       orderBy: { created_at: 'desc' },
       take: 8,
-    })
+    }),
+    prisma.department.findMany()
   ]);
 
   const getStatusStyle = (status: string | null) => {
@@ -82,7 +84,7 @@ export default async function HRDashboard() {
       </div>
 
       {/* HR Action Center */}
-      <HRActionCenter positions={positions} />
+      <HRActionCenter positions={positions} departments={departments} />
 
       {/* Middle Row: Distribution Charts */}
       <DashboardCharts departmentCounts={departmentCounts} positions={positions} />

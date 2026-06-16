@@ -63,8 +63,23 @@ export default function ActivityHistoryTable({ logs, role }: { logs: any[], role
   const router = useRouter();
 
   const handleArchive = () => {
+    const unarchivedCount = logs.filter((l: any) => !l.is_archived).length;
+    if (unarchivedCount === 0) return;
+
+    // F8 fix: require explicit confirmation with the exact count displayed
+    const confirmed = window.confirm(
+      `⚠️ Archive all ${unarchivedCount} active log entries?\n\n` +
+      `This will hide them from the default activity view. This action is logged and irreversible.\n\n` +
+      `Type OK to confirm.`
+    );
+    if (!confirmed) return;
+
     startTransition(async () => {
-      await archiveAllHistoryAction();
+      // Pass the expected count to the server for mismatch protection
+      const result = await archiveAllHistoryAction(unarchivedCount);
+      if (result?.success === false) {
+        alert(`Archive failed: ${result.message}`);
+      }
       router.refresh();
     });
   };
@@ -74,6 +89,10 @@ export default function ActivityHistoryTable({ logs, role }: { logs: any[], role
     if (filter === 'Salary Changes' && log.action !== 'UPDATE SALARY') return false;
     if (filter === 'Department Changes' && !['CREATE DEPARTMENT', 'UPDATE DEPARTMENT', 'DELETE DEPARTMENT', 'CREATE POSITION', 'UPDATE POSITION', 'DELETE POSITION'].includes(log.action)) return false;
     if (filter === 'Terminations' && !['ARCHIVE_EMPLOYEE', 'DELETE_EMPLOYEE', 'DELETE EMPLOYEE'].includes(log.action)) return false;
+    if (filter === 'Security Alerts') {
+      const isThreat = ['ALERT', 'EXFILTRATION', 'TAMPERING', 'SECURITY', 'INJECTION', 'XSS', 'TRAVERSAL'].some(keyword => log.action.toUpperCase().includes(keyword));
+      if (!isThreat) return false;
+    }
 
     // Date filter
     if (dateFilter !== 'All Time') {
@@ -122,6 +141,7 @@ export default function ActivityHistoryTable({ logs, role }: { logs: any[], role
             className="text-sm border-slate-300 rounded-md shadow-sm focus:border-violet-500 focus:ring-violet-500 py-1.5 min-w-[150px] cursor-pointer"
           >
             <option value="All">All Actions</option>
+            <option value="Security Alerts">Security Alerts</option>
             <option value="Salary Changes">Salary Changes</option>
             <option value="Department Changes">Department Changes</option>
             <option value="Terminations">Terminations</option>

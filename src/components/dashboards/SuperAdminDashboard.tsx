@@ -2,23 +2,34 @@ import prisma from '@/lib/prisma';
 import SuperAdminActionCenter from './SuperAdminActionCenter';
 import Link from 'next/link';
 import { getSession } from '@/app/actions/auth';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 
-export default async function SuperAdminDashboard() {
+export default async function SuperAdminDashboard({ page = 1 }: { page?: number }) {
   const session = await getSession();
+  const ITEMS_PER_PAGE = 5;
+  const skip = (page - 1) * ITEMS_PER_PAGE;
+
   const [
     totalEmployees,
     activeStaff,
     totalLogs,
+    feedTotalLogs,
     recentLogs,
   ] = await Promise.all([
     prisma.employee.count({ where: { deleted_at: null } }),
     prisma.employee.count({ where: { status: 'Active', deleted_at: null } }),
     prisma.auditLog.count(),
+    prisma.auditLog.count({ where: { action: { notIn: [...ACCESS_LOG_ACTIONS] } } }),
+    // Operational activity only — login/security events go to Access Logs
     prisma.auditLog.findMany({
-      take: 5,
+      take: ITEMS_PER_PAGE,
+      skip,
+      where: { action: { notIn: [...ACCESS_LOG_ACTIONS] } },
       orderBy: { timestamp: 'desc' },
     })
   ]);
+
+  const totalPages = Math.ceil(feedTotalLogs / ITEMS_PER_PAGE);
 
   const getActionColor = (action: string) => {
     if (action.includes('CREATE') || action.includes('ADDED')) return 'text-violet-600 font-semibold';
@@ -93,6 +104,33 @@ export default async function SuperAdminDashboard() {
             </tbody>
           </table>
         </div>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50">
+            <div className="text-sm text-slate-500">
+              Page <span className="font-semibold text-slate-800">{page}</span> of <span className="font-semibold text-slate-800">{totalPages}</span>
+            </div>
+            <div className="flex space-x-2">
+              {page > 1 ? (
+                <Link href={`/?page=${page - 1}`} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+                  Previous
+                </Link>
+              ) : (
+                <button disabled className="px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-50 border border-slate-200 rounded-md cursor-not-allowed">
+                  Previous
+                </button>
+              )}
+              {page < totalPages ? (
+                <Link href={`/?page=${page + 1}`} className="px-4 py-2 text-sm font-semibold text-violet-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+                  Next
+                </Link>
+              ) : (
+                <button disabled className="px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-50 border border-slate-200 rounded-md cursor-not-allowed">
+                  Next
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { UserPlus, CreditCard, ChevronRight } from 'lucide-react';
 import RegisterPersonnelModal from '@/components/RegisterPersonnelModal';
 import Link from 'next/link';
 
-export default function HRActionCenter({ positions }: { positions: any[] }) {
+export default function HRActionCenter({ positions, departments }: { positions: any[], departments?: any[] }) {
   const [showPersonnelModal, setShowPersonnelModal] = useState(false);
 
   return (
@@ -45,6 +45,7 @@ export default function HRActionCenter({ positions }: { positions: any[] }) {
       {showPersonnelModal && (
         <RegisterPersonnelModal 
           positions={positions} 
+          departments={departments}
           onClose={() => setShowPersonnelModal(false)} 
         />
       )}

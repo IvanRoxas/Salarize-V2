@@ -5,7 +5,7 @@ import { UserPlus, ShieldAlert, ChevronRight } from 'lucide-react';
 import RegisterPersonnelModal from '@/components/RegisterPersonnelModal';
 import SystemAdminModal from '@/components/SystemAdminModal';
 
-export default function DashboardActionCenter({ positions }: { positions: any[] }) {
+export default function DashboardActionCenter({ positions, departments }: { positions: any[], departments?: any[] }) {
   const [showPersonnelModal, setShowPersonnelModal] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
 
@@ -46,6 +46,7 @@ export default function DashboardActionCenter({ positions }: { positions: any[] 
       {showPersonnelModal && (
         <RegisterPersonnelModal 
           positions={positions} 
+          departments={departments}
           onClose={() => setShowPersonnelModal(false)} 
         />
       )}

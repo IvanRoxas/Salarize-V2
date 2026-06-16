@@ -2,6 +2,8 @@ import prisma from '@/lib/prisma';
 import EmployeeRegistry from '@/components/EmployeeRegistry';
 import { getSession } from '@/app/actions/auth';
 import SearchBar from '@/components/ui/SearchBar';
+import { checkAccess } from '@/lib/security';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,6 +13,12 @@ export default async function EmployeesPage({
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const session = await getSession();
+
+  // F1 fix: PERSONNEL_DIRECTORY READ required — ADMIN role does not have it
+  if (!session || !checkAccess(session.role as string, 'PERSONNEL_DIRECTORY', 'READ')) {
+    redirect('/');
+  }
+
   const resolvedParams = await searchParams;
   const query = typeof resolvedParams?.query === 'string' ? resolvedParams.query : '';
 

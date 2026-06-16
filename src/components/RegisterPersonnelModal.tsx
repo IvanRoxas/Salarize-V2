@@ -19,11 +19,12 @@ function SubmitButton() {
   );
 }
 
-export default function RegisterPersonnelModal({ positions, onClose }: { positions: any[], onClose: () => void }) {
+export default function RegisterPersonnelModal({ positions, departments: propDepartments, onClose }: { positions: any[], departments?: any[], onClose: () => void }) {
   const [sessionRole, setSessionRole] = useState<string>('SUPER_ADMIN'); // In a real app, pass this down or fetch it
   const [selectedDeptId, setSelectedDeptId] = useState<string>('');
 
   const departments = useMemo(() => {
+    if (propDepartments && propDepartments.length > 0) return propDepartments;
     const deptMap = new Map();
     positions.forEach(p => {
       if (p.department) {
@@ -31,7 +32,7 @@ export default function RegisterPersonnelModal({ positions, onClose }: { positio
       }
     });
     return Array.from(deptMap.values());
-  }, [positions]);
+  }, [positions, propDepartments]);
 
   const filteredPositions = useMemo(() => {
     if (!selectedDeptId) return [];

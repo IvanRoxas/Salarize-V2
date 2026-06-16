@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { getSession } from '@/app/actions/auth';
 import { redirect } from 'next/navigation';
 import AuditLogsTable from '@/components/AuditLogsTable';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,23 +17,24 @@ export default async function AuditLogsPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const accessActionTypes = ['LOGIN_SUCCESS', 'LOGIN_FAILED', '403_FORBIDDEN', 'UNAUTHORIZED_LOGIN_ATTEMPT', 'UNAUTHORIZED', 'REVOKE ROLE', 'CREATE_ADMIN'];
-
-  const [logs, totalEvents, modificationsToday] = await Promise.all([
+  const [logs, totalEvents, modificationsToday, admins] = await Promise.all([
     prisma.auditLog.findMany({
-      where: { action: { in: accessActionTypes } },
+      where: { action: { in: [...ACCESS_LOG_ACTIONS] } },
       orderBy: { timestamp: 'desc' }
     }),
     prisma.auditLog.count({
-      where: { action: { in: accessActionTypes } }
+      where: { action: { in: [...ACCESS_LOG_ACTIONS] } }
     }),
     prisma.auditLog.count({
-      where: { 
-        action: { in: accessActionTypes },
-        timestamp: { gte: today } 
+      where: {
+        action: { in: [...ACCESS_LOG_ACTIONS] },
+        timestamp: { gte: today }
       }
-    })
+    }),
+    prisma.admin.findMany({ select: { username: true } })
   ]);
+
+  const registeredActors = admins.map(a => a.username);
 
   return (
     <div className="space-y-8">
@@ -52,7 +54,7 @@ export default async function AuditLogsPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <AuditLogsTable logs={logs} />
+        <AuditLogsTable logs={logs} registeredActors={registeredActors} />
       </div>
     </div>
   );

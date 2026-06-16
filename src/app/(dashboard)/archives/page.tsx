@@ -23,7 +23,6 @@ export default async function ArchivesPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-slate-800">System Archives</h1>
-          <p className="text-slate-500 mt-1">Massive data table of all archived audit logs.</p>
         </div>
       </div>
 

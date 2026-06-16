@@ -6,11 +6,13 @@ import AuditorDashboard from '@/components/dashboards/AuditorDashboard';
 
 export const dynamic = 'force-dynamic';
 
-export default async function DashboardTrafficCop() {
+export default async function DashboardTrafficCop({ searchParams }: any) {
   const session = await getSession();
+  const pageStr = await searchParams?.page;
+  const page = pageStr ? parseInt(pageStr as string) : 1;
 
   if (session?.role === 'SUPER_ADMIN' || session?.role === 'ADMIN') {
-    return <SuperAdminDashboard />;
+    return <SuperAdminDashboard page={page} />;
   }
 
   if (session?.role === 'HR_MANAGER') {

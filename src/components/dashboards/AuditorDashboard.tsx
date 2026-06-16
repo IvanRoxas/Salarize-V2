@@ -4,6 +4,7 @@ import GenerateComplianceReportButton from '@/components/GenerateComplianceRepor
 import { getSession } from '@/app/actions/auth';
 import NewAuditorKPICards from '@/components/dashboards/NewAuditorKPICards';
 import UnifiedActivityLedger from '@/components/dashboards/UnifiedActivityLedger';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 
 function formatValue(val: string | null) {
   if (!val) return '-';
@@ -39,7 +40,7 @@ export default async function AuditorDashboard() {
     prisma.auditLog.count({ 
       where: { 
         is_archived: false,
-        action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_FAILED'] }
+        action: { notIn: [...ACCESS_LOG_ACTIONS] }
       } 
     }),
     prisma.employee.findMany({
@@ -49,7 +50,7 @@ export default async function AuditorDashboard() {
     prisma.auditLog.findMany({
       where: { 
         is_archived: false,
-        action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_FAILED'] }
+        action: { notIn: [...ACCESS_LOG_ACTIONS] }
       },
       orderBy: { timestamp: 'desc' },
       take: 50

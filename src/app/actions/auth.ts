@@ -61,7 +61,7 @@ export async function loginAction(formData: FormData) {
       const defaultUser = process.env.DEFAULT_ADMIN_USER || 'admin';
       const defaultPass = process.env.DEFAULT_ADMIN_PASS || 'Admin@123!';
       const hash = await bcrypt.hash(defaultPass, 10);
-      
+
       await prisma.admin.create({
         data: { username: defaultUser, password_hash: hash, role: 'SUPER_ADMIN', status: 'APPROVED' }
       });
@@ -79,7 +79,7 @@ export async function loginAction(formData: FormData) {
     }
 
     const user = await prisma.admin.findUnique({ where: { username } });
-    
+
     if (!user) {
       rateLimitInfo.attempts += 1;
       if (rateLimitInfo.attempts >= MAX_ATTEMPTS) rateLimitInfo.lockUntil = now + LOCK_TIME_MS;
@@ -220,12 +220,12 @@ export async function getSession() {
   if (!session) return null;
   try {
     const { payload } = await jwtVerify(session, key);
-    
+
     // Lightweight DB Check: Verify the admin still exists, role matches, and is APPROVED
     const admin = await prisma.admin.findUnique({
       where: { id: payload.id as string }
     });
-    
+
     if (!admin || admin.role !== payload.role || admin.status !== 'APPROVED') {
       return null;
     }

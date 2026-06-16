@@ -7,13 +7,13 @@ export async function generateAuditReport() {
   return secureAction('SECURITY_LOGS', 'READ', async (session) => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const accessActionTypes = ['LOGIN_SUCCESS', 'LOGIN_FAILED', '403_FORBIDDEN', 'UNAUTHORIZED_LOGIN_ATTEMPT', 'UNAUTHORIZED', 'REVOKE ROLE', 'CREATE_ADMIN'];
+    const accessActionTypes = ['LOGIN_SUCCESS', 'LOGIN_SUCCESS_2FA', 'LOGIN_FAILED', '403_FORBIDDEN', 'UNAUTHORIZED_LOGIN_ATTEMPT', 'UNAUTHORIZED', 'REVOKE ROLE', 'CREATE_ADMIN'];
 
     const [activeLogs, accessLogs] = await Promise.all([
       prisma.auditLog.findMany({
         where: { 
           is_archived: false,
-          action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_FAILED'] }
+          action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_SUCCESS_2FA', 'LOGIN_FAILED'] }
         },
         orderBy: { timestamp: 'desc' }
       }),

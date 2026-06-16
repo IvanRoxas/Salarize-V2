@@ -6,7 +6,7 @@ import { Search } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function AuditLogsTable({ logs }: { logs: any[] }) {
+export default function AuditLogsTable({ logs, registeredActors = [] }: { logs: any[], registeredActors?: string[] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [actionFilter, setActionFilter] = useState('All');
   const [actorFilter, setActorFilter] = useState('All');
@@ -14,12 +14,41 @@ export default function AuditLogsTable({ logs }: { logs: any[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const uniqueActions = useMemo(() => Array.from(new Set(logs.map(l => l.action))).filter(Boolean), [logs]);
-  const uniqueActors = useMemo(() => Array.from(new Set(logs.map(l => l.admin_name))).filter(Boolean), [logs]);
+  const categorizedActors = useMemo(() => {
+    const validActors = new Set<string>();
+    let hasThreats = false;
+    
+    logs.forEach(l => {
+      const actor = l.admin_name;
+      if (!actor) return;
+      
+      const isRegistered = registeredActors.includes(actor);
+      
+      if (isRegistered) {
+        validActors.add(actor);
+      } else {
+        hasThreats = true;
+      }
+    });
+
+    return {
+      valid: Array.from(validActors).sort(),
+      hasThreats
+    };
+  }, [logs, registeredActors]);
 
   const filteredLogs = useMemo(() => {
     return logs.filter(log => {
       if (actionFilter !== 'All' && log.action !== actionFilter) return false;
-      if (actorFilter !== 'All' && log.admin_name !== actorFilter) return false;
+      
+      if (actorFilter !== 'All') {
+        if (actorFilter === 'EXTERNAL_THREATS') {
+           const isRegistered = log.admin_name && registeredActors.includes(log.admin_name);
+           if (isRegistered) return false;
+        } else if (log.admin_name !== actorFilter) {
+           return false;
+        }
+      }
       
       if (searchQuery) {
         const term = searchQuery.toLowerCase();
@@ -69,9 +98,12 @@ export default function AuditLogsTable({ logs }: { logs: any[] }) {
             className="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-violet-500 outline-none cursor-pointer bg-white"
           >
             <option value="All">All Actors</option>
-            {uniqueActors.map((actor: any) => (
+            {categorizedActors.valid.map((actor: string) => (
               <option key={actor} value={actor}>{actor}</option>
             ))}
+            {categorizedActors.hasThreats && (
+              <option value="EXTERNAL_THREATS" className="text-red-600 font-semibold">External Threats (Unrecognized)</option>
+            )}
           </select>
           <select
             value={dateFilter}

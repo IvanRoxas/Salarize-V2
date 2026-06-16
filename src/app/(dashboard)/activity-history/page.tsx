@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { getSession } from '@/app/actions/auth';
 import { redirect } from 'next/navigation';
 import ActivityHistoryTable from '@/components/dashboards/ActivityHistoryTable';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +13,12 @@ export default async function ActivityHistoryPage() {
     redirect('/');
   }
 
+  // Exclude ALL access-log action types — login attempts, 403s, rate limits,
+  // and account lifecycle events belong in the Access Logs page, not here.
   const rawActiveLogsData = await prisma.auditLog.findMany({
-    where: { 
+    where: {
       is_archived: false,
-      action: { notIn: ['LOGIN_SUCCESS', 'LOGIN_FAILED'] }
+      action: { notIn: [...ACCESS_LOG_ACTIONS] }
     },
     orderBy: { timestamp: 'desc' }
   });
@@ -25,10 +28,9 @@ export default async function ActivityHistoryPage() {
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-800">Activity History</h1>
-          <p className="text-slate-500 mt-1">Review operational actions and unarchived system events.</p>
         </div>
       </div>
-      
+
       <ActivityHistoryTable logs={rawActiveLogsData} role={session.role as string} />
     </div>
   );
