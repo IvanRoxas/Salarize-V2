@@ -22,7 +22,7 @@ export default function RootLayout({
           style: { borderRadius: '10px', fontWeight: 500, fontSize: '14px' },
           success: { style: { background: '#2ECC71', color: '#fff' } },
           error: { style: { background: '#ef4444', color: '#fff' } },
-        }} />
+        }} containerStyle={{ zIndex: 999999 }} />
         {children}
       </body>
     </html>

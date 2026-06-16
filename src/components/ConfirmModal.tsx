@@ -27,24 +27,28 @@ export default function ConfirmModal({
 }: ConfirmModalProps) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const [expectedCode, setExpectedCode] = useState('123456');
 
   useEffect(() => {
     if (require2FA) {
+      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+      setExpectedCode(generatedCode);
+      
       toast.success(
         (t) => (
           <div className="flex flex-col text-white">
             <span className="font-bold text-sm">2FA Code Sent!</span>
-            <span className="text-xs mt-1">Code: <strong className="text-white text-base tracking-widest">123456</strong></span>
+            <span className="text-xs mt-1">Code: <strong className="text-white text-base tracking-widest">{generatedCode}</strong></span>
           </div>
         ),
-        { duration: 10000 }
+        { duration: 10000, id: '2fa-toast' }
       );
     }
   }, [require2FA]);
 
   const handleConfirm = () => {
     if (require2FA) {
-      if (code.trim() !== '123456') {
+      if (code.trim() !== expectedCode) {
         setError('Invalid authentication code.');
         return;
       }
