@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 import { secureAction } from '@/lib/security';
 
 const validStatuses = ['Active', 'Standby', 'Onboarding', 'Off-duty', 'Terminated'];
@@ -243,8 +244,13 @@ export async function acknowledgeAlertsAction() {
 // action is rejected — preventing accidental or malicious mass-archiving.
 export async function archiveAllHistoryAction(expectedCount: number) {
   return secureAction('ARCHIVES', 'WRITE', async (session) => {
-    // Count unarchived logs before proceeding
-    const activeCount = await prisma.auditLog.count({ where: { is_archived: false } });
+    // Count unarchived operational logs before proceeding
+    const activeCount = await prisma.auditLog.count({ 
+      where: { 
+        is_archived: false,
+        action: { notIn: [...ACCESS_LOG_ACTIONS] }
+      } 
+    });
 
     if (activeCount !== expectedCount) {
       return {
@@ -258,7 +264,10 @@ export async function archiveAllHistoryAction(expectedCount: number) {
     }
 
     await prisma.auditLog.updateMany({
-      where: { is_archived: false },
+      where: { 
+        is_archived: false,
+        action: { notIn: [...ACCESS_LOG_ACTIONS] }
+      },
       data: { is_archived: true },
     });
 
