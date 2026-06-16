@@ -11,6 +11,7 @@
 
 export const ACCESS_LOG_ACTIONS = [
   // Authentication
+  'LOGIN_SUCCESS',
   'LOGIN_FAILED',
   'LOGIN_SUCCESS_2FA',
   // Authorization denials
