@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, ShieldCheck } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface ConfirmModalProps {
   title: string;
@@ -26,6 +27,20 @@ export default function ConfirmModal({
 }: ConfirmModalProps) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (require2FA) {
+      toast.success(
+        (t) => (
+          <div className="flex flex-col text-white">
+            <span className="font-bold text-sm">2FA Code Sent!</span>
+            <span className="text-xs mt-1">Code: <strong className="text-white text-base tracking-widest">123456</strong></span>
+          </div>
+        ),
+        { duration: 10000 }
+      );
+    }
+  }, [require2FA]);
 
   const handleConfirm = () => {
     if (require2FA) {
