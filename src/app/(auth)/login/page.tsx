@@ -108,16 +108,26 @@ export default function LoginPage() {
 
         {/* Toggle Pills (hidden during 2FA) */}
         {step !== '2fa' && (
-          <div className="flex bg-purple-50/50 p-1.5 rounded-xl mb-8 fade-in border border-purple-100/50">
+          <div className="flex bg-purple-50/60 p-1.5 rounded-xl mb-8 fade-in border border-purple-100 shadow-inner relative">
             <button
+              type="button"
               onClick={() => setStep('login')}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 ${step === 'login' ? 'bg-white text-purple-700 shadow-sm border border-purple-100' : 'text-slate-500 hover:text-purple-600'}`}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 z-10 active:scale-95 ${
+                step === 'login' 
+                  ? 'bg-white text-purple-700 shadow-[0_2px_10px_rgba(109,40,217,0.15)] border border-purple-200/50' 
+                  : 'text-slate-500 hover:text-purple-700 hover:bg-white/50'
+              }`}
             >
               Sign In
             </button>
             <button
+              type="button"
               onClick={() => setStep('signup')}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 ${step === 'signup' ? 'bg-white text-purple-700 shadow-sm border border-purple-100' : 'text-slate-500 hover:text-purple-600'}`}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 z-10 active:scale-95 ${
+                step === 'signup' 
+                  ? 'bg-white text-purple-700 shadow-[0_2px_10px_rgba(109,40,217,0.15)] border border-purple-200/50' 
+                  : 'text-slate-500 hover:text-purple-700 hover:bg-white/50'
+              }`}
             >
               Request Access
             </button>
