@@ -16,9 +16,9 @@ async function main() {
   const hashAuditor = await bcrypt.hash('Auditor@2026', 10);
 
   const adminsData = [
-    { username: 'superadmin', role: 'SUPER_ADMIN', password_hash: hashSuperAdmin },
-    { username: 'hrmanager', role: 'HR_MANAGER', password_hash: hashHrManager },
-    { username: 'auditor', role: 'AUDITOR', password_hash: hashAuditor },
+    { username: 'superadmin', role: 'SUPER_ADMIN', status: 'APPROVED', password_hash: hashSuperAdmin },
+    { username: 'hrmanager', role: 'HR_MANAGER', status: 'APPROVED', password_hash: hashHrManager },
+    { username: 'auditor', role: 'AUDITOR', status: 'APPROVED', password_hash: hashAuditor },
   ];
 
   const createdAdmins = [];

@@ -18,6 +18,7 @@ export default function AdminRegistry({
   const [adminToProcess, setAdminToProcess] = useState<any>(null);
   const [actionType, setActionType] = useState<'approve' | 'suspend' | 'restore' | 'editRole' | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showInitialConfirm, setShowInitialConfirm] = useState(false);
   
   // State for inline editing in Active Roster
   const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
@@ -38,7 +39,7 @@ export default function AdminRegistry({
     setPendingRoles(prev => ({ ...prev, [adminId]: role }));
   };
 
-  const executeAction = async () => {
+  const executeAction = async (code?: string) => {
     if (!adminToProcess || !actionType) return;
     
     let result;
@@ -48,14 +49,14 @@ export default function AdminRegistry({
         toast.error("Please select a role first.");
         return;
       }
-      result = await approveAdminAction(adminToProcess.id, selectedRole);
+      result = await approveAdminAction(adminToProcess.id, selectedRole, code || '');
     } else if (actionType === 'suspend') {
-      result = await suspendAdminAction(adminToProcess.id);
+      result = await suspendAdminAction(adminToProcess.id, code || '');
     } else if (actionType === 'restore') {
       result = await restoreUserAccessAction(adminToProcess.id);
     } else if (actionType === 'editRole') {
       if (!editingRoleValue) return;
-      result = await updateAdminRoleAction(adminToProcess.id, editingRoleValue);
+      result = await updateAdminRoleAction(adminToProcess.id, editingRoleValue, code || '');
       if (result.success) {
         setEditingRoleId(null);
       }
@@ -252,7 +253,7 @@ export default function AdminRegistry({
                     {admin.id !== currentAdminId && (
                       admin.status === 'APPROVED' ? (
                         <button
-                          onClick={() => { setAdminToProcess(admin); setActionType('suspend'); }}
+                          onClick={() => { setAdminToProcess(admin); setActionType('suspend'); setShowInitialConfirm(true); }}
                           className="inline-flex items-center space-x-1 border border-red-200 text-red-600 hover:border-red-600 hover:bg-red-50 transition-colors px-3 py-1.5 rounded-md text-sm font-medium"
                         >
                           <UserX className="w-4 h-4" />
@@ -283,31 +284,50 @@ export default function AdminRegistry({
         </div>
       </div>
 
-      {adminToProcess && actionType && (
+      {adminToProcess && actionType === 'suspend' && showInitialConfirm && (
         <ConfirmModal
-          title={
-            actionType === 'approve' ? "Approve Access Request" :
-            actionType === 'suspend' ? "Suspend Administrator" : 
-            actionType === 'editRole' ? "Confirm Role Change" :
-            "Restore Access"
-          }
-          message={
-            actionType === 'approve' ? `Are you sure you want to approve ${adminToProcess.username} and assign them the role of ${pendingRoles[adminToProcess.id] || 'selected'}?` :
-            actionType === 'suspend' ? `Are you sure you want to suspend ${adminToProcess.username}? They will lose all access to the system immediately.` :
-            actionType === 'editRole' ? `Are you sure you want to change ${adminToProcess.username}'s role to ${editingRoleValue}?` :
-            `Are you sure you want to restore access for ${adminToProcess.username}?`
-          }
-          confirmText={
-            actionType === 'approve' ? "Approve" :
-            actionType === 'suspend' ? "Suspend" :
-            actionType === 'editRole' ? "Update Role" :
-            "Restore"
-          }
-          require2FA={true}
-          onConfirm={executeAction}
-          onCancel={() => { setAdminToProcess(null); setActionType(null); }}
+          title="Suspend Administrator"
+          message={`Do you want to suspend ${adminToProcess.username}? They will lose all access to the system immediately.`}
+          confirmText="Proceed"
+          cancelText="Cancel"
+          isDestructive={true}
+          require2FA={false}
+          onConfirm={() => setShowInitialConfirm(false)}
+          onCancel={() => { setAdminToProcess(null); setActionType(null); setShowInitialConfirm(false); }}
         />
       )}
+
+      {adminToProcess && actionType && !showInitialConfirm && (() => {
+        const currentAdmin = activeAdmins.find(admin => admin.id === currentAdminId);
+        const isSuperAdmin = currentAdmin?.role === 'SUPER_ADMIN';
+        const require2FA = actionType === 'approve' || actionType === 'editRole' || (actionType === 'suspend' && isSuperAdmin);
+        
+        return (
+          <ConfirmModal
+            title={
+              actionType === 'approve' ? "Approve Access Request" :
+              actionType === 'suspend' ? "Verify Suspension" : 
+              actionType === 'editRole' ? "Confirm Role Change" :
+              "Restore Access"
+            }
+            message={
+              actionType === 'approve' ? `Are you sure you want to approve ${adminToProcess.username} and assign them the role of ${pendingRoles[adminToProcess.id] || 'selected'}?` :
+              actionType === 'suspend' ? `Enter the verification code sent to your email to confirm suspension of ${adminToProcess.username}.` :
+              actionType === 'editRole' ? `Are you sure you want to change ${adminToProcess.username}'s role to ${editingRoleValue}?` :
+              `Are you sure you want to restore access for ${adminToProcess.username}?`
+            }
+            confirmText={
+              actionType === 'approve' ? "Approve" :
+              actionType === 'suspend' ? "Confirm Suspension" :
+              actionType === 'editRole' ? "Update Role" :
+              "Restore"
+            }
+            require2FA={require2FA}
+            onConfirm={executeAction}
+            onCancel={() => { setAdminToProcess(null); setActionType(null); setShowInitialConfirm(false); }}
+          />
+        );
+      })()}
     </div>
   );
 }

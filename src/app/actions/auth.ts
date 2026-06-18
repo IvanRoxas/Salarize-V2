@@ -56,26 +56,29 @@ export async function loginAction(formData: FormData) {
       return { success: false, message: `Validation Error: Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.` };
     }
 
-    const adminCount = await prisma.admin.count();
-    if (adminCount === 0) {
+    const activeSuperAdmins = await prisma.admin.count({ where: { role: 'SUPER_ADMIN', status: 'APPROVED' } });
+    if (activeSuperAdmins === 0) {
       const defaultUser = process.env.DEFAULT_ADMIN_USER || 'admin';
       const defaultPass = process.env.DEFAULT_ADMIN_PASS || 'Admin@123!';
       const hash = await bcrypt.hash(defaultPass, 10);
 
-      await prisma.admin.create({
-        data: { username: defaultUser, password_hash: hash, role: 'SUPER_ADMIN', status: 'APPROVED' }
-      });
+      const existingAdmin = await prisma.admin.findUnique({ where: { username: defaultUser } });
+      if (!existingAdmin) {
+        await prisma.admin.create({
+          data: { username: defaultUser, password_hash: hash, role: 'SUPER_ADMIN', status: 'APPROVED' }
+        });
 
-      await prisma.auditLog.create({
-        data: {
-          admin_id: 'SYSTEM',
-          admin_name: 'SYSTEM',
-          action: 'GENESIS ACCOUNT CREATED',
-          target_employee: `Username: ${defaultUser}`,
-          old_value: 'NULL',
-          new_value: 'STATUS: APPROVED'
-        }
-      });
+        await prisma.auditLog.create({
+          data: {
+            admin_id: 'SYSTEM',
+            admin_name: 'SYSTEM',
+            action: 'GENESIS ACCOUNT CREATED',
+            target_employee: `Username: ${defaultUser}`,
+            old_value: 'NULL',
+            new_value: 'STATUS: APPROVED'
+          }
+        });
+      }
     }
 
     const user = await prisma.admin.findUnique({ where: { username } });
