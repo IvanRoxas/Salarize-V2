@@ -62,12 +62,18 @@ export async function createAdminAction(formData: FormData) {
 
     const { username, email, password, role } = parsed.data;
 
-    const existingAdmin = await prisma.admin.findUnique({
-      where: { username }
+    const existingAdmin = await prisma.admin.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email }
+        ]
+      }
     });
 
     if (existingAdmin) {
-      return { success: false, message: 'Validation Error: Username is already taken.' };
+      const field = existingAdmin.username === username ? 'Username' : 'Email';
+      return { success: false, message: `Validation Error: ${field} is already taken.` };
     }
 
     const password_hash = await bcrypt.hash(password, 10);

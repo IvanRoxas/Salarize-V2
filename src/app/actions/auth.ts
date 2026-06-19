@@ -266,12 +266,22 @@ export async function requestAccessAction(formData: FormData) {
       return { success: false, message: `Validation Error: Account locked due to too many requests. Try again in ${remainingTime} minutes.` };
     }
 
-    const existingAdmin = await prisma.admin.findUnique({ where: { username } });
+    const existingAdmin = await prisma.admin.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email }
+        ]
+      }
+    });
+
     if (existingAdmin) {
       rateLimitInfo.attempts += 1;
       if (rateLimitInfo.attempts >= MAX_ATTEMPTS) rateLimitInfo.lockUntil = now + LOCK_TIME_MS;
       rateLimits.set(rateLimitKey, rateLimitInfo);
-      return { success: false, message: 'Validation Error: Username is already taken.' };
+      
+      const field = existingAdmin.username === username ? 'Username' : 'Email';
+      return { success: false, message: `Validation Error: ${field} is already taken.` };
     }
 
     const password_hash = await bcrypt.hash(password, 10);
