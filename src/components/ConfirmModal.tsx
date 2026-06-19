@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { sendStepUpOTPAction } from '@/app/actions/auth';
 
 interface ConfirmModalProps {
   title: string;
@@ -11,7 +12,7 @@ interface ConfirmModalProps {
   cancelText?: string;
   isDestructive?: boolean;
   require2FA?: boolean;
-  onConfirm: () => void;
+  onConfirm: (code?: string) => void;
   onCancel: () => void;
 }
 
@@ -27,34 +28,31 @@ export default function ConfirmModal({
 }: ConfirmModalProps) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
-  const [expectedCode, setExpectedCode] = useState('123456');
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     if (require2FA) {
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-      setExpectedCode(generatedCode);
-      
-      toast.success(
-        (t) => (
-          <div className="flex flex-col text-white">
-            <span className="font-bold text-sm">2FA Code Sent!</span>
-            <span className="text-xs mt-1">Code: <strong className="text-white text-base tracking-widest">{generatedCode}</strong></span>
-          </div>
-        ),
-        { duration: 10000, id: '2fa-toast' }
-      );
+      const triggerOTP = async () => {
+        setIsSending(true);
+        const res = await sendStepUpOTPAction();
+        setIsSending(false);
+        if (res.success) {
+          toast.success('Step-up verification code sent to your email.', { id: 'stepup-toast' });
+        } else {
+          toast.error(res.message || 'Failed to send verification code.');
+        }
+      };
+      triggerOTP();
     }
   }, [require2FA]);
 
   const handleConfirm = () => {
-    if (require2FA) {
-      if (code.trim() !== expectedCode) {
-        setError('Invalid authentication code.');
-        return;
-      }
+    if (require2FA && code.length !== 6) {
+      setError('Please enter a valid 6-digit code.');
+      return;
     }
     setError('');
-    onConfirm();
+    onConfirm(require2FA ? code : undefined);
   };
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -102,13 +100,14 @@ export default function ConfirmModal({
             </button>
             <button
               onClick={handleConfirm}
+              disabled={isSending}
               className={`flex-1 py-2.5 px-4 text-sm font-semibold text-white rounded-lg transition-colors shadow-sm cursor-pointer ${
                 isDestructive 
                   ? 'bg-red-600 hover:bg-red-700' 
                   : 'bg-violet-600 hover:bg-violet-700'
-              }`}
+              } ${isSending ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              {confirmText}
+              {isSending ? 'Sending OTP...' : confirmText}
             </button>
           </div>
         </div>

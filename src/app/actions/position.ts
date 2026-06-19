@@ -37,7 +37,7 @@ export async function createPositionAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     const { title, department_id, icon, base_salary, min_salary, max_salary } = parsed.data;
@@ -78,7 +78,7 @@ export async function updatePositionAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     const { id, title, department_id, icon, base_salary, min_salary, max_salary } = parsed.data;

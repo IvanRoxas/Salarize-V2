@@ -26,7 +26,7 @@ export async function createDepartmentAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     const { name, description, icon, color } = parsed.data;
@@ -65,7 +65,7 @@ export async function updateDepartmentAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     const { id, name, description, icon, color } = parsed.data;

@@ -23,7 +23,7 @@ function getDiffKeys(oldVal: string | null, newVal: string | null) {
   return undefined;
 }
 
-function GitDiffDisplay({ log }: { log: any }) {
+function getDiffEntries(log: any) {
   const oldVal = log.old_value;
   const newVal = log.new_value;
   
@@ -47,16 +47,25 @@ function GitDiffDisplay({ log }: { log: any }) {
   const isCreate = log.action.includes('CREATE') || log.action.includes('ADDED');
   const isDelete = log.action.includes('DELETE') || log.action.includes('ARCHIVE');
   
+  return {
+    oldEntries: isCreate ? [] : oldEntries,
+    newEntries: isDelete ? [] : newEntries
+  };
+}
+
+function GitDiffDisplay({ log }: { log: any }) {
+  const { oldEntries, newEntries } = getDiffEntries(log);
+  
   return (
     <div className="p-0 border-t border-slate-100 divide-y divide-slate-100 text-sm font-mono w-full">
-      {!isCreate && oldEntries.map(([k, v]) => (
+      {oldEntries.map(([k, v]) => (
         <div key={`old-${k}`} className="px-6 py-3 bg-red-50 text-red-800 flex flex-col sm:flex-row sm:items-baseline sm:gap-4 transition-colors hover:bg-red-100/50">
           <span className="w-48 shrink-0 opacity-70 uppercase tracking-wider text-xs font-bold">- {k.replace(/_/g, ' ')}</span>
           <span className="line-through whitespace-pre-wrap font-medium text-base">{String(v)}</span>
         </div>
       ))}
       
-      {!isDelete && newEntries.map(([k, v]) => (
+      {newEntries.map(([k, v]) => (
         <div key={`new-${k}`} className="px-6 py-3 bg-emerald-50 text-emerald-800 flex flex-col sm:flex-row sm:items-baseline sm:gap-4 transition-colors hover:bg-emerald-100/50">
           <span className="w-48 shrink-0 opacity-70 uppercase tracking-wider text-xs font-bold">+ {k.replace(/_/g, ' ')}</span>
           <span className="whitespace-pre-wrap font-bold text-base">{String(v)}</span>
@@ -91,6 +100,11 @@ export default function NewAuditorKPICards({
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
+  const filteredDepartmentalChangesLogs = departmentalChangesLogs.filter(log => {
+    const { oldEntries, newEntries } = getDiffEntries(log);
+    return oldEntries.length > 0 || newEntries.length > 0;
+  });
+
   const getActionColor = (action: string) => {
     if (action.includes('CREATE') || action.includes('ADDED')) return 'text-violet-700 bg-violet-50 border-violet-200';
     if (action.includes('UPDATE')) return 'text-amber-700 bg-amber-50 border-amber-200';
@@ -98,7 +112,7 @@ export default function NewAuditorKPICards({
     return 'text-slate-700 bg-slate-50 border-slate-200';
   };
 
-  const currentLogs = activeModal === 'salary' ? salaryAdjustmentsLogs : activeModal === 'department' ? departmentalChangesLogs : [];
+  const currentLogs = activeModal === 'salary' ? salaryAdjustmentsLogs : activeModal === 'department' ? filteredDepartmentalChangesLogs : [];
   const totalPages = Math.ceil(currentLogs.length / ITEMS_PER_PAGE);
   const paginatedLogs = currentLogs.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -156,7 +170,7 @@ export default function NewAuditorKPICards({
               </div>
               <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Structure Changes</p>
             </div>
-            <span className="text-3xl font-bold text-blue-600 ml-2">{departmentalChangesCount}</span>
+            <span className="text-3xl font-bold text-blue-600 ml-2">{filteredDepartmentalChangesLogs.length}</span>
           </div>
           <p className="text-xs text-slate-400 mt-4 font-medium">All unarchived • Click for details</p>
         </div>

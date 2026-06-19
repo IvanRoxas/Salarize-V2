@@ -11,11 +11,11 @@ function SubmitButton({ step }: { step: 'login' | 'signup' | '2fa' }) {
   const { pending } = useFormStatus();
   
   let label = 'Sign In';
-  if (step === 'signup') label = 'Request Access';
+  if (step === 'signup') label = 'Create an account';
   if (step === '2fa') label = 'Verify Code';
 
   let pendingLabel = 'Authenticating...';
-  if (step === 'signup') pendingLabel = 'Submitting...';
+  if (step === 'signup') pendingLabel = 'Creating...';
   if (step === '2fa') pendingLabel = 'Verifying...';
 
   return (
@@ -46,16 +46,8 @@ export default function LoginPage() {
     } else if (step === 'login') {
       const res = await loginAction(formData);
       if (res.requires2FA) {
-        // Mock 2FA Delivery
-        toast.success(
-          (t) => (
-            <div className="flex flex-col">
-              <span className="font-bold text-sm">2FA Code Sent!</span>
-              <span className="text-xs mt-1">Code: <strong className="text-purple-600 text-base">{res.mockCode}</strong></span>
-            </div>
-          ),
-          { duration: 10000 }
-        );
+        // 2FA Delivery Message
+        toast.success(res.message || 'OTP sent to your email.', { duration: 5000 });
         setStep('2fa');
       } else if (res.success) {
         // Fallback if 2FA wasn't triggered
@@ -129,7 +121,7 @@ export default function LoginPage() {
                   : 'text-slate-500 hover:text-purple-700 hover:bg-white/50'
               }`}
             >
-              Request Access
+              Create an account
             </button>
           </div>
         )}
@@ -158,13 +150,26 @@ export default function LoginPage() {
             </div>
           ) : (
             <div className="fade-in animate-in slide-in-from-left-4 duration-300 space-y-5">
+              {step === 'signup' && (
+                <div className="group">
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5 transition-colors group-focus-within:text-purple-600">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    required
+                    placeholder="Username"
+                    className="w-full bg-slate-50/50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-4 focus:ring-purple-600/10 focus:border-purple-500 hover:border-purple-300 outline-none transition-all duration-300 shadow-sm"
+                  />
+                </div>
+              )}
+              
               <div className="group">
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5 transition-colors group-focus-within:text-purple-600">Username</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 transition-colors group-focus-within:text-purple-600">Email Address</label>
                 <input
-                  type="text"
-                  name="username"
+                  type="email"
+                  name="email"
                   required
-                  placeholder="Username"
+                  placeholder="name@example.com"
                   className="w-full bg-slate-50/50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-4 focus:ring-purple-600/10 focus:border-purple-500 hover:border-purple-300 outline-none transition-all duration-300 shadow-sm"
                 />
               </div>

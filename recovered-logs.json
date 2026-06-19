@@ -1,0 +1,674 @@
+[
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "_2FASYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "8638f98c-96be-4e5f-9553-76be114b0b0e) | '8924e991-5486-4db2-94cc-3a42f277f44) | U | 6929673b-f454-4a19-a01c-900 | UU | / | 9 | ad4395a8-1433-41fd-a366-181f919895a3609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | / | j | & | UU | '!;; | bf834caf-e7e9-488b-"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "_2FASYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "tip.edu.ph\",\"gender\":\"Male\",\"status\":\"Active\",\"position_id\":\"74d4bd27-52ee-4ead-87a8-de9a4915769c\"} | \" | 3 | UU | / | 9 | 2a416ecb-a81f-496d-bb6c-9596ba5c0f24c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | \" | j | UU | / | 9 | fdb07e2b-28d3-4147-9090-"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "_2FASYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "| UU | / | 9 | ad | UU!/ | 9 | 07a52efb-cd46-4f20-a245-474b9a5c1131ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | P | UU!% | - | 9250021a-e206-4f11-bbd1-a07eb98e5a70ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_FAILEDSYSTEMN/AInvalid password"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "SYSTEMN/AAuthenticated",
+    "raw_context": "89f85819-cb71-43c6-9674-f5274541d6fb | E | + | X | \" | h | C | E | UU | ' | ' | 6b256ec1-d59a-4b7a-bc9b-7e758af5a9b1c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESSSYSTEMN/AAuthenticated | 5 | UU!/ | y | cf956457-5fa2-4770-bab1-91ac37e2cc83e760bda2-da82-4617-be3a-bd01a8705ce9superadminDELE"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "SYSTEMN/AAuthenticated",
+    "raw_context": "description\":\"aasdasdasd\",\"icon\":\"Building\",\"color\":\"rose\",\"created_at\":\"2026-06-15T11:21:45.727Z\"} |   | UU!' | ' | 32a7d600-f091-472a-8a5e-325b2cee7ed6e760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_SUCCESSSYSTEMN/AAuthenticated | UU!% | - | 5c331554-2fbf-4dcd-ae06-196d1c170738e760bda2-da82-46"
+  },
+  {
+    "admin_id": "b54a42df-ae1f-4ceb-88d6-8f6a9de66013",
+    "admin_name": "ivanroxas",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "_2FASYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "3-9ef8-00a14f13b9f2UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 1) |   | < | UU | / | 9 | b82e0aa3-4236-4bae-970c-d04464c2f48eb54a42df-ae1f-4ceb-88d6-8f6a9de66013ivanroxasLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | %; | UU | A | Y | 76203899-42c9-4ab3-b538-62"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "LOGIN_SUCCESS",
+    "target_employee": "SYSTEMN/AAuthenticated",
+    "raw_context": "5f3-a31d-e3a1d29d0b48609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESSSYSTEMN/AAuthenticated | Um | 0 | UU!' | ' | 34a3ef26-2f92-47a0-89ca-195bb9ec888ae760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_SUCCESSSYSTEMN/AAuthenticated | R | / | UU | ' | ' | 460e4609-5b1f-4a0f-b60d-068f65e4399fb"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password",
+    "raw_context": "5c1131ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | P | UU!% | - | 9250021a-e206-4f11-bbd1-a07eb98e5a70ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_FAILEDSYSTEMN/AInvalid password | 4 | UU!/ | 9 | 2efc2cfb-30f0-4771-b0e2-cdeb79a2d2b7ba0901ad-"
+  },
+  {
+    "admin_id": "aa2487b9-a128-47ca-8282-2d10eae7c64d",
+    "admin_name": "UNKNOWNadmin' --",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "Port scan detected | p | U | '' | 1 | a27efd11-5f8d-496d-8f36-9494430ed308UNKNOWNhacker_bot_02SECURITY_SCANSYSTEMN/APort scan detected | i | U | % | - | aa2487b9-a128-47ca-8282-2d10eae7c64dUNKNOWNadmin' --LOGIN_FAILEDSYSTEMN/AInvalid username | n | U | )% | - | 0e720a0f-2104-46e9-aed6-fe172f2c0793UN"
+  },
+  {
+    "admin_id": "98093811-29f1-4c72-a888-c99897d3af8c",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password (Brute Force Attempt 5)",
+    "raw_context": "1UNKNOWNhacker_bot_01UNAUTHORIZED_LOGIN_ATTEMPTSYSTEMN/ARATE LIMIT TRIGGERED: Account locked due to too many failed attempts. | G | U | '% | ] | 98093811-29f1-4c72-a888-c99897d3af8cUNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 5) | U | '% | ] | e90c0510-b523-4280-a06"
+  },
+  {
+    "admin_id": "e90c0510-b523-4280-a062-13ce493be816",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password (Brute Force Attempt 4)",
+    "raw_context": "U | '% | ] | e90c0510-b523-4280-a062-13ce493be816UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 4) | g | U | '% | ] | 39047888-60cf-436e-b30b-d70d6151e759UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 3) | U | '% | ] | 8ebc478a-16f9-4cf"
+  },
+  {
+    "admin_id": "39047888-60cf-436e-b30b-d70d6151e759",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password (Brute Force Attempt 3)",
+    "raw_context": "U | '% | ] | 39047888-60cf-436e-b30b-d70d6151e759UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 3) | U | '% | ] | 8ebc478a-16f9-4cf9-b7b7-9c7547dbad3dUNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 2) | q | U | '% | ] | 33caeb65-c079-496"
+  },
+  {
+    "admin_id": "8ebc478a-16f9-4cf9-b7b7-9c7547dbad3d",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password (Brute Force Attempt 2)",
+    "raw_context": "| '% | ] | 8ebc478a-16f9-4cf9-b7b7-9c7547dbad3dUNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 2) | q | U | '% | ] | 33caeb65-c079-496b-b7ce-45668b27f010UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 1) | Z | ! | UU | '%35 | 8cc737cf-41"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password",
+    "raw_context": "49b1cf12408f609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | _ | 5 | UU | % | - | 971aacbc-0333-4369-a5fe-b964c9ef3b4d609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_FAILEDSYSTEMN/AInvalid password | _ | 4 | UU!/ | 9 | b9e925bd-acf6-4b80-8377-66d9cb74ce5"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid password",
+    "raw_context": "d3c-aa27-ca8e2c99cee1c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESSSYSTEMN/AAuthenticated | # | UU | % | - | 55fe2d6d-867a-4d00-92ec-9523076e3a85c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_FAILEDSYSTEMN/AInvalid password | _ | %\" | UU | A | Y | 18426faf-d668-4995-a073-f3e5503549a0"
+  },
+  {
+    "admin_id": "d9d0c0a6-6829-4764-9971-96ac3028cc3b",
+    "admin_name": "UNKNOWNKatherineSupan",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "| g?K|w | U | /= | + | 0d3b4f8c-2f62-4f3e-9df7-d14ff1c24584SYSTEMSYSTEMACCOUNT REQUESTEDUsername: KatherineSupanNULLSTATUS: PENDING | f | Mnv | U | )% | - | d9d0c0a6-6829-4764-9971-96ac3028cc3bUNKNOWNKatherineSupanLOGIN_FAILEDSYSTEMN/AInvalid username | f | u | UU | / | 9 | 9c2dd3c8-29da-4485-a192-"
+  },
+  {
+    "admin_id": "8be0019a-7d8b-461b-89eb-899917af3d8c",
+    "admin_name": "UNKNOWNadmin",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "FAILEDSYSTEMN/AInvalid password | /u | eg | U | % | - | 8be0019a-7d8b-461b-89eb-899917af3d8cUNKNOWNadminLOGIN_FAILEDSYSTEMN/AInvalid username | \" | 7ef | U | % | - | 8f043adc-1e77-421d-8427-9bdb0af0a739UNKNOWNadminLOGIN_FAILEDSYSTEMN/AInvalid username | 8 | e | UU!/ | 9 | c896ea91-77d7-4d8e-b6ad-211"
+  },
+  {
+    "admin_id": "3143075a-4834-4b2f-8676-45c9aa3f1699",
+    "admin_name": "UNKNOWNnonexistent",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "96ea91-77d7-4d8e-b6ad-211555db12ede760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | kd | U | #% | - | 3143075a-4834-4b2f-8676-45c9aa3f1699UNKNOWNnonexistentLOGIN_FAILEDSYSTEMN/AInvalid username | \"jec | U | % | - | 69fb30d4-e562-4f6c-bac9-ecb40f39b5d0UN"
+  },
+  {
+    "admin_id": "0728fb61-99e6-4ecb-988a-f5d552eb9c4d",
+    "admin_name": "UNKNOWNadmin' OR 1=1--",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "| Fob | U | +% | - | 0728fb61-99e6-4ecb-988a-f5d552eb9c4dUNKNOWNadmin' OR 1=1--LOGIN_FAILEDSYSTEMN/AInvalid username | b | D}a | U | G% | - | 377a0126-d4fd-4cd9-95ce-e0aab0f62631UNKNOWN<script>alert('XSS')</script>LOGIN_FAILEDSYSTEMN/AInvalid username | b | _i` | U | % | - | 945b45d6-2593-4720-891e"
+  },
+  {
+    "admin_id": "377a0126-d4fd-4cd9-95ce-e0aab0f62631",
+    "admin_name": "UNKNOWN<script>alert('XSS')</script>",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "ame | b | D}a | U | G% | - | 377a0126-d4fd-4cd9-95ce-e0aab0f62631UNKNOWN<script>alert('XSS')</script>LOGIN_FAILEDSYSTEMN/AInvalid username | b | _i` | U | % | - | 945b45d6-2593-4720-891e-7aabd4b6fbecUNKNOWNadmin\" --LOGIN_FAILEDSYSTEMN/AInvalid username | T | f_ | U | % | - | 8a18c26e-45fd-4993-91c2-"
+  },
+  {
+    "admin_id": "945b45d6-2593-4720-891e-7aabd4b6fbec",
+    "admin_name": "UNKNOWNadmin\" --",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "DSYSTEMN/AInvalid username | b | _i` | U | % | - | 945b45d6-2593-4720-891e-7aabd4b6fbecUNKNOWNadmin\" --LOGIN_FAILEDSYSTEMN/AInvalid username | T | f_ | U | % | - | 8a18c26e-45fd-4993-91c2-2a7d672aad8cUNKNOWNadmin2LOGIN_FAILEDSYSTEMN/AInvalid username | T. | r^ | U | 1% | - | 9ab7404c-f6d2-4fe7-bf8f-"
+  },
+  {
+    "admin_id": "8a18c26e-45fd-4993-91c2-2a7d672aad8c",
+    "admin_name": "UNKNOWNadmin2",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "AInvalid username | T | f_ | U | % | - | 8a18c26e-45fd-4993-91c2-2a7d672aad8cUNKNOWNadmin2LOGIN_FAILEDSYSTEMN/AInvalid username | T. | r^ | U | 1% | - | 9ab7404c-f6d2-4fe7-bf8f-a1ecd9559c3dUNKNOWNadmin@salarize.comLOGIN_FAILEDSYSTEMN/AInvalid username | R | ] | UU | % | - | 7f83183b-9cd1-4e85-ad7a-c"
+  },
+  {
+    "admin_id": "9ab7404c-f6d2-4fe7-bf8f-a1ecd9559c3d",
+    "admin_name": "UNKNOWNadmin@salarize.com",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "| - | 9ab7404c-f6d2-4fe7-bf8f-a1ecd9559c3dUNKNOWNadmin@salarize.comLOGIN_FAILEDSYSTEMN/AInvalid username | R | ] | UU | % | - | 7f83183b-9cd1-4e85-ad7a-c807c94fbf50609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_FAILEDSYSTEMN/AInvalid password | P | fh\\ | U | % | - | 412ee8de-41f8-46a8-a29a-97fad0"
+  },
+  {
+    "admin_id": "412ee8de-41f8-46a8-a29a-97fad0613ec2",
+    "admin_name": "UNKNOWNemployee",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "YSTEMN/AInvalid password | P | fh\\ | U | % | - | 412ee8de-41f8-46a8-a29a-97fad0613ec2UNKNOWNemployeeLOGIN_FAILEDSYSTEMN/AInvalid username | P | i[ | U | % | - | e07f81c3-90f4-4011-9b59-226076f35a27UNKNOWNadmin' --LOGIN_FAILEDSYSTEMN/AInvalid username | P(ekZ | U | #% | - | f5c98e36-49e1-4db8-9e93-b2"
+  },
+  {
+    "admin_id": "f5c98e36-49e1-4db8-9e93-b2d79db54c91",
+    "admin_name": "UNKNOWN' OR '1'='1",
+    "action": "LOGIN_FAILED",
+    "target_employee": "SYSTEMN/AInvalid username",
+    "raw_context": "SYSTEMN/AInvalid username | P(ekZ | U | #% | - | f5c98e36-49e1-4db8-9e93-b2d79db54c91UNKNOWN' OR '1'='1LOGIN_FAILEDSYSTEMN/AInvalid username | M | eY | U | % | - | e6e8c18f-5d35-400d-93dd-08d785833307UNKNOWNadminLOGIN_FAILEDSYSTEMN/AInvalid username | F | ~ | X | UU | % | - | 9e236ec5-e251-4828-af1d"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "LOGIN_SUCCESS_2FA",
+    "target_employee": "SYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "8638f98c-96be-4e5f-9553-76be114b0b0e) | '8924e991-5486-4db2-94cc-3a42f277f44) | U | 6929673b-f454-4a19-a01c-900 | UU | / | 9 | ad4395a8-1433-41fd-a366-181f919895a3609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | / | j | & | UU | '!;; | bf834caf-e7e9-488b-"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "LOGIN_SUCCESS_2FA",
+    "target_employee": "SYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "tip.edu.ph\",\"gender\":\"Male\",\"status\":\"Active\",\"position_id\":\"74d4bd27-52ee-4ead-87a8-de9a4915769c\"} | \" | 3 | UU | / | 9 | 2a416ecb-a81f-496d-bb6c-9596ba5c0f24c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | \" | j | UU | / | 9 | fdb07e2b-28d3-4147-9090-"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "LOGIN_SUCCESS_2FA",
+    "target_employee": "SYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "| UU | / | 9 | ad | UU!/ | 9 | 07a52efb-cd46-4f20-a245-474b9a5c1131ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | P | UU!% | - | 9250021a-e206-4f11-bbd1-a07eb98e5a70ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_FAILEDSYSTEMN/AInvalid password"
+  },
+  {
+    "admin_id": "b54a42df-ae1f-4ceb-88d6-8f6a9de66013",
+    "admin_name": "ivanroxas",
+    "action": "LOGIN_SUCCESS_2FA",
+    "target_employee": "SYSTEMN/AAuthenticated with 2FA",
+    "raw_context": "3-9ef8-00a14f13b9f2UNKNOWNhacker_bot_01LOGIN_FAILEDSYSTEMN/AInvalid password (Brute Force Attempt 1) |   | < | UU | / | 9 | b82e0aa3-4236-4bae-970c-d04464c2f48eb54a42df-ae1f-4ceb-88d6-8f6a9de66013ivanroxasLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | %; | UU | A | Y | 76203899-42c9-4ab3-b538-62"
+  },
+  {
+    "admin_id": "f3b6b3f6-155b-4e3f-9457-35964aa8b5d4",
+    "admin_name": "cm5o3zxyzrogue_hr_manager",
+    "action": "403_FORBIDDEN",
+    "target_employee": "Module: SYSTEM_ACCOUNTS, Action: WRITEN/AAccess Denied via secureAction middleware (Privilege Escalation Attempt)",
+    "raw_context": "| z | U | ;+ | - | 6940aba8-9e9a-42f1-b107-7b2cc79d09beSYSTEMSYSTEMGENESIS ACCOUNT CREATEDUsername: adminNULLSTATUS: APPROVED | L | U | -'Y | f3b6b3f6-155b-4e3f-9457-35964aa8b5d4cm5o3zxyzrogue_hr_manager403_FORBIDDENModule: SYSTEM_ACCOUNTS, Action: WRITEN/AAccess Denied via secureAction middleware"
+  },
+  {
+    "admin_id": "dc8ad2d0-cbe8-418e-a99d-857ae1e38c0b",
+    "admin_name": "cm5o3zxyzrogue_hr_manager",
+    "action": "403_FORBIDDEN",
+    "target_employee": "Module: SYSTEM_ACCOUNTS, Action: READN/AAccess Denied via secureAction middleware (BOLA Attempt)",
+    "raw_context": "ORBIDDENModule: SYSTEM_ACCOUNTS, Action: WRITEN/AAccess Denied via secureAction middleware (Privilege Escalation Attempt) | g | : | U | -'W | } | dc8ad2d0-cbe8-418e-a99d-857ae1e38c0bcm5o3zxyzrogue_hr_manager403_FORBIDDENModule: SYSTEM_ACCOUNTS, Action: READN/AAccess Denied via secureAction middlewar"
+  },
+  {
+    "admin_id": "8e3a464c-adef-4447-9124-149e2de94bf1",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "UNAUTHORIZED_LOGIN_ATTEMPT",
+    "target_employee": "SYSTEMN/ARATE LIMIT TRIGGERED: Account locked due to too many failed attempts.",
+    "raw_context": "ogue_hr_manager403_FORBIDDENModule: SYSTEM_ACCOUNTS, Action: READN/AAccess Denied via secureAction middleware (BOLA Attempt) | 7 | 1 | U | 'A | 8e3a464c-adef-4447-9124-149e2de94bf1UNKNOWNhacker_bot_01UNAUTHORIZED_LOGIN_ATTEMPTSYSTEMN/ARATE LIMIT TRIGGERED: Account locked due to too many failed attem"
+  },
+  {
+    "admin_id": "8e3a464c-adef-4447-9124-149e2de94bf1",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "UNAUTHORIZED",
+    "target_employee": "_LOGIN_ATTEMPTSYSTEMN/ARATE LIMIT TRIGGERED: Account locked due to too many failed attempts.",
+    "raw_context": "ogue_hr_manager403_FORBIDDENModule: SYSTEM_ACCOUNTS, Action: READN/AAccess Denied via secureAction middleware (BOLA Attempt) | 7 | 1 | U | 'A | 8e3a464c-adef-4447-9124-149e2de94bf1UNKNOWNhacker_bot_01UNAUTHORIZED_LOGIN_ATTEMPTSYSTEMN/ARATE LIMIT TRIGGERED: Account locked due to too many failed attem"
+  },
+  {
+    "admin_id": "b196c269-bbf8-4903-8c54-87cbd34c244e",
+    "admin_name": "SYSTEMSYSTEM",
+    "action": "ACCOUNT REQUESTED",
+    "target_employee": "Username: ivanroxasNULLSTATUS: PENDING",
+    "raw_context": "| O | - | UU!' | ' | 0fa602b9-5a3a-4ade-a6b2-e64865291ffbe760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_SUCCESSSYSTEMN/AAuthenticated | K | w, | U | /3 | + | b196c269-bbf8-4903-8c54-87cbd34c244eSYSTEMSYSTEMACCOUNT REQUESTEDUsername: ivanroxasNULLSTATUS: PENDING | J | T+ | UU!%}+K | b7410dd5-1c"
+  },
+  {
+    "admin_id": "0d3b4f8c-2f62-4f3e-9df7-d14ff1c24584",
+    "admin_name": "SYSTEMSYSTEM",
+    "action": "ACCOUNT REQUESTED",
+    "target_employee": "Username: KatherineSupanNULLSTATUS: PENDING",
+    "raw_context": "| 9 | a7bad9a3-0afe-45b2-a55f-ac4a5720619de760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | g?K|w | U | /= | + | 0d3b4f8c-2f62-4f3e-9df7-d14ff1c24584SYSTEMSYSTEMACCOUNT REQUESTEDUsername: KatherineSupanNULLSTATUS: PENDING | f | Mnv | U | )% | - | d9d0c"
+  },
+  {
+    "admin_id": "6940aba8-9e9a-42f1-b107-7b2cc79d09be",
+    "admin_name": "SYSTEMSYSTEM",
+    "action": "GENESIS ACCOUNT CREATED",
+    "target_employee": "Username: adminNULLSTATUS: APPROVED",
+    "raw_context": "YSTEMN/AInvalid username | n | U | )% | - | 0e720a0f-2104-46e9-aed6-fe172f2c0793UNKNOWNKatherineSupanLOGIN_FAILEDSYSTEMN/AInvalid username | z | U | ;+ | - | 6940aba8-9e9a-42f1-b107-7b2cc79d09beSYSTEMSYSTEMGENESIS ACCOUNT CREATEDUsername: adminNULLSTATUS: APPROVED | L | U | -'Y | f3b6b3f6-155b-4e3f-"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE EMPLOYEE",
+    "target_employee": "Ethan Wilson{\"status\":\"Active\",\"actual_salary\":48000}",
+    "raw_context": "EMPLOYEEOscar Garcia{\"status\":\"Active\"}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-10T08:52:27.594Z\"} | J | % | UU!+% | _ | 89f85819-cb71-43c6-9674-f5274541d6fbe760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE EMPLOYEEEthan Wilson{\"status\":\"Active\",\"actual_salary\":48000} | . | J | ! | UU | ''35 |"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "CREATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "1-ac02-289dfbed9786hrmanagerUPDATE SALARYMaria Jaduday{\"actual_salary\":30000}{\"actual_salary\":35768} | h | P | UU | +' | ) | fb95e84b-bb15-4a27-9ab1-183141aa7817c6efd841-243d-4981-ac02-289dfbed9786hrmanagerCREATE EMPLOYEEMaria JadudayNULL{\"id\":\"305b0427-fa48-4de5-a8e5-3ed39957f976\",\"first_name\":\"Mar"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "CREATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "tip.edu.ph\",\"gender\":\"Male\",\"status\":\"Active\",\"position_id\":\"0634b2fb-bdd8-4e2c-80aa-4da4b9ec52f6\"} | HXS | Go | UU | +! | ef7bd1ea-4961-430a-a703-55d199bc3733c6efd841-243d-4981-ac02-289dfbed9786hrmanagerCREATE EMPLOYEEJOHN ROXASNULL{\"id\":\"c8a5729a-e627-4f84-bf22-8a281874ee34\",\"first_name\":\"JOHN\",\"l"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "DELETE EMPLOYEE",
+    "target_employee": "Hannah Anderson{\"status\":\"Active\",\"deleted_at\":null}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-15T09:10:00.348Z\"}",
+    "raw_context": "4981-ac02-289dfbed9786hrmanagerUPDATE SALARYLaura Harris{\"actual_salary\":50000}{\"actual_salary\":50001} | a | UU | ++W | 5844354a-d370-4839-9ce0-21f9e3aeddc4c6efd841-243d-4981-ac02-289dfbed9786hrmanagerDELETE EMPLOYEEHannah Anderson{\"status\":\"Active\",\"deleted_at\":null}{\"status\":\"Off-duty\",\"deleted_at"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "DELETE EMPLOYEE",
+    "target_employee": "Oscar Garcia{\"status\":\"Active\"}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-10T08:52:27.594Z\"}",
+    "raw_context": "43d-4981-ac02-289dfbed9786hrmanagerUPDATE STATUSLaura Harris{\"status\":\"Active\"}{\"status\":\"Standby\"} | J | M | UU!+%3 | fb7477ed-fdd5-4222-8d35-be9f2c6a3512e760bda2-da82-4617-be3a-bd01a8705ce9superadminDELETE EMPLOYEEOscar Garcia{\"status\":\"Active\"}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-10T08:52:2"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "DELETE EMPLOYEE",
+    "target_employee": "Oscar Garcia{\"status\":\"Active\"}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-13T08:12:21.240Z\"}",
+    "raw_context": "7f-44de-b49f-1722778baac1hrmanagerUPDATE STATUSLaura Harris{\"status\":\"Active\"}{\"status\":\"Standby\"} | [ | x | N | UU!+%3 | afab83b5-e5b9-42fd-8819-f7494dcc6cffba0901ad-8b82-4407-9204-3d20c3647b1asuperadminDELETE EMPLOYEEOscar Garcia{\"status\":\"Active\"}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-13T08:1"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "81-ac02-289dfbed9786hrmanagerUPDATE SALARYJOHN ROXAS{\"actual_salary\":65464}{\"actual_salary\":33334} | + | R | UU | +! | y | M | 2ae6931d-de6f-4192-b9fb-670c9fe430abc6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE EMPLOYEEJOHN ROXAS{\"first_name\":\"JOHN\",\"last_name\":\"ROXAS\",\"email\":\"mjiroxas01@tip.ed"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "96-8a71-d94992e411f8609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESSSYSTEMN/AAuthenticated | } | j% | UU | +' | a | f9a1de42-bcdc-4f76-87a7-81bd0642d222c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE EMPLOYEEMaria Jaduday{\"first_name\":\"Maria\",\"last_name\":\"Jaduday\",\"email\":\"netstartcapsto"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "-ac02-289dfbed9786hrmanagerUPDATE SALARYMaria Jaduday{\"actual_salary\":35768}{\"actual_salary\":35769} | j | UU | +' | c | e7be455a-b37e-4494-8e29-925352a24d49c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE EMPLOYEEMaria Jaduday{\"first_name\":\"Maria\",\"last_name\":\"Jaduday\",\"email\":\"netstartcapstone@g"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE EMPLOYEE",
+    "target_employee": null,
+    "raw_context": "81-ac02-289dfbed9786hrmanagerUPDATE SALARYJOHN ROXAS{\"actual_salary\":45000}{\"actual_salary\":60000} | H | ] | Vp | UU | +! | M | bb19a900-393d-4467-9a4f-af0e8df2c9f7c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE EMPLOYEEJOHN ROXAS{\"first_name\":\"JOHN\",\"last_name\":\"ROXAS\",\"email\":\"mjiroxas01@tip.e"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "Laura Harris{\"actual_salary\":50000}{\"actual_salary\":50001}",
+    "raw_context": "e2d-4a21-b826-b0a68d986b9bauditorGENERATE_COMPLIANCE_REPORTSYSTEMGenerated 30-day PDF compliance report | ' | UU | '%;; | ffefd41f-050e-42f2-adb8-215b65eb7e17c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYLaura Harris{\"actual_salary\":50000}{\"actual_salary\":50001} | a | UU | ++W | 5844354a"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE SALARY",
+    "target_employee": "Bob Smith{\"actual_s",
+    "raw_context": "43d-4981-ac02-289dfbed9786hrmanagerUPDATE STATUSCharlie Davis{\"status\":\"Active\"}{\"status\":\"Standby\"} | AJ | % | UU!' | ;; | 7f1a4dee-b523-4c61-a9f5-df76b38d694fe760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE SALARYBob Smith{\"actual_s | & | % | $~ | !j |  L | 2 | m | E | E | ; | Q | o | E | ( |"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "JOHN ROXAS{\"actual_salary\":65464}{\"actual_salary\":33334}",
+    "raw_context": "919895a3609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | / | j | & | UU | '!;; | bf834caf-e7e9-488b-9134-b92e599ff38ac6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYJOHN ROXAS{\"actual_salary\":65464}{\"actual_salary\":33334} | + | R | UU | +! | y |"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "UPDATE SALARY",
+    "target_employee": "Bob Smith{\"actual_salary\":80000}{\"actual_salary\":85000}",
+    "raw_context": "7f-44de-b49f-1722778baac1hrmanagerUPDATE STATUSCharlie Davis{\"status\":\"Active\"}{\"status\":\"Standby\"} | 6 | x | & | UU!' | ;; | 2cb5b942-6033-4d74-a17e-6000f330d0ddba0901ad-8b82-4407-9204-3d20c3647b1asuperadminUPDATE SALARYBob Smith{\"actual_salary\":80000}{\"actual_salary\":85000} | ox | { | R | 4 | > |"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "Maria Jaduday{\"actual_salary\":30000}{\"actual_salary\":35768}",
+    "raw_context": "b3fc-2c278b9e2657609e870d-6e2d-4a21-b826-b0a68d986b9bauditorARCHIVE_HISTORYSystem LogsActiveArchived | qw | ) | UU | '';; | 882cccc6-1a5e-4003-ac46-98516acbd512c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYMaria Jaduday{\"actual_salary\":30000}{\"actual_salary\":35768} | h | P | UU | +' | )"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "Maria Jaduday{\"actual_salary\":35768}{\"actual_salary\":35769}",
+    "raw_context": "4d7e-b8b4-b55bf6afdcfe609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESSSYSTEMN/AAuthenticated | K | ) | UU | '';; | c0374e7a-ff8d-45cf-a3bf-ba48850ce340c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYMaria Jaduday{\"actual_salary\":35768}{\"actual_salary\":35769} | j | UU | +' | c | e7b"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "JOHN ROXAS{\"actual_salary\":60000}{\"actual_salary\":65464}",
+    "raw_context": "c1ad64e08\"} | X | ' | k | X | & | UU | '!;; | f4e4f182-9894-42ac-92ca-a0a3612574a7c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYJOHN ROXAS{\"actual_salary\":60000}{\"actual_salary\":65464} |   | . | UU | 3! | g | fd64e994-e326-4d5e-bd2e-13512fa20c90c6efd841-243d-4981-ac02-289dfbed9786hrmanag"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "JOHN ROXAS{\"actual_salary\":45000}{\"actual_salary\":60000}",
+    "raw_context": "366942247609e870d-6e2d-4a21-b826-b0a68d986b9bauditorLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | I | [ | &q | UU | '!;; | 7ab468e9-00fe-4666-8fff-7502ca7fd502c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYJOHN ROXAS{\"actual_salary\":45000}{\"actual_salary\":60000} | H | ] | Vp | UU | +"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE SALARY",
+    "target_employee": "Maria Jaduday{\"actual_salary\":35769}{\"actual_salary\":35770}",
+    "raw_context": "2dd8d706c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | G | )m | UU | '';; | 6f35f4d0-1f0e-4991-b7e8-7021e327141ec6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE SALARYMaria Jaduday{\"actual_salary\":35769}{\"actual_salary\":35770} | B,r | l | UU | / |"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE STATUS",
+    "target_employee": "Laura Harris{\"status\":\"Active\"}{\"status\":\"Standby\"}",
+    "raw_context": "iption\":\"Finance and Accounting\",\"icon\":\"Globe\",\"color\":\"rose\",\"created_at\":\"2026-06-15T08:52:27.456Z\"} | < |   | UU | '%35 | c65bb8fd-d0b6-4e93-b495-8a9653e565e5c6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE STATUSLaura Harris{\"status\":\"Active\"}{\"status\":\"Standby\"} | J | M | UU!+%3 | fb7477ed-"
+  },
+  {
+    "admin_id": "c6efd841-243d-4981-ac02-289dfbed9786",
+    "admin_name": "hrmanager",
+    "action": "UPDATE STATUS",
+    "target_employee": "Charlie Davis{\"status\":\"Active\"}{\"status\":\"Standby\"}",
+    "raw_context": "-4617-be3a-bd01a8705ce9superadminCREATE EMPLOYEEEthan Wilson{\"status\":\"Active\",\"actual_salary\":48000} | . | J | ! | UU | ''35 | 310feeb0-cb69-4231-ad55-b397c5c70e5cc6efd841-243d-4981-ac02-289dfbed9786hrmanagerUPDATE STATUSCharlie Davis{\"status\":\"Active\"}{\"status\":\"Standby\"} | AJ | % | UU!' | ;; | 7f"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE POSITION",
+    "target_employee": null,
+    "raw_context": "ary\":100,\"max_salary\":10000,\"created_at\":\"2026-06-15T09:09:28.856Z\",\"_count\":{\"employees\":0}}DELETED | e | UU!+ | ] | e8a33402-8cbf-4d3a-9040-f67ddc0560f8e760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE POSITION34345345NULL{\"id\":\"9f6841cd-003c-474f-9916-32d361f5b701\",\"title\":\"34345345\",\"departme"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE POSITION",
+    "target_employee": null,
+    "raw_context": "ription\":\"aasdasdasd\",\"icon\":\"Building\",\"color\":\"emerald\",\"created_at\":\"2026-06-15T11:21:45.727Z\"} | r | e | UU!+ | ] | e33d9376-c1a3-4843-b94c-77ba1b63e37ee760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE POSITIONasadsadNULL{\"id\":\"6ed777d6-b351-4150-a46c-d58b513cc400\",\"title\":\"asadsad\",\"departme"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE POSITION",
+    "target_employee": null,
+    "raw_context": "29d9b54a42df-ae1f-4ceb-88d6-8f6a9de66013ivanroxasLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | v | UU!+- | m | 6929673b-f454-4a19-a01c-9001253b37aae760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE POSITIONBrand AmbassadorNULL{\"id\":\"74d4bd27-52ee-4ead-87a8-de9a4915769c\",\"title\":\"Brand Ambassa"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "DELETE POSITION",
+    "target_employee": null,
+    "raw_context": "on{\"status\":\"Active\",\"deleted_at\":null}{\"status\":\"Off-duty\",\"deleted_at\":\"2026-06-15T09:10:00.348Z\"} | UU!+ | 88750703-3797-48d2-8db1-9438d3d5afc0e760bda2-da82-4617-be3a-bd01a8705ce9superadminDELETE POSITION34345345{\"id\":\"9f6841cd-003c-474f-9916-32d361f5b701\",\"title\":\"34345345\",\"department_id\":\"0d42"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "DELETE POSITION",
+    "target_employee": null,
+    "raw_context": "n\":\"Cpu\",\"color\":\"emerald\",\"created_at\":\"2026-06-15T11:21:45.727Z\",\"_count\":{\"positions\":0}}DELETED | UU!+ | 776b1c57-25e5-42f3-a160-4ae6499752c4e760bda2-da82-4617-be3a-bd01a8705ce9superadminDELETE POSITIONasadsad{\"id\":\"6ed777d6-b351-4150-a46c-d58b513cc400\",\"title\":\"asadsad\",\"department_id\":\"7ec37e0"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "fd\",\"description\":\"sdfsdfsfds\",\"icon\":\"Cpu\",\"color\":\"blue\",\"created_at\":\"2026-06-15T09:08:56.474Z\"} | ( | m | UU!+/ | w | w | b03a05d5-eb31-4d68-9db7-cf045f758f18e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONFinancial Analyst{\"id\":\"7d8499cb-8896-499a-8df0-96b5a1b2dc60\",\"title\":\"Financ"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "d Public Relations\",\"icon\":\"Building\",\"color\":\"emerald\",\"created_at\":\"2026-06-15T08:52:27.444Z\"} | q | a | UU!+) | q | i | 07b5d794-7ba2-4431-9f4b-84d971b5ddbbe760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONHR Coordinator{\"id\":\"f2e4523f-de30-49af-9cf2-b7a00fbe39b3\",\"title\":\"HR Coordinat"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "echnology and Systems\",\"icon\":\"Building\",\"color\":\"rose\",\"created_at\":\"2026-06-15T08:52:27.437Z\"} | H | q | UU!+5 | y | u | 3d5ddf21-1393-4e4a-989d-6b4e956a46f3e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONMarketing Specialist{\"id\":\"07f94ded-6a3b-4dd1-b3fe-d13c1ad64e08\",\"title\":\"Market"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "| w | UU!+7 | y | 8dd7b1fa-b2c4-4837-aee1-8e51347bd05ee760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONSystems Administrator{\"id\":\"0634b2fb-bdd8-4e2c-80aa-4da4b9ec52f6\",\"title\":\"Systems Administrator\",\"department_id\":\"ddf9850a-f574-4250-b686-76ac454b2110\",\"icon\":\"Briefcase\",\"base_salary"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "\"base_salary\":45000,\"min_salary\":35000,\"max_salary\":75000,\"created_at\":\"2026-06-15T08:52:27.483Z\"} | h | UU!+/ | o | s | 8eba2cc9-e330-47ec-b87c-72e894a8ed1ee760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONSoftware Engineer{\"id\":\"875d4740-83d2-442c-a90f-0b5257c11f69\",\"title\":\"Software En"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "base_salary\":50000,\"min_salary\":40000,\"max_salary\":90000,\"created_at\":\"2026-06-15T08:52:27.463Z\"} | j | UU!+/ | w | o | be4cbfe5-7525-4aa2-866f-7386d91c72ede760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONSoftware Engineer{\"id\":\"875d4740-83d2-442c-a90f-0b5257c11f69\",\"title\":\"Software Eng"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE POSITION",
+    "target_employee": null,
+    "raw_context": "base_salary\":50000,\"min_salary\":40000,\"max_salary\":90000,\"created_at\":\"2026-06-15T08:52:27.463Z\"} | u | UU!+5 | } | y | d4072e88-7842-46bb-9e04-bfde0825b9c5e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE POSITIONMarketing Specialist{\"id\":\"07f94ded-6a3b-4dd1-b3fe-d13c1ad64e08\",\"title\":\"Marketing"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE DEPARTMENT",
+    "target_employee": "dsfsfdsfdNULL{\"id\":\"0d4232c9-e499-47c9-be35-5350c8944206\",\"name\":\"dsfsfdsfd\",\"description\":\"sdfsdfsfds\",\"icon\":\"Cpu\",\"color\":\"blue\",\"created_at\":\"2026-06-15T09:08:56.474Z\"}",
+    "raw_context": "case\",\"base_salary\":500,\"min_salary\":100,\"max_salary\":10000,\"created_at\":\"2026-06-15T09:09:28.856Z\"} | UU!/ | K | 01abab53-b930-4a98-a87e-38c23e0f1ab1e760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE DEPARTMENTdsfsfdsfdNULL{\"id\":\"0d4232c9-e499-47c9-be35-5350c8944206\",\"name\":\"dsfsfdsfd\",\"descripti"
+  },
+  {
+    "admin_id": "ba0901ad-8b82-4407-9204-3d20c3647b1a",
+    "admin_name": "superadmin",
+    "action": "CREATE DEPARTMENT",
+    "target_employee": "Diplomacy DepartmentNULL{\"name\":\"Diplomacy Department\",\"description\":\"Diplomatic Operations and Ambassadors\",\"icon\":\"Globe\",\"color\":\"amber\"}",
+    "raw_context": "2d2b7ba0901ad-8b82-4407-9204-3d20c3647b1asuperadminLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | UU!/5 | u | 2c22d396-34d5-4e14-9944-06b81bf98c4eba0901ad-8b82-4407-9204-3d20c3647b1asuperadminCREATE DEPARTMENTDiplomacy DepartmentNULL{\"name\":\"Diplomacy Department\",\"description\":\"Diplomatic Operat"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "CREATE DEPARTMENT",
+    "target_employee": "ddddNULL{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\"aasdasdasd\",\"icon\":\"Building\",\"color\":\"rose\",\"created_at\":\"2026-06-15T11:21:45.727Z\"}",
+    "raw_context": "\"base_salary\":76455,\"min_salary\":2222,\"max_salary\":765432,\"created_at\":\"2026-06-15T11:21:58.245Z\"} | P | UU!/ | K | b83f3e60-17b4-4853-944f-09223dfc2666e760bda2-da82-4617-be3a-bd01a8705ce9superadminCREATE DEPARTMENTddddNULL{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\"aas"
+  },
+  {
+    "admin_id": "b54a42df-ae1f-4ceb-88d6-8f6a9de66013",
+    "admin_name": "ivanroxas",
+    "action": "CREATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "9d9eafc6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | A | Y | Sk | UU | /5 | ac75ad2c-42ca-47c3-9f76-55ff4edf232cb54a42df-ae1f-4ceb-88d6-8f6a9de66013ivanroxasCREATE DEPARTMENTDiplomacy DepartmentNULL{\"id\":\"2bb20b1d-fbbe-4767-8fe0-8e97a25273a6\",\"name\":\""
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": ",\"base_salary\":55000,\"min_salary\":45000,\"max_salary\":85000,\"created_at\":\"2026-06-15T08:52:27.488Z\"} | N | w | UU!/1 | y | f9f147ea-f924-4728-a43c-2ef006408e63e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTFinance Department{\"id\":\"af751ea4-c983-4c1b-aeda-6ece7346a8e2\",\"name\":\"Finance"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "2222,\"max_salary\":765432,\"created_at\":\"2026-06-15T11:21:58.245Z\",\"_count\":{\"employees\":0}}DELETED | 3 | 8 | UU!/ | Q | G | 16c39d80-6ef8-4f39-a30b-1f5f6ac0b7a0e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTdddd{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\""
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "description\":\"aasdasdasd\",\"icon\":\"Cpu\",\"color\":\"emerald\",\"created_at\":\"2026-06-15T11:21:45.727Z\"} | : | UU!/ | K | Q | ecc04ed8-93ca-409c-8d12-1a60ade9f292e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTdddd{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\"aasd"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "ase_salary\":28000,\"min_salary\":25000,\"max_salary\":35000,\"created_at\":\"2026-06-16T06:09:59.821Z\"} | UU!/5 | a5c20f4d-4742-4251-ad4b-e2eae64fe222e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTMarketing Department{\"id\":\"ace570e6-9e6c-4037-b067-4c55d75ffb40\",\"name\":\"Marketing Department\""
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "ase_salary\":30000,\"min_salary\":25000,\"max_salary\":45000,\"created_at\":\"2026-06-15T08:52:27.477Z\"} | Wg | s | UU!/1 | y | y | 1439c977-f2e3-4c26-8980-7628490460ebe760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTFinance Department{\"id\":\"af751ea4-c983-4c1b-aeda-6ece7346a8e2\",\"name\":\"Financ"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "\":\"Finance and Accounting\",\"icon\":\"Globe\",\"color\":\"blue\",\"created_at\":\"2026-06-15T08:52:27.456Z\"} | 3 | UU!/' | 21b8c6e8-9710-4d3d-af85-4708ffc65902e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE DEPARTMENTIT Department{\"id\":\"ddf9850a-f574-4250-b686-76ac454b2110\",\"name\":\"IT Department\",\"descrip"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "DELETE DEPARTMENT",
+    "target_employee": "dddd{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\"aasdasdasd\",\"icon\":\"Cpu\",\"color\":\"emerald\",\"created_at\":\"2026-06-15T11:21:45.727Z\",\"_count\":{\"positions\":0}}DELETED",
+    "raw_context": "-bc9b-7e758af5a9b1c6efd841-243d-4981-ac02-289dfbed9786hrmanagerLOGIN_SUCCESSSYSTEMN/AAuthenticated | 5 | UU!/ | y | cf956457-5fa2-4770-bab1-91ac37e2cc83e760bda2-da82-4617-be3a-bd01a8705ce9superadminDELETE DEPARTMENTdddd{\"id\":\"7ec37e06-6531-4bf7-93db-3e9130be768e\",\"name\":\"dddd\",\"description\":\"aasdasd"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "DELETE DEPARTMENT",
+    "target_employee": null,
+    "raw_context": "56d609e870d-6e2d-4a21-b826-b0a68d986b9bauditorACKNOWLEDGE_ALERTSSystem Alert ResetnullAcknowledged | t | < | UU!/ | } | fa8ea7b2-38a0-44fe-9e6a-6c1723b1ab2be760bda2-da82-4617-be3a-bd01a8705ce9superadminDELETE DEPARTMENTdsfsfdsfd{\"id\":\"0d4232c9-e499-47c9-be35-5350c8944206\",\"name\":\"dsfsfdsfd\",\"descrip"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "APPROVE ROLE",
+    "target_employee": "Admin ID: b54a42df-ae1f-4ceb-88d6-8f6a9de66013 (ivanroxas)STATUS: PENDINGSTATUS: APPROVED, ROLE: ADMIN",
+    "raw_context": "f-b60d-068f65e4399fb54a42df-ae1f-4ceb-88d6-8f6a9de66013ivanroxasLOGIN_SUCCESSSYSTEMN/AAuthenticated | O | U. | UU!% | +G | 56f0873f-7398-4bb8-b706-a2f8c97b476de760bda2-da82-4617-be3a-bd01a8705ce9superadminAPPROVE ROLEAdmin ID: b54a42df-ae1f-4ceb-88d6-8f6a9de66013 (ivanroxas)STATUS: PENDINGSTATUS: AP"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "APPROVE ROLE",
+    "target_employee": "Admin ID: 609e870d-6e2d-4a21-b826-b0a68d986b9b (auditor)STATUS: PENDINGSTATUS: APPROVED, ROLE: AUDITOR",
+    "raw_context": "96c269-bbf8-4903-8c54-87cbd34c244eSYSTEMSYSTEMACCOUNT REQUESTEDUsername: ivanroxasNULLSTATUS: PENDING | J | T+ | UU!%}+K | b7410dd5-1c99-464d-9348-bf20300b39b8e760bda2-da82-4617-be3a-bd01a8705ce9superadminAPPROVE ROLEAdmin ID: 609e870d-6e2d-4a21-b826-b0a68d986b9b (auditor)STATUS: PENDINGSTATUS: APPR"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "APPROVE ROLE",
+    "target_employee": "Admin ID: c6efd841-243d-4981-ac02-289dfbed9786 (hrmanager)STATUS: PENDINGSTATUS: APPROVED, ROLE: HR_MANAGER",
+    "raw_context": "n ID: 609e870d-6e2d-4a21-b826-b0a68d986b9b (auditor)STATUS: PENDINGSTATUS: APPROVED, ROLE: AUDITOR | G< | Z* | UU!% | +Q | c85f9536-cbb4-405d-93d3-3912a749b9a3e760bda2-da82-4617-be3a-bd01a8705ce9superadminAPPROVE ROLEAdmin ID: c6efd841-243d-4981-ac02-289dfbed9786 (hrmanager)STATUS: PENDINGSTATUS: AP"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin ELEVATED_PRIVILEGE",
+    "action": "APPROVE ROLE",
+    "target_employee": "Admin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)STATUS: PENDINGSTATUS: APPROVED, ROLE: SUPER_ADMIN",
+    "raw_context": "419a3f6c3f47KatherineSupanLOGIN_SUCCESS_2FASYSTEMN/AAuthenticated with 2FA | m | ~y | UU!a | +S | a3fd4d60-94f3-4429-91c4-4dcbd12db86ee760bda2-da82-4617-be3a-bd01a8705ce9superadmin |  ELEVATED_PRIVILEGE  |  APPROVE ROLEAdmin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)STATUS: PENDINGSTA"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin",
+    "action": "UPDATE ROLE",
+    "target_employee": "Admin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)ROLE: SUPER_ADMINROLE: ADMIN",
+    "raw_context": "| I~ | UU!# | /# | b5092966-6cb7-4816-a44c-87c10ad87a12e760bda2-da82-4617-be3a-bd01a8705ce9superadminUPDATE ROLEAdmin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)ROLE: SUPER_ADMINROLE: ADMIN | $ | } | UU!/ | 9 | da41fcf5-1485-4628-9f7c-7b375d8294c6e760bda2-da82-4617-be3a-bd01a8705ce9su"
+  },
+  {
+    "admin_id": "e760bda2-da82-4617-be3a-bd01a8705ce9",
+    "admin_name": "superadmin ELEVATED_PRIVILEGE",
+    "action": "UPDATE ROLE",
+    "target_employee": "Admin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)ROLE: ADMINROLE: SUPER_ADMIN",
+    "raw_context": "_salary\":25000,\"max_salary\":50000,\"created_at\":\"2026-06-15T08:52:27.470Z\"} | g | UU!_ | #/ | 0c4bf479-a293-41db-9992-2927b060fcc6e760bda2-da82-4617-be3a-bd01a8705ce9superadmin |  ELEVATED_PRIVILEGE  |  UPDATE ROLEAdmin ID: a2033d0e-fb80-45d6-bbd4-419a3f6c3f47 (KatherineSupan)ROLE: ADMINROLE: SUPER_A"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "ACKNOWLEDGE_ALERTS",
+    "target_employee": "System Alert ResetnullAcknowledged",
+    "raw_context": "| UU | 11 | % | 4f977811-da59-41af-b228-df6a41017907609e870d-6e2d-4a21-b826-b0a68d986b9bauditorACKNOWLEDGE_ALERTSSystem Alert ResetnullAcknowledged | $ | UU | A | Y | 64059014-fe49-4002-88e1-5ae286fa023e609e870d-6e2d-4a21-b826-b0a68d986b9bauditorGENERATE_COMPLIANCE_REPORTSYSTEMGenerated 30-day PDF"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "ARCHIVE_HISTORY",
+    "target_employee": "System LogsActiveArchived",
+    "raw_context": "d-ae06-196d1c170738e760bda2-da82-4617-be3a-bd01a8705ce9superadminLOGIN_FAILEDSYSTEMN/AInvalid password | UU | +# | d592a5c0-3f71-42d2-bacc-4629ae5f5904609e870d-6e2d-4a21-b826-b0a68d986b9bauditorARCHIVE_HISTORYSystem LogsActiveArchived | {R | UU | +# | 8d882c8b-0512-43bc-b3fc-2c278b9e2657609e870d-6e2"
+  },
+  {
+    "admin_id": "c62f4c4c-2b4b-4dff-b9b5-7efa393ac735",
+    "admin_name": "UNKNOWNhacker_bot_04",
+    "action": "SECURITY_SCAN",
+    "target_employee": "SYSTEMN/APort scan detected",
+    "raw_context": "b48d-4c78-b57a-a2622ea6de71UNKNOWNhacker_bot_01PARAMETER_TAMPERINGEMP_10293Salary: 50000Salary: -999999 (Blocked by Validation) | p | U | '' | 1 | c62f4c4c-2b4b-4dff-b9b5-7efa393ac735UNKNOWNhacker_bot_04SECURITY_SCANSYSTEMN/APort scan detected | p | U | '' | 1 | 0aefd702-66c5-4d23-9ed8-c3866784cca3U"
+  },
+  {
+    "admin_id": "0aefd702-66c5-4d23-9ed8-c3866784cca3",
+    "admin_name": "UNKNOWNhacker_bot_03",
+    "action": "SECURITY_SCAN",
+    "target_employee": "SYSTEMN/APort scan detected",
+    "raw_context": "scan detected | p | U | '' | 1 | 0aefd702-66c5-4d23-9ed8-c3866784cca3UNKNOWNhacker_bot_03SECURITY_SCANSYSTEMN/APort scan detected | p | U | '' | 1 | a27efd11-5f8d-496d-8f36-9494430ed308UNKNOWNhacker_bot_02SECURITY_SCANSYSTEMN/APort scan detected | i | U | % | - | aa2487b9-a128-47ca-8282-2d10eae7c64"
+  },
+  {
+    "admin_id": "4796f98a-b48d-4c78-b57a-a2622ea6de71",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "PARAMETER_TAMPERING",
+    "target_employee": "EMP_10293Salary: 50000Salary: -999999 (Blocked by Validation)",
+    "raw_context": "01DATA_EXFILTRATION_ALERTModule: PAYROLLN/ARate Limit Exceeded: 500 records accessed in 10 seconds (Possible Data Exfiltration) | U | '3 | '[ | 4796f98a-b48d-4c78-b57a-a2622ea6de71UNKNOWNhacker_bot_01PARAMETER_TAMPERINGEMP_10293Salary: 50000Salary: -999999 (Blocked by Validation) | p | U | '' | 1 |"
+  },
+  {
+    "admin_id": "d6fbc7f9-8968-4524-ad1b-ba144baf3cce",
+    "admin_name": "cm5o3zxyzrogue_hr_manager",
+    "action": "PARAMETER_TAMPERING",
+    "target_employee": "EMP_10293Salary: 50000Salary: -999999 (Blocked by Validation)",
+    "raw_context": "AInvalid username | B | eS | U | % | - | 7dd10ace-ec44-43a1-b76b-cfb90aa79ce2UNKNOWNadminLOGIN_FAILEDSYSTEMN/AInvalid username | Bxd | R | U | -3 | '[ | d6fbc7f9-8968-4524-ad1b-ba144baf3ccecm5o3zxyzrogue_hr_managerPARAMETER_TAMPERINGEMP_10293Salary: 50000Salary: -999999 (Blocked by Validation) | + |"
+  },
+  {
+    "admin_id": "db808e62-9a0c-4c82-b437-cf21c4ad226d",
+    "admin_name": "UNKNOWNhacker_bot_01",
+    "action": "DATA_EXFILTRATION_ALERT",
+    "target_employee": "Module: PAYROLLN/ARate Limit Exceeded: 500 records accessed in 10 seconds (Possible Data Exfiltration)",
+    "raw_context": "tmentNULL{\"name\":\"Diplomacy Department\",\"description\":\"Diplomatic Operations and Ambassadors\",\"icon\":\"Globe\",\"color\":\"amber\"} | F | U | ';+ | 5 | db808e62-9a0c-4c82-b437-cf21c4ad226dUNKNOWNhacker_bot_01DATA_EXFILTRATION_ALERTModule: PAYROLLN/ARate Limit Exceeded: 500 records accessed in 10 seconds ("
+  },
+  {
+    "admin_id": "02b267bd-fc72-4eaf-a3ff-ad93519d1b19",
+    "admin_name": "cm5o3zxyzrogue_hr_manager",
+    "action": "DATA_EXFILTRATION_ALERT",
+    "target_employee": "Module: PAYROLLN/ARate Limit Exceeded: 500 records accessed in 10 seconds (Possible Data Exfiltration)",
+    "raw_context": "3UNKNOWNhacker_bot_04SECURITY_ALERTSYSTEMN/APath Traversal attempt detected: GET /api/download?file=../../../etc/passwd | / | KP | U | -;+ | 5 | 02b267bd-fc72-4eaf-a3ff-ad93519d1b19cm5o3zxyzrogue_hr_managerDATA_EXFILTRATION_ALERTModule: PAYROLLN/ARate Limit Exceeded: 500 records accessed in 10 secon"
+  },
+  {
+    "admin_id": "609e870d-6e2d-4a21-b826-b0a68d986b9b",
+    "admin_name": "auditor",
+    "action": "GENERATE_COMPLIANCE_REPORT",
+    "target_employee": "SYSTEMGenerated 30-day PDF compliance report",
+    "raw_context": "a41017907609e870d-6e2d-4a21-b826-b0a68d986b9bauditorACKNOWLEDGE_ALERTSSystem Alert ResetnullAcknowledged | $ | UU | A | Y | 64059014-fe49-4002-88e1-5ae286fa023e609e870d-6e2d-4a21-b826-b0a68d986b9bauditorGENERATE_COMPLIANCE_REPORTSYSTEMGenerated 30-day PDF compliance report | ' | UU | '%;; | ffefd41f"
+  }
+]

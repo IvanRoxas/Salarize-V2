@@ -113,11 +113,11 @@ export default async function HRDashboard() {
                       <div className="flex flex-col">
                         <span className="text-slate-800 font-medium">{emp.position?.title || 'Unassigned'}</span>
                         {(() => {
-                          const deptName = emp.position?.department?.name;
+                          const deptName = (emp.position as any)?.department?.name;
                           if (!deptName) return <span className="text-slate-500 text-xs mt-1">N/A</span>;
                           
-                          const iconName = emp.position?.department?.icon || 'Building';
-                          const colorName = emp.position?.department?.color || 'slate';
+                          const iconName = (emp.position as any)?.department?.icon || 'Building';
+                          const colorName = (emp.position as any)?.department?.color || 'slate';
                           const DeptIcon = IconMap[iconName] || IconMap['Building'];
                           const colorTheme = ColorMap[colorName] || ColorMap['slate'];
 

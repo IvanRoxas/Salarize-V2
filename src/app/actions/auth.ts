@@ -5,6 +5,7 @@ import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
+import { sendOTP } from '@/lib/email';
 
 const prisma = new PrismaClient();
 
@@ -20,12 +21,13 @@ const MAX_ATTEMPTS = 5;
 const LOCK_TIME_MS = 15 * 60 * 1000; // 15 minutes
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required."),
+  email: z.string().email("Valid email is required."),
   password: z.string().min(1, "Password is required.")
 });
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters."),
+  email: z.string().email("Invalid email address."),
   password: z.string()
     .min(8, "Password must be at least 8 characters long.")
     .regex(/\d/, "Password must contain at least one number.")
@@ -37,18 +39,18 @@ const codeSchema = z.string().length(6, "OTP code must be 6 digits.");
 export async function loginAction(formData: FormData) {
   try {
     const parsed = loginSchema.safeParse({
-      username: formData.get('username'),
+      email: formData.get('email'),
       password: formData.get('password')
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
-    const { username, password } = parsed.data;
+    const { email, password } = parsed.data;
 
     const now = Date.now();
-    const rateLimitKey = username.toLowerCase();
+    const rateLimitKey = email.toLowerCase();
     let rateLimitInfo = rateLimits.get(rateLimitKey) || { attempts: 0, lockUntil: null };
 
     if (rateLimitInfo.lockUntil && now < rateLimitInfo.lockUntil) {
@@ -59,13 +61,14 @@ export async function loginAction(formData: FormData) {
     const activeSuperAdmins = await prisma.admin.count({ where: { role: 'SUPER_ADMIN', status: 'APPROVED' } });
     if (activeSuperAdmins === 0) {
       const defaultUser = process.env.DEFAULT_ADMIN_USER || 'admin';
+      const defaultEmail = process.env.DEFAULT_ADMIN_EMAIL || 'admin@salarize.com';
       const defaultPass = process.env.DEFAULT_ADMIN_PASS || 'Admin@123!';
       const hash = await bcrypt.hash(defaultPass, 10);
 
       const existingAdmin = await prisma.admin.findUnique({ where: { username: defaultUser } });
       if (!existingAdmin) {
         await prisma.admin.create({
-          data: { username: defaultUser, password_hash: hash, role: 'SUPER_ADMIN', status: 'APPROVED' }
+          data: { username: defaultUser, email: defaultEmail, password_hash: hash, role: 'SUPER_ADMIN', status: 'APPROVED' }
         });
 
         await prisma.auditLog.create({
@@ -81,7 +84,7 @@ export async function loginAction(formData: FormData) {
       }
     }
 
-    const user = await prisma.admin.findUnique({ where: { username } });
+    const user = await prisma.admin.findUnique({ where: { email } });
 
     if (!user) {
       rateLimitInfo.attempts += 1;
@@ -91,11 +94,11 @@ export async function loginAction(formData: FormData) {
       await prisma.auditLog.create({
         data: {
           admin_id: 'UNKNOWN',
-          admin_name: username,
+          admin_name: email,
           action: 'LOGIN_FAILED',
           target_employee: 'SYSTEM',
           old_value: 'N/A',
-          new_value: 'Invalid username',
+          new_value: 'Invalid credentials',
         }
       });
 
@@ -133,8 +136,10 @@ export async function loginAction(formData: FormData) {
     // Reset rate limits on successful login
     rateLimits.delete(rateLimitKey);
 
-    // Generate 6-digit mock OTP
+    // Generate 6-digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    await sendOTP(user.email, otpCode);
 
     const pendingJwt = await new SignJWT({ id: user.id, username: user.username, role: user.role, code: otpCode })
       .setProtectedHeader({ alg: 'HS256' })
@@ -150,7 +155,7 @@ export async function loginAction(formData: FormData) {
       maxAge: 60 * 5 // 5 minutes
     });
 
-    return { success: true, requires2FA: true, mockCode: otpCode, message: 'Please enter the 6-digit authentication code.' };
+    return { success: true, requires2FA: true, message: 'Please enter the 6-digit authentication code sent to your email.' };
   } catch (error) {
     console.error('[Login Error]:', error);
     return { success: false, message: 'Internal Server Error. Please contact support.' };
@@ -160,7 +165,7 @@ export async function loginAction(formData: FormData) {
 export async function verify2FAAction(formData: FormData) {
   try {
     const parsed = codeSchema.safeParse(formData.get('code'));
-    if (!parsed.success) return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+    if (!parsed.success) return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     const code = parsed.data;
 
     const cookieStore = await cookies();
@@ -197,8 +202,7 @@ export async function verify2FAAction(formData: FormData) {
     cookieStore.set('salarize_session', jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 2 // 2 hours
+      sameSite: 'strict'
     });
 
     // Destroy the pending 2FA token
@@ -243,14 +247,15 @@ export async function requestAccessAction(formData: FormData) {
   try {
     const parsed = registerSchema.safeParse({
       username: formData.get('username'),
+      email: formData.get('email'),
       password: formData.get('password')
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
-    const { username, password } = parsed.data;
+    const { username, email, password } = parsed.data;
 
     const now = Date.now();
     const rateLimitKey = `req_${username.toLowerCase()}`;
@@ -274,6 +279,7 @@ export async function requestAccessAction(formData: FormData) {
     const newUser = await prisma.admin.create({
       data: {
         username,
+        email,
         password_hash,
         role: 'UNASSIGNED',
         status: 'PENDING'
@@ -298,5 +304,37 @@ export async function requestAccessAction(formData: FormData) {
   } catch (error) {
     console.error('[Request Access Error]:', error);
     return { success: false, message: 'Internal Server Error. Please contact support.' };
+  }
+}
+
+export async function sendStepUpOTPAction() {
+  try {
+    const session = await getSession();
+    if (!session) return { success: false, message: 'Unauthorized' };
+
+    const user = await prisma.admin.findUnique({ where: { id: session.id } });
+    if (!user) return { success: false, message: 'User not found' };
+
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    await sendOTP(user.email, otpCode);
+
+    const stepUpJwt = await new SignJWT({ id: user.id, code: otpCode })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('5m')
+      .sign(key);
+
+    const cookieStore = await cookies();
+    cookieStore.set('salarize_stepup_pending', stepUpJwt, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 5 // 5 minutes
+    });
+
+    return { success: true, message: 'Step-up OTP sent.' };
+  } catch (error) {
+    console.error('[StepUp Error]:', error);
+    return { success: false, message: 'Failed to send OTP.' };
   }
 }

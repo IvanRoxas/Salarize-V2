@@ -11,7 +11,7 @@ function formatValue(val: string | null, diffKeys?: string[]) {
   try {
     const parsed = JSON.parse(val);
     if (typeof parsed === 'object' && parsed !== null) {
-      const ignoredKeys = ['id', 'created_at', 'updated_at', 'deleted_at', 'icon', 'color', 'count', '_count', 'department_id', 'position_id', 'password_hash'];
+      const ignoredKeys = ['id', 'created_at', 'updated_at', 'deleted_at', 'count', '_count', 'department_id', 'position_id', 'password_hash'];
       let entries = Object.entries(parsed).filter(
         ([k, v]) => !ignoredKeys.includes(k) && v !== null && v !== '' && typeof v !== 'object'
       );

@@ -30,13 +30,13 @@ export default function DownloadPdfReportButton() {
         doc.text(deptName, 14, currentY);
         currentY += 6;
 
-        const tableData = employees.map((emp: any) => [
+        const tableData = (employees as any[]).map((emp: any) => [
           `${emp.first_name} ${emp.last_name}`,
           emp.position?.title || 'N/A',
           `PHP ${emp.actual_salary.toLocaleString()}`
         ]);
 
-        const totalSalary = employees.reduce((sum: number, emp: any) => sum + emp.actual_salary, 0);
+        const totalSalary = (employees as any[]).reduce((sum: number, emp: any) => sum + emp.actual_salary, 0);
         tableData.push(['', 'Total Liability', `PHP ${totalSalary.toLocaleString()}`]);
 
         autoTable(doc, {

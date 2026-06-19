@@ -34,7 +34,7 @@ export async function createEmployeeAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     let { first_name, last_name, email, gender, status, position_id, actual_salary } = parsed.data;
@@ -103,7 +103,7 @@ export async function updateEmployeeAction(formData: FormData) {
     });
 
     if (!parsed.success) {
-      return { success: false, message: `Validation Error: ${parsed.error.errors[0].message}` };
+      return { success: false, message: `Validation Error: ${parsed.error.issues[0].message}` };
     }
 
     const { id, first_name, last_name, email, gender, status, position_id, actual_salary } = parsed.data;
