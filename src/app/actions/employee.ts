@@ -60,27 +60,31 @@ export async function createEmployeeAction(formData: FormData) {
       actual_salary = position.base_salary;
     }
 
-    const newEmployee = await prisma.employee.create({
-      data: {
-        first_name,
-        last_name,
-        email,
-        gender,
-        status,
-        position_id,
-        actual_salary: actual_salary,
-      },
-    });
+    const newEmployee = await prisma.$transaction(async (tx) => {
+      const emp = await tx.employee.create({
+        data: {
+          first_name,
+          last_name,
+          email,
+          gender,
+          status,
+          position_id,
+          actual_salary: actual_salary,
+        },
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'CREATE EMPLOYEE',
-        target_employee: `${newEmployee.first_name} ${newEmployee.last_name}`,
-        old_value: 'NULL',
-        new_value: JSON.stringify(newEmployee),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'CREATE EMPLOYEE',
+          target_employee: `${emp.first_name} ${emp.last_name}`,
+          old_value: 'NULL',
+          new_value: JSON.stringify(emp),
+        },
+      });
+
+      return emp;
     });
 
     revalidatePath('/', 'layout');
@@ -160,21 +164,24 @@ export async function updateEmployeeAction(formData: FormData) {
       newValues.actual_salary = actual_salary;
     }
 
-    const updatedEmployee = await prisma.employee.update({
-      where: { id },
-      data: newValues,
-    });
+    const updatedEmployee = await prisma.$transaction(async (tx) => {
+      const emp = await tx.employee.update({
+        where: { id },
+        data: newValues,
+      });
 
-    // Create Audit Log
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'UPDATE EMPLOYEE',
-        target_employee: `${updatedEmployee.first_name} ${updatedEmployee.last_name}`,
-        old_value: JSON.stringify(oldValues),
-        new_value: JSON.stringify(newValues),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'UPDATE EMPLOYEE',
+          target_employee: `${emp.first_name} ${emp.last_name}`,
+          old_value: JSON.stringify(oldValues),
+          new_value: JSON.stringify(newValues),
+        },
+      });
+
+      return emp;
     });
 
     revalidatePath('/', 'layout');
@@ -196,21 +203,24 @@ export async function terminateEmployeeAction(id: string) {
     const deletedAt = new Date();
     const newValues = { status: 'Off-duty', deleted_at: deletedAt };
 
-    const updatedEmployee = await prisma.employee.update({
-      where: { id: parsedId.data },
-      data: newValues,
-    });
+    const updatedEmployee = await prisma.$transaction(async (tx) => {
+      const emp = await tx.employee.update({
+        where: { id: parsedId.data },
+        data: newValues,
+      });
 
-    // Create Audit Log
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'ARCHIVE_EMPLOYEE',
-        target_employee: `${updatedEmployee.first_name} ${updatedEmployee.last_name}`,
-        old_value: JSON.stringify(oldValues),
-        new_value: JSON.stringify(newValues),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'ARCHIVE_EMPLOYEE',
+          target_employee: `${emp.first_name} ${emp.last_name}`,
+          old_value: JSON.stringify(oldValues),
+          new_value: JSON.stringify(newValues),
+        },
+      });
+
+      return emp;
     });
 
     revalidatePath('/', 'layout');
@@ -246,23 +256,54 @@ export async function updateSalaryAction(employeeId: string, newSalary: number) 
       return { success: false, message: "Validation Error: Salary is outside authorized pay grade boundaries." };
     }
 
-    const updatedEmployee = await prisma.employee.update({
-      where: { id },
-      data: { actual_salary: salary }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.employee.update({
+        where: { id },
+        data: { actual_salary: salary }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'UPDATE SALARY',
-        target_employee: `${employee.first_name} ${employee.last_name}`,
-        old_value: JSON.stringify({ actual_salary: employee.actual_salary }),
-        new_value: JSON.stringify({ actual_salary: salary }),
-      }
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'UPDATE SALARY',
+          target_employee: `${employee.first_name} ${employee.last_name}`,
+          old_value: JSON.stringify({ actual_salary: employee.actual_salary }),
+          new_value: JSON.stringify({ actual_salary: salary }),
+        }
+      });
     });
 
     revalidatePath('/', 'layout');
     return { success: true, message: 'Salary updated successfully.' };
+  });
+}
+
+export async function getEmployeesByPositionAction(positionId: string) {
+  return secureAction('PERSONNEL_DIRECTORY', 'READ', async (session) => {
+    try {
+      const parsedId = z.string().min(1).safeParse(positionId);
+      if (!parsedId.success) {
+        return { success: false, message: 'Validation Error: Invalid ID.' };
+      }
+
+      const employees = await prisma.employee.findMany({
+        where: { position_id: parsedId.data, deleted_at: null },
+        orderBy: { first_name: 'asc' },
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          status: true,
+          created_at: true,
+        }
+      });
+
+      return { success: true, employees };
+    } catch (error) {
+      console.error('[getEmployeesByPosition Error]:', error);
+      return { success: false, message: 'Failed to fetch employees.' };
+    }
   });
 }

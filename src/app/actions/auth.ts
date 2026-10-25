@@ -3,11 +3,10 @@
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { z } from 'zod';
 import { sendOTP } from '@/lib/email';
-
-const prisma = new PrismaClient();
+import { hashOTP, verifyOTPHash } from '@/lib/security';
 
 if (!process.env.JWT_SECRET) {
   throw new Error('FATAL ERROR: JWT_SECRET environment variable is missing.');
@@ -17,7 +16,9 @@ const key = new TextEncoder().encode(secretKey);
 
 // In-memory rate limiting storage
 const rateLimits = new Map<string, { attempts: number, lockUntil: number | null }>();
+const otpAttempts = new Map<string, number>();
 const MAX_ATTEMPTS = 5;
+const MAX_OTP_ATTEMPTS = 3;
 const LOCK_TIME_MS = 15 * 60 * 1000; // 15 minutes
 
 const loginSchema = z.object({
@@ -106,7 +107,7 @@ export async function loginAction(formData: FormData) {
     }
 
     if (user.status === 'PENDING') {
-      return { success: false, message: '403 Forbidden: Account pending approval by an administrator.' };
+      return { success: false, isPending: true, message: 'Account pending approval by an administrator.' };
     }
 
     if (user.status === 'SUSPENDED') {
@@ -141,7 +142,7 @@ export async function loginAction(formData: FormData) {
     
     await sendOTP(user.email, otpCode);
 
-    const pendingJwt = await new SignJWT({ id: user.id, username: user.username, role: user.role, code: otpCode })
+    const pendingJwt = await new SignJWT({ id: user.id, username: user.username, role: user.role, otpHash: hashOTP(user.id, otpCode) })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime('5m') // 5 minutes to enter code
@@ -176,12 +177,33 @@ export async function verify2FAAction(formData: FormData) {
     }
 
     const { payload } = await jwtVerify(pendingSession, key);
+    const userId = payload.id as string;
+    const attempts = otpAttempts.get(userId) || 0;
 
-    if (payload.code !== code) {
+    if (!verifyOTPHash(userId, code, payload.otpHash as string)) {
+      if (attempts >= MAX_OTP_ATTEMPTS - 1) {
+        cookieStore.delete('salarize_2fa_pending');
+        otpAttempts.delete(userId);
+        
+        await prisma.auditLog.create({
+          data: {
+            admin_id: userId,
+            admin_name: payload.username as string,
+            action: 'LOGIN_FAILED_2FA',
+            target_employee: 'SYSTEM',
+            old_value: 'N/A',
+            new_value: 'Max 2FA attempts reached. Session destroyed.',
+          }
+        });
+        return { success: false, message: 'Validation Error: Too many failed attempts. Session expired. Please log in again.' };
+      }
+      
+      otpAttempts.set(userId, attempts + 1);
       return { success: false, message: 'Validation Error: Invalid authentication code.' };
     }
 
     // Code is valid! Issue the real session cookie
+    otpAttempts.delete(userId);
     await prisma.auditLog.create({
       data: {
         admin_id: payload.id as string,
@@ -328,7 +350,7 @@ export async function sendStepUpOTPAction() {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     await sendOTP(user.email, otpCode);
 
-    const stepUpJwt = await new SignJWT({ id: user.id, code: otpCode })
+    const stepUpJwt = await new SignJWT({ id: user.id, otpHash: hashOTP(user.id, otpCode) })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime('5m')

@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
-import { secureAction } from '@/lib/security';
+import { secureAction, verifyOTPHash } from '@/lib/security';
 import { z } from 'zod';
 import { sendApprovalNotification } from '@/lib/email';
 import { cookies } from 'next/headers';
@@ -14,6 +14,9 @@ if (!process.env.JWT_SECRET) {
 const secretKey = process.env.JWT_SECRET;
 const key = new TextEncoder().encode(secretKey);
 
+const stepUpAttempts = new Map<string, number>();
+const MAX_OTP_ATTEMPTS = 3;
+
 async function verifyStepUpOTP(code: string) {
   const cookieStore = await cookies();
   const stepUpSession = cookieStore.get('salarize_stepup_pending')?.value;
@@ -22,14 +25,25 @@ async function verifyStepUpOTP(code: string) {
 
   try {
     const { payload } = await jwtVerify(stepUpSession, key);
-    if (payload.code === code) {
+    const userId = payload.id as string;
+    const attempts = stepUpAttempts.get(userId) || 0;
+
+    if (verifyOTPHash(userId, code, payload.otpHash as string)) {
       cookieStore.delete('salarize_stepup_pending');
+      stepUpAttempts.delete(userId);
       return true;
+    } else {
+      if (attempts >= MAX_OTP_ATTEMPTS - 1) {
+        cookieStore.delete('salarize_stepup_pending');
+        stepUpAttempts.delete(userId);
+        return false;
+      }
+      stepUpAttempts.set(userId, attempts + 1);
+      return false;
     }
   } catch (error) {
     return false;
   }
-  return false;
 }
 
 const createAdminSchema = z.object({
@@ -78,24 +92,26 @@ export async function createAdminAction(formData: FormData) {
 
     const password_hash = await bcrypt.hash(password, 10);
 
-    const newAdmin = await prisma.admin.create({
-      data: {
-        username,
-        email,
-        password_hash,
-        role,
-      }
-    });
+    await prisma.$transaction(async (tx) => {
+      const newAdmin = await tx.admin.create({
+        data: {
+          username,
+          email,
+          password_hash,
+          role,
+        }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'CREATE ROLE',
-        target_employee: `Admin ID: ${newAdmin.id} (${username})`,
-        old_value: 'NULL',
-        new_value: JSON.stringify({ username: newAdmin.username, role: newAdmin.role }),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'CREATE ROLE',
+          target_employee: `Admin ID: ${newAdmin.id} (${username})`,
+          old_value: 'NULL',
+          new_value: JSON.stringify({ username: newAdmin.username, role: newAdmin.role }),
+        },
+      });
     });
 
     return { success: true, message: 'System Administrator created successfully.' };
@@ -120,19 +136,21 @@ export async function revokeAdminAccessAction(adminId: string) {
       return { success: false, message: 'Validation Error: Administrator not found.' };
     }
 
-    await prisma.admin.delete({
-      where: { id }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.admin.delete({
+        where: { id }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'REVOKE ROLE',
-        target_employee: `Admin Username: ${adminToDelete.username}`,
-        old_value: 'ACTIVE',
-        new_value: 'REVOKED',
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'REVOKE ROLE',
+          target_employee: `Admin Username: ${adminToDelete.username}`,
+          old_value: 'ACTIVE',
+          new_value: 'REVOKED',
+        },
+      });
     });
 
     return { success: true, message: 'Administrator access revoked successfully.' };
@@ -161,22 +179,24 @@ export async function approveAdminAction(adminId: string, role: string, otp: str
       return { success: false, message: 'Validation Error: Administrator not found or not in pending state.' };
     }
 
-    await prisma.admin.update({
-      where: { id },
-      data: { status: 'APPROVED', role: validatedRole }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.admin.update({
+        where: { id },
+        data: { status: 'APPROVED', role: validatedRole }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id:        (session.id || session.username) as string,
-        admin_name:      session.username as string,
-        action:          validatedRole === 'SUPER_ADMIN'
-                           ? '⚠️ ELEVATED_PRIVILEGE — APPROVE ROLE'
-                           : 'APPROVE ROLE',
-        target_employee: `Admin ID: ${adminToApprove.id} (${adminToApprove.username})`,
-        old_value:       'STATUS: PENDING',
-        new_value:       `STATUS: APPROVED, ROLE: ${validatedRole}`,
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id:        (session.id || session.username) as string,
+          admin_name:      session.username as string,
+          action:          validatedRole === 'SUPER_ADMIN'
+                             ? '⚠️ ELEVATED_PRIVILEGE — APPROVE ROLE'
+                             : 'APPROVE ROLE',
+          target_employee: `Admin ID: ${adminToApprove.id} (${adminToApprove.username})`,
+          old_value:       'STATUS: PENDING',
+          new_value:       `STATUS: APPROVED, ROLE: ${validatedRole}`,
+        },
+      });
     });
 
     await sendApprovalNotification(adminToApprove.email, validatedRole);
@@ -217,20 +237,22 @@ export async function suspendAdminAction(adminId: string, otp: string) {
       }
     }
 
-    await prisma.admin.update({
-      where: { id },
-      data: { status: 'SUSPENDED' }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.admin.update({
+        where: { id },
+        data: { status: 'SUSPENDED' }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: session.role === 'SUPER_ADMIN' ? '⚠️ ELEVATED_PRIVILEGE — SUSPEND ROLE' : 'SUSPEND ROLE',
-        target_employee: `Admin ID: ${adminToSuspend.id} (${adminToSuspend.username})`,
-        old_value: `STATUS: ${adminToSuspend.status}`,
-        new_value: 'STATUS: SUSPENDED',
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: session.role === 'SUPER_ADMIN' ? '⚠️ ELEVATED_PRIVILEGE — SUSPEND ROLE' : 'SUSPEND ROLE',
+          target_employee: `Admin ID: ${adminToSuspend.id} (${adminToSuspend.username})`,
+          old_value: `STATUS: ${adminToSuspend.status}`,
+          new_value: 'STATUS: SUSPENDED',
+        },
+      });
     });
 
     return { success: true, message: 'Administrator suspended successfully.' };
@@ -248,20 +270,22 @@ export async function restoreUserAccessAction(adminId: string) {
       return { success: false, message: 'Validation Error: Administrator not found or not suspended.' };
     }
 
-    await prisma.admin.update({
-      where: { id },
-      data: { status: 'APPROVED' }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.admin.update({
+        where: { id },
+        data: { status: 'APPROVED' }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'RESTORE ROLE',
-        target_employee: `Admin ID: ${adminToRestore.id} (${adminToRestore.username})`,
-        old_value: 'STATUS: SUSPENDED',
-        new_value: 'STATUS: APPROVED',
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'RESTORE ROLE',
+          target_employee: `Admin ID: ${adminToRestore.id} (${adminToRestore.username})`,
+          old_value: 'STATUS: SUSPENDED',
+          new_value: 'STATUS: APPROVED',
+        },
+      });
     });
 
     return { success: true, message: 'Administrator access restored successfully.' };
@@ -303,22 +327,24 @@ export async function updateAdminRoleAction(adminId: string, newRole: string, ot
       }
     }
 
-    await prisma.admin.update({
-      where: { id },
-      data: { role: validatedRole }
-    });
+    await prisma.$transaction(async (tx) => {
+      await tx.admin.update({
+        where: { id },
+        data: { role: validatedRole }
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id:        (session.id || session.username) as string,
-        admin_name:      session.username as string,
-        action:          validatedRole === 'SUPER_ADMIN'
-                           ? '⚠️ ELEVATED_PRIVILEGE — UPDATE ROLE'
-                           : 'UPDATE ROLE',
-        target_employee: `Admin ID: ${adminToEdit.id} (${adminToEdit.username})`,
-        old_value:       `ROLE: ${adminToEdit.role}`,
-        new_value:       `ROLE: ${validatedRole}`,
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id:        (session.id || session.username) as string,
+          admin_name:      session.username as string,
+          action:          validatedRole === 'SUPER_ADMIN'
+                             ? '⚠️ ELEVATED_PRIVILEGE — UPDATE ROLE'
+                             : 'UPDATE ROLE',
+          target_employee: `Admin ID: ${adminToEdit.id} (${adminToEdit.username})`,
+          old_value:       `ROLE: ${adminToEdit.role}`,
+          new_value:       `ROLE: ${validatedRole}`,
+        },
+      });
     });
 
     return { success: true, message: 'Administrator role updated successfully.' };

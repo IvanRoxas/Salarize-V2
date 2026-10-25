@@ -33,8 +33,8 @@ export async function middleware(req: NextRequest) {
     return res;
   };
 
-  // Protect all routes except /login
-  if (req.nextUrl.pathname !== '/login') {
+  // Protect all routes except /login and /pending
+  if (req.nextUrl.pathname !== '/login' && req.nextUrl.pathname !== '/pending') {
     if (!session) {
       return applyHeaders(NextResponse.redirect(new URL('/login', req.url)));
     }
@@ -46,8 +46,8 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // If at /login but already authenticated, redirect to Dashboard
-  if (req.nextUrl.pathname === '/login' && session) {
+  // If at /login or /pending but already authenticated, redirect to Dashboard
+  if ((req.nextUrl.pathname === '/login' || req.nextUrl.pathname === '/pending') && session) {
     try {
       await jwtVerify(session, key);
       return applyHeaders(NextResponse.redirect(new URL('/', req.url)));

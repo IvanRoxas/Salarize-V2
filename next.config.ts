@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Empty config or known valid properties
+  output: 'standalone',
 };
 
 export default nextConfig;

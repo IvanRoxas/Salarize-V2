@@ -47,6 +47,33 @@ export function checkAccess(role: string, moduleName: Module, action: ActionType
   return permissions[moduleName]?.includes(action) ?? false;
 }
 
+import crypto from 'crypto';
+
+/**
+ * Cryptographically binds an OTP code to a user ID using HMAC-SHA256.
+ * Storing this hash in the client token prevents client-side extraction of the OTP.
+ */
+export function hashOTP(userId: string, code: string): string {
+  const secret = process.env.JWT_SECRET || 'fallback-secret-salarize';
+  return crypto.createHmac('sha256', secret).update(`${userId}:${code.trim()}`).digest('hex');
+}
+
+/**
+ * Constant-time comparison between user-provided OTP code and stored HMAC hash.
+ */
+export function verifyOTPHash(userId: string, code: string, expectedHash: string): boolean {
+  if (!code || !expectedHash) return false;
+  const computedHash = hashOTP(userId, code);
+  try {
+    const a = Buffer.from(computedHash, 'hex');
+    const b = Buffer.from(expectedHash, 'hex');
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
+
 // ── F5: Per-user WRITE rate limiter ───────────────────────────────────────────
 // Tracks write action counts per authenticated user per minute.
 // Resets automatically when the window expires.

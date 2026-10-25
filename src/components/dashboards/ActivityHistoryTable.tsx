@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { archiveAllHistoryAction } from '@/app/actions';
+import { archiveAllHistoryAction } from '@/app/actions/audit';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 

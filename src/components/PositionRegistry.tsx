@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Plus, Briefcase, Edit2, Search, User, Users, Shield, Calculator, Code, Monitor, Wrench, Headphones, Truck, Lightbulb, PenTool } from 'lucide-react';
 import CreatePositionModal from './CreatePositionModal';
 import EditPositionModal from './EditPositionModal';
+import PositionEmployeesModal from './PositionEmployeesModal';
 
 const IconMap: Record<string, any> = {
   User, Users, Shield, Briefcase, Calculator, Code, Monitor, Wrench, Headphones, Truck, Lightbulb, PenTool
@@ -29,6 +30,7 @@ export default function PositionRegistry({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPos, setSelectedPos] = useState<any>(null);
+  const [viewEmployeesPos, setViewEmployeesPos] = useState<any>(null);
   const [filterDept, setFilterDept] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -102,7 +104,11 @@ export default function PositionRegistry({
                   const PosIcon = IconMap[pos.icon || 'Briefcase'] || Briefcase;
                   const colorTheme = ColorMap[pos.department?.color || 'violet'] || ColorMap.violet;
                   return (
-                    <div key={pos.id} className="p-6 flex items-center justify-between hover:bg-slate-50/50 transition-colors group">
+                    <div 
+                      key={pos.id} 
+                      onClick={() => setViewEmployeesPos(pos)}
+                      className="p-6 flex items-center justify-between hover:bg-slate-50/50 transition-colors group cursor-pointer"
+                    >
                       <div className="flex items-center space-x-4">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorTheme.bg} ${colorTheme.text}`}>
                           <PosIcon className="w-5 h-5" />
@@ -123,7 +129,10 @@ export default function PositionRegistry({
                       </span>
                       {(role === 'SUPER_ADMIN' || role === 'ADMIN') && (
                         <button 
-                          onClick={() => setSelectedPos(pos)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPos(pos);
+                          }}
                           className="text-slate-400 hover:text-violet-600 p-2 rounded hover:bg-violet-50 cursor-pointer transition-colors"
                           title="Edit Position"
                         >
@@ -142,6 +151,7 @@ export default function PositionRegistry({
 
       {isModalOpen && <CreatePositionModal departments={departments} onClose={() => setIsModalOpen(false)} />}
       {selectedPos && <EditPositionModal position={selectedPos} departments={departments} role={role} onClose={() => setSelectedPos(null)} />}
+      {viewEmployeesPos && <PositionEmployeesModal position={viewEmployeesPos} onClose={() => setViewEmployeesPos(null)} />}
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AlertTriangle, ShieldCheck, X } from 'lucide-react';
-import { acknowledgeAlertsAction } from '@/app/actions';
+import { acknowledgeAlertsAction } from '@/app/actions/audit';
 
 interface AuditorKPICardsProps {
   totalLogs: number;

@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import SalaryRegistry from '@/components/SalaryRegistry';
 import { getSession } from '@/app/actions/auth';
 import { checkAccess } from '@/lib/security';
 import { redirect } from 'next/navigation';
-
-const prisma = new PrismaClient();
 
 export const dynamic = 'force-dynamic';
 

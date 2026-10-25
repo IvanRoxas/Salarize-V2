@@ -1,0 +1,86 @@
+<mxfile host="app.diagrams.net" modified="2026-10-25T16:45:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="system-architecture-diagram" name="2.3 Architecture Diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="720" background="#FAF7F2" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- LAYER 1: CLIENT LAYER (WARM TAUPE) -->
+        <mxCell id="layer1" value="&lt;b&gt;1. Client Layer&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EBE0;strokeColor=#8C7A6B;strokeWidth=2;verticalAlign=top;spacingTop=8;fontSize=13;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="780" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="client_portal" value="&lt;b&gt;Staff Access Dashboard&lt;/b&gt;&lt;br&gt;&lt;font color='#8C5E3C'&gt;Where different staff members access the system dashboard&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.5;fontSize=12;fontColor=#8F3900;" vertex="1" parent="1">
+          <mxGeometry x="90" y="72" width="370" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="client_users" value="&lt;b&gt;Authorized Personnel Personas&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;Super Admin • HR Manager • System Admin • Auditor&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C7A6B;strokeWidth=1.2;fontSize=11;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="480" y="72" width="330" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Connector L1 -> L2 -->
+        <mxCell id="edge1_2" value="Staff Web Requests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=2;fontColor=#8F3900;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="layer1" target="layer2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LAYER 2: WEB SERVER LAYER (HONEY AMBER) -->
+        <mxCell id="layer2" value="&lt;b&gt;2. Web Server Layer&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;verticalAlign=top;spacingTop=8;fontSize=13;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="60" y="185" width="780" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="iis_gateway" value="&lt;b&gt;Secure Front Door (IIS Gateway)&lt;/b&gt;&lt;br&gt;&lt;font color='#78350F'&gt;Safely guides outside traffic into the internal application&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.5;fontSize=12;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="90" y="217" width="370" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="iis_shield" value="&lt;b&gt;Protection Shield&lt;/b&gt;&lt;br&gt;&lt;font color='#92400E'&gt;Blocks unwanted visitors and hides internal system details&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.2;fontSize=11;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="480" y="217" width="330" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Connector L2 -> L3 -->
+        <mxCell id="edge2_3" value="Safely Guided Traffic" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=2;fontColor=#78350F;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="layer2" target="layer3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LAYER 3: APPLICATION LAYER (FOREST SAGE) -->
+        <mxCell id="layer3" value="&lt;b&gt;3. Application Layer&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F7F2;strokeColor=#4D7C54;strokeWidth=2;verticalAlign=top;spacingTop=8;fontSize=13;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="60" y="330" width="780" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_engine" value="&lt;b&gt;Main Processing Engine&lt;/b&gt;&lt;br&gt;&lt;font color='#2D6A4F'&gt;Coordinates all application features and display logic&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.5;fontSize=11.5;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="90" y="365" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_auth" value="&lt;b&gt;Secure Logins and Identity&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;Handles secure logins, passwords, and two-factor code verification&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#115E59;" vertex="1" parent="1">
+          <mxGeometry x="350" y="365" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_ops" value="&lt;b&gt;Company Operations&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;Manages employee records, department salaries, and reports&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#115E59;" vertex="1" parent="1">
+          <mxGeometry x="630" y="365" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Connector L3 -> L4 -->
+        <mxCell id="edge3_4" value="Store and Retrieve Records" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=2;fontColor=#1E3A24;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="layer3" target="layer4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LAYER 4: DATABASE LAYER (WARM TERRACOTTA) -->
+        <mxCell id="layer4" value="&lt;b&gt;4. Database Layer&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF3EC;strokeColor=#C26D38;strokeWidth=2;verticalAlign=top;spacingTop=8;fontSize=13;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="60" y="495" width="780" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_vault" value="&lt;b&gt;Secure Digital Vault&lt;/b&gt;&lt;br&gt;&lt;font color='#8C5E3C'&gt;Safely houses all enterprise data and business records&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.5;fontSize=11.5;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="90" y="530" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_records" value="&lt;b&gt;Business Records&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;Staff accounts, employee profiles, salary limits, and audit logs&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.2;fontSize=11;fontColor=#1E293B;" vertex="1" parent="1">
+          <mxGeometry x="350" y="530" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_daily_backup" value="&lt;b&gt;Daily Fresh Copy&lt;/b&gt;&lt;br&gt;&lt;font color='#2D6A4F'&gt;Automatically saves a fresh backup copy of the data every day&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#14532D;" vertex="1" parent="1">
+          <mxGeometry x="630" y="530" width="180" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -45,19 +45,21 @@ export async function createPositionAction(formData: FormData) {
     const existingPosition = await prisma.position.findUnique({ where: { title } });
     if (existingPosition) return { success: false, message: 'A job position with this title already exists.' };
 
-    const newPosition = await prisma.position.create({
-      data: { title, department_id, icon, base_salary, min_salary, max_salary },
-    });
+    await prisma.$transaction(async (tx) => {
+      const newPosition = await tx.position.create({
+        data: { title, department_id, icon, base_salary, min_salary, max_salary },
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'CREATE POSITION',
-        target_employee: title,
-        old_value: 'NULL',
-        new_value: JSON.stringify(newPosition),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'CREATE POSITION',
+          target_employee: title,
+          old_value: 'NULL',
+          new_value: JSON.stringify(newPosition),
+        },
+      });
     });
 
     revalidatePath('/', 'layout');
@@ -86,20 +88,22 @@ export async function updatePositionAction(formData: FormData) {
     const existingPosition = await prisma.position.findUnique({ where: { id } });
     if (!existingPosition) return { success: false, message: 'Job Position not found.' };
 
-    const updatedPosition = await prisma.position.update({
-      where: { id },
-      data: { title, department_id, icon, base_salary, min_salary, max_salary },
-    });
+    await prisma.$transaction(async (tx) => {
+      const updatedPosition = await tx.position.update({
+        where: { id },
+        data: { title, department_id, icon, base_salary, min_salary, max_salary },
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'UPDATE POSITION',
-        target_employee: title,
-        old_value: JSON.stringify(existingPosition),
-        new_value: JSON.stringify(updatedPosition),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'UPDATE POSITION',
+          target_employee: title,
+          old_value: JSON.stringify(existingPosition),
+          new_value: JSON.stringify(updatedPosition),
+        },
+      });
     });
 
     revalidatePath('/', 'layout');
@@ -124,17 +128,19 @@ export async function deletePositionAction(id: string) {
       return { success: false, message: 'Validation Error: Cannot delete: Job Position has active personnel. Reassign them first.' };
     }
 
-    await prisma.position.delete({ where: { id: parsedId.data } });
+    await prisma.$transaction(async (tx) => {
+      await tx.position.delete({ where: { id: parsedId.data } });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'DELETE POSITION',
-        target_employee: existingPosition.title,
-        old_value: JSON.stringify(existingPosition),
-        new_value: 'DELETED',
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'DELETE POSITION',
+          target_employee: existingPosition.title,
+          old_value: JSON.stringify(existingPosition),
+          new_value: 'DELETED',
+        },
+      });
     });
 
     revalidatePath('/', 'layout');

@@ -2,6 +2,8 @@
 
 import prisma from '@/lib/prisma';
 import { secureAction } from '@/lib/security';
+import { revalidatePath } from 'next/cache';
+import { ACCESS_LOG_ACTIONS } from '@/lib/auditCategories';
 
 export async function generateAuditReport() {
   return secureAction('SECURITY_LOGS', 'READ', async (session) => {
@@ -40,5 +42,69 @@ export async function generateAuditReport() {
       accessLogs,
       auditorName: session.username
     };
+  });
+}
+
+export async function acknowledgeAlertsAction() {
+  return secureAction('ARCHIVES', 'WRITE', async (session) => {
+    await prisma.auditLog.create({
+      data: {
+        admin_id:        session.id as string,
+        admin_name:      session.username as string,
+        action:          'ACKNOWLEDGE_ALERTS',
+        target_employee: 'System Alert Reset',
+        old_value:       'null',
+        new_value:       'Acknowledged',
+      }
+    });
+    revalidatePath('/', 'layout');
+    return { success: true };
+  });
+}
+
+export async function archiveAllHistoryAction(expectedCount: number) {
+  return secureAction('ARCHIVES', 'WRITE', async (session) => {
+    const activeCount = await prisma.auditLog.count({ 
+      where: { 
+        is_archived: false,
+        action: { notIn: [...ACCESS_LOG_ACTIONS] }
+      } 
+    });
+
+    if (activeCount !== expectedCount) {
+      return {
+        success: false,
+        message: `Count mismatch: expected ${expectedCount} records but found ${activeCount}. Refresh and confirm again.`
+      };
+    }
+
+    if (activeCount === 0) {
+      return { success: false, message: 'No active logs to archive.' };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.auditLog.updateMany({
+        where: { 
+          is_archived: false,
+          action: { notIn: [...ACCESS_LOG_ACTIONS] }
+        },
+        data: { is_archived: true },
+      });
+
+      await tx.auditLog.create({
+        data: {
+          admin_id:        session.id as string,
+          admin_name:      session.username as string,
+          action:          'ARCHIVE_HISTORY',
+          target_employee: 'System Logs',
+          old_value:       `${activeCount} active records`,
+          new_value:       'Archived',
+          is_archived:     false,
+        }
+      });
+    });
+
+    revalidatePath('/', 'layout');
+    return { success: true, message: `${activeCount} records archived successfully.` };
   });
 }

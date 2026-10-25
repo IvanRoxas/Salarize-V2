@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import EditEmployeeModal from '@/components/EditEmployeeModal';
+import RegisterPersonnelModal from '@/components/RegisterPersonnelModal';
 import Pagination from '@/components/Pagination';
-import { Eye, Edit, Search } from 'lucide-react';
+import { Eye, Edit, Search, UserPlus } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { IconMap, ColorMap } from '@/lib/theme';
 
@@ -18,6 +19,7 @@ export default function PersonnelTable({
   const searchParams = useSearchParams();
 
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [filterDept, setFilterDept] = useState(initialDept);
 
@@ -87,15 +89,26 @@ export default function PersonnelTable({
           ))}
         </select>
         
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search personnel by name or email..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
-          />
+        <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-3 sm:items-center">
+          <div className="relative w-full sm:w-80">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Search personnel by name or email..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow"
+            />
+          </div>
+          {(role === 'HR_MANAGER' || role === 'SUPER_ADMIN') && (
+            <button
+              onClick={() => setShowRegisterModal(true)}
+              className="flex items-center justify-center space-x-2 bg-violet-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-violet-700 transition-all duration-200 shadow-sm shrink-0 active:scale-95 text-sm cursor-pointer whitespace-nowrap"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span className="hidden sm:inline">Register</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -184,6 +197,13 @@ export default function PersonnelTable({
           role={role}
           positions={positions}
           onClose={() => setSelectedEmployee(null)} 
+        />
+      )}
+
+      {showRegisterModal && (
+        <RegisterPersonnelModal 
+          positions={positions} 
+          onClose={() => setShowRegisterModal(false)} 
         />
       )}
     </div>

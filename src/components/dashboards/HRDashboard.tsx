@@ -25,7 +25,7 @@ export default async function HRDashboard() {
       where: { deleted_at: null },
       orderBy: { created_at: 'desc' },
       take: 5,
-      include: { position: true },
+      include: { position: { include: { department: true } } },
     }),
     prisma.employee.groupBy({
       by: ['position_id'],
@@ -45,7 +45,7 @@ export default async function HRDashboard() {
         status: 'Onboarding',
         deleted_at: null,
       },
-      include: { position: true },
+      include: { position: { include: { department: true } } },
       orderBy: { created_at: 'desc' },
       take: 8,
     }),

@@ -45,7 +45,9 @@ export default function LoginPage() {
       }
     } else if (step === 'login') {
       const res = await loginAction(formData);
-      if (res.requires2FA) {
+      if (res.isPending) {
+        router.push('/pending');
+      } else if (res.requires2FA) {
         // 2FA Delivery Message
         toast.success(res.message || 'OTP sent to your email.', { duration: 5000 });
         setStep('2fa');

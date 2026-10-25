@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 680" width="100%" height="100%" style="background:#FAF7F2; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="autumn-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arr-rust" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#C26D38"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#D97706"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4D7C54"/>
+    </marker>
+  </defs>
+
+  <!-- Title Banner -->
+  <text x="35" y="32" font-size="17" font-weight="700" fill="#3D2E24">2.3 System Architecture Diagram — Purpose-Driven Overview</text>
+  <text x="35" y="52" font-size="11.5" font-weight="500" fill="#8C7A6B">Salarize Multi-Tier Enterprise Architecture on Windows Server</text>
+
+  <!-- ========================================== -->
+  <!-- LAYER 1: CLIENT LAYER (WARM TAUPE)         -->
+  <!-- ========================================== -->
+  <g transform="translate(35, 70)">
+    <rect x="0" y="0" width="850" height="95" rx="10" fill="#F5EBE0" stroke="#8C7A6B" stroke-width="2"/>
+    <text x="20" y="24" font-size="12" font-weight="700" fill="#3D2E24">1. CLIENT LAYER</text>
+
+    <!-- Staff Access Dashboard Card with Crisp Browser Window Icon -->
+    <g transform="translate(20, 34)">
+      <rect x="0" y="0" width="410" height="48" rx="6" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.3" filter="url(#autumn-shadow)"/>
+      <!-- Crisp Browser Window Icon -->
+      <g transform="translate(14, 11)">
+        <rect x="0" y="0" width="30" height="24" rx="3" fill="#FFFFFF" stroke="#8F3900" stroke-width="1.6"/>
+        <rect x="0" y="0" width="30" height="7" rx="3" fill="#C26D38"/>
+        <circle cx="5" cy="3.5" r="1.2" fill="#FFFFFF"/>
+        <circle cx="9" cy="3.5" r="1.2" fill="#FFFFFF"/>
+        <circle cx="13" cy="3.5" r="1.2" fill="#FFFFFF"/>
+        <line x1="17" y1="3.5" x2="26" y2="3.5" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round"/>
+        <rect x="5" y="11" width="20" height="9" rx="1.5" fill="#FAF7F2" stroke="#D1804E" stroke-width="0.8"/>
+      </g>
+      <text x="56" y="21" font-size="11.5" font-weight="700" fill="#8F3900">Staff Access Dashboard</text>
+      <text x="56" y="37" font-size="10" fill="#8C5E3C">Where different staff members access the system dashboard</text>
+    </g>
+
+    <!-- User Roles Card -->
+    <g transform="translate(450, 34)">
+      <rect x="0" y="0" width="380" height="48" rx="6" fill="#FFFFFF" stroke="#8C7A6B" stroke-width="1.2"/>
+      <text x="18" y="21" font-size="11.5" font-weight="700" fill="#3D2E24">Authorized Personnel Personas</text>
+      <text x="18" y="37" font-size="10" fill="#64748B">Super Admin • HR Manager • System Admin • Auditor</text>
+    </g>
+  </g>
+
+  <!-- Flow 1 -> 2 -->
+  <path d="M 460 165 L 460 200" stroke="#C26D38" stroke-width="2" marker-end="url(#arr-rust)"/>
+  <text x="470" y="187" font-size="10.5" font-weight="600" fill="#8F3900">Staff Web Requests</text>
+
+  <!-- ========================================== -->
+  <!-- LAYER 2: WEB SERVER LAYER (HONEY AMBER)    -->
+  <!-- ========================================== -->
+  <g transform="translate(35, 200)">
+    <rect x="0" y="0" width="850" height="95" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+    <text x="20" y="24" font-size="12" font-weight="700" fill="#78350F">2. WEB SERVER LAYER</text>
+
+    <!-- Secure Front Door Card with Microsoft IIS Brand -->
+    <g transform="translate(20, 34)">
+      <rect x="0" y="0" width="410" height="48" rx="6" fill="#FFFFFF" stroke="#D97706" stroke-width="1.3" filter="url(#autumn-shadow)"/>
+      <!-- Microsoft Brand Icon (4 colorful tiles) -->
+      <g transform="translate(14, 11)">
+        <rect x="0" y="0" width="11" height="11" fill="#F25022"/>
+        <rect x="14" y="0" width="11" height="11" fill="#7FBA00"/>
+        <rect x="0" y="14" width="11" height="11" fill="#00A4EF"/>
+        <rect x="14" y="14" width="11" height="11" fill="#FFB900"/>
+      </g>
+      <text x="52" y="21" font-size="11.5" font-weight="700" fill="#78350F">Secure Front Door (IIS Gateway)</text>
+      <text x="52" y="37" font-size="10" fill="#92400E">Safely guides outside traffic into the internal application</text>
+    </g>
+
+    <!-- Protection Shield Card -->
+    <g transform="translate(450, 34)">
+      <rect x="0" y="0" width="380" height="48" rx="6" fill="#FFFFFF" stroke="#D97706" stroke-width="1.2"/>
+      <!-- Security Shield Icon -->
+      <g transform="translate(14, 12)">
+        <path d="M 11 2 L 2 6 L 2 13 C 2 19, 11 23, 11 23 C 11 23, 20 19, 20 13 L 20 6 Z" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+        <path d="M 7 12 L 10 15 L 16 9" fill="none" stroke="#D97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <text x="44" y="21" font-size="11.5" font-weight="700" fill="#78350F">Protection Shield</text>
+      <text x="44" y="37" font-size="10" fill="#92400E">Blocks unwanted visitors and hides internal system details</text>
+    </g>
+  </g>
+
+  <!-- Flow 2 -> 3 -->
+  <path d="M 460 295 L 460 330" stroke="#D97706" stroke-width="2" marker-end="url(#arr-amber)"/>
+  <text x="470" y="317" font-size="10.5" font-weight="600" fill="#78350F">Safely Guided Traffic</text>
+
+  <!-- ========================================== -->
+  <!-- LAYER 3: APPLICATION LAYER (FOREST SAGE)   -->
+  <!-- ========================================== -->
+  <g transform="translate(35, 330)">
+    <rect x="0" y="0" width="850" height="120" rx="10" fill="#F3F7F2" stroke="#4D7C54" stroke-width="2"/>
+    <text x="20" y="24" font-size="12" font-weight="700" fill="#1E3A24">3. APPLICATION LAYER</text>
+
+    <!-- Main Engine Card with Next.js Logo -->
+    <g transform="translate(20, 36)">
+      <rect x="0" y="0" width="260" height="68" rx="6" fill="#FFFFFF" stroke="#4D7C54" stroke-width="1.3" filter="url(#autumn-shadow)"/>
+      <!-- Next.js Brand Icon -->
+      <g transform="translate(12, 17)">
+        <circle cx="16" cy="16" r="16" fill="#000000"/>
+        <path d="M 11 9 L 11 23 M 11 11 L 21 23 M 20 9 L 20 18" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+      <text x="54" y="25" font-size="11.5" font-weight="700" fill="#1E3A24">Main Processing Engine</text>
+      <text x="54" y="42" font-size="10" fill="#2D6A4F">Coordinates all application</text>
+      <text x="54" y="56" font-size="10" fill="#2D6A4F">features and display logic</text>
+    </g>
+
+    <!-- Secure Logins Card with Node.js Brand -->
+    <g transform="translate(300, 36)">
+      <rect x="0" y="0" width="260" height="68" rx="6" fill="#FFFFFF" stroke="#4D7C54" stroke-width="1.2"/>
+      <!-- Node.js Brand Icon -->
+      <g transform="translate(12, 17)">
+        <polygon points="16,2 30,10 30,26 16,34 2,26 2,10" fill="#339933"/>
+        <path d="M 10 24 L 10 12 L 20 22 L 20 12" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <text x="52" y="25" font-size="11.5" font-weight="700" fill="#1E3A24">Secure Logins and Identity</text>
+      <text x="52" y="42" font-size="10" fill="#475569">Handles secure logins, passwords,</text>
+      <text x="52" y="56" font-size="10" fill="#475569">and two-factor code verification</text>
+    </g>
+
+    <!-- Company Operations Card -->
+    <g transform="translate(580, 36)">
+      <rect x="0" y="0" width="250" height="68" rx="6" fill="#FFFFFF" stroke="#4D7C54" stroke-width="1.2"/>
+      <g transform="translate(14, 18)">
+        <rect x="0" y="5" width="24" height="18" rx="3" fill="#E8F2E8" stroke="#4D7C54" stroke-width="1.5"/>
+        <path d="M 7 5 L 7 2 C 7 1, 8 0, 9 0 L 15 0 C 16 0, 17 1, 17 2 L 17 5" fill="none" stroke="#4D7C54" stroke-width="1.5"/>
+        <line x1="0" y1="11" x2="24" y2="11" stroke="#4D7C54" stroke-width="1.2"/>
+      </g>
+      <text x="48" y="25" font-size="11.5" font-weight="700" fill="#1E3A24">Company Operations</text>
+      <text x="48" y="42" font-size="10" fill="#475569">Manages employee records,</text>
+      <text x="48" y="56" font-size="10" fill="#475569">department salaries, and reports</text>
+    </g>
+  </g>
+
+  <!-- Flow 3 -> 4 -->
+  <path d="M 460 450 L 460 485" stroke="#4D7C54" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="470" y="472" font-size="10.5" font-weight="600" fill="#1E3A24">Store and Retrieve Records</text>
+
+  <!-- ========================================== -->
+  <!-- LAYER 4: DATABASE LAYER (WARM RUST)        -->
+  <!-- ========================================== -->
+  <g transform="translate(35, 485)">
+    <rect x="0" y="0" width="850" height="125" rx="10" fill="#FDF3EC" stroke="#C26D38" stroke-width="2"/>
+    <text x="20" y="24" font-size="12" font-weight="700" fill="#6E2800">4. DATABASE LAYER</text>
+
+    <!-- PostgreSQL Vault Card with Elephant Logo -->
+    <g transform="translate(20, 36)">
+      <rect x="0" y="0" width="260" height="72" rx="6" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.3" filter="url(#autumn-shadow)"/>
+      <!-- PostgreSQL Elephant Brand Emblem -->
+      <g transform="translate(12, 18)">
+        <rect x="0" y="0" width="34" height="34" rx="7" fill="#336791"/>
+        <path d="M 8 11 C 8 7, 24 7, 24 11 C 24 16, 21 19, 17 19 C 17 24, 16 27, 13 27 C 11 27, 11 23, 12 21 C 9 21, 8 17, 8 13 Z" fill="#FFFFFF"/>
+        <circle cx="13" cy="11.5" r="1.5" fill="#336791"/>
+      </g>
+      <text x="56" y="26" font-size="11.5" font-weight="700" fill="#6E2800">Secure Digital Vault</text>
+      <text x="56" y="44" font-size="10" fill="#8C5E3C">Safely houses all enterprise</text>
+      <text x="56" y="58" font-size="10" fill="#8C5E3C">data and business records</text>
+    </g>
+
+    <!-- Business Records Card with Prisma Brand -->
+    <g transform="translate(300, 36)">
+      <rect x="0" y="0" width="280" height="72" rx="6" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.2"/>
+      <!-- Prisma Logo -->
+      <g transform="translate(12, 18)">
+        <polygon points="16,2 30,30 2,30" fill="#0C344B"/>
+        <polygon points="16,2 30,30 18,30" fill="#16679A"/>
+      </g>
+      <text x="50" y="26" font-size="11.5" font-weight="700" fill="#6E2800">Business Records</text>
+      <text x="50" y="44" font-size="10" fill="#475569">Staff accounts, employee profiles,</text>
+      <text x="50" y="58" font-size="10" fill="#475569">salary limits, and audit logs</text>
+    </g>
+
+    <!-- Daily Fresh Copy Card with Backup Calendar/Clock -->
+    <g transform="translate(600, 36)">
+      <rect x="0" y="0" width="230" height="72" rx="6" fill="#FFFFFF" stroke="#4D7C54" stroke-width="1.2"/>
+      <g transform="translate(12, 20)">
+        <circle cx="15" cy="15" r="14" fill="#EBF5ED" stroke="#4D7C54" stroke-width="1.5"/>
+        <polyline points="15,8 15,15 20,15" fill="none" stroke="#4D7C54" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 23 8 A 12 12 0 1 0 25 18" fill="none" stroke="#2D6A4F" stroke-width="1.5" stroke-dasharray="2,2"/>
+      </g>
+      <text x="48" y="26" font-size="11.5" font-weight="700" fill="#14532D">Daily Fresh Copy</text>
+      <text x="48" y="44" font-size="10" fill="#475569">Automatically saves a fresh</text>
+      <text x="48" y="58" font-size="10" font-weight="600" fill="#2D6A4F">copy of the data every day</text>
+    </g>
+  </g>
+
+</svg>

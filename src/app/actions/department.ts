@@ -34,19 +34,21 @@ export async function createDepartmentAction(formData: FormData) {
     const existing = await prisma.department.findUnique({ where: { name } });
     if (existing) return { success: false, message: 'A department with this name already exists.' };
 
-    const newDept = await prisma.department.create({
-      data: { name, description, icon, color },
-    });
+    await prisma.$transaction(async (tx) => {
+      const newDept = await tx.department.create({
+        data: { name, description, icon, color },
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'CREATE DEPARTMENT',
-        target_employee: name,
-        old_value: 'NULL',
-        new_value: JSON.stringify(newDept),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'CREATE DEPARTMENT',
+          target_employee: name,
+          old_value: 'NULL',
+          new_value: JSON.stringify(newDept),
+        },
+      });
     });
 
     revalidatePath('/', 'layout');
@@ -73,20 +75,22 @@ export async function updateDepartmentAction(formData: FormData) {
     const existing = await prisma.department.findUnique({ where: { id } });
     if (!existing) return { success: false, message: 'Department not found.' };
 
-    const updatedDept = await prisma.department.update({
-      where: { id },
-      data: { name, description, icon, color },
-    });
+    await prisma.$transaction(async (tx) => {
+      const updatedDept = await tx.department.update({
+        where: { id },
+        data: { name, description, icon, color },
+      });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'UPDATE DEPARTMENT',
-        target_employee: name,
-        old_value: JSON.stringify(existing),
-        new_value: JSON.stringify(updatedDept),
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'UPDATE DEPARTMENT',
+          target_employee: name,
+          old_value: JSON.stringify(existing),
+          new_value: JSON.stringify(updatedDept),
+        },
+      });
     });
 
     revalidatePath('/', 'layout');
@@ -112,17 +116,19 @@ export async function deleteDepartmentAction(id: string) {
       return { success: false, message: 'Validation Error: Cannot delete: Department has active job positions. Reassign or delete them first.' };
     }
 
-    await prisma.department.delete({ where: { id: parsedId.data } });
+    await prisma.$transaction(async (tx) => {
+      await tx.department.delete({ where: { id: parsedId.data } });
 
-    await prisma.auditLog.create({
-      data: {
-        admin_id: (session.id || session.username) as string,
-        admin_name: session.username as string,
-        action: 'DELETE DEPARTMENT',
-        target_employee: existing.name,
-        old_value: JSON.stringify(existing),
-        new_value: 'DELETED',
-      },
+      await tx.auditLog.create({
+        data: {
+          admin_id: (session.id || session.username) as string,
+          admin_name: session.username as string,
+          action: 'DELETE DEPARTMENT',
+          target_employee: existing.name,
+          old_value: JSON.stringify(existing),
+          new_value: 'DELETED',
+        },
+      });
     });
 
     revalidatePath('/departments');

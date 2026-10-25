@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 440" width="100%" height="100%" style="background:#FAF7F2; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="shadow-autumn" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arr-taupe" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8C7A6B"/>
+    </marker>
+    <marker id="arr-rust" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#C26D38"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4D7C54"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#D97706"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="30" y="32" font-size="16" font-weight="700" fill="#3D2E24">2.2 Network Topology Diagram</text>
+
+  <!-- Host Machine Container (Warm Taupe) -->
+  <rect x="30" y="55" width="230" height="360" rx="10" fill="#F5EBE0" stroke="#8C7A6B" stroke-width="2"/>
+  <text x="45" y="85" font-size="13" font-weight="700" fill="#3D2E24">Host Machine (Physical PC)</text>
+
+  <!-- Browser -->
+  <rect x="50" y="110" width="190" height="75" rx="8" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <g transform="translate(62, 134)">
+    <rect x="0" y="0" width="28" height="22" rx="3" fill="#FFFFFF" stroke="#8F3900" stroke-width="1.5"/>
+    <rect x="0" y="0" width="28" height="6.5" rx="3" fill="#C26D38"/>
+    <circle cx="4.5" cy="3.2" r="1.1" fill="#FFFFFF"/>
+    <circle cx="8" cy="3.2" r="1.1" fill="#FFFFFF"/>
+    <circle cx="11.5" cy="3.2" r="1.1" fill="#FFFFFF"/>
+  </g>
+  <text x="100" y="142" font-size="12.5" font-weight="700" fill="#8F3900">Web Browser</text>
+  <text x="100" y="162" font-size="10.5" fill="#8C5E3C">http://192.168.56.50</text>
+
+  <!-- Host Adapter -->
+  <rect x="50" y="260" width="190" height="75" rx="8" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <text x="65" y="290" font-size="12" font-weight="700" fill="#8F3900">Host-Only Adapter</text>
+  <text x="65" y="312" font-size="11" fill="#8C5E3C">IP: 192.168.56.1</text>
+
+  <!-- Connector: Browser -> Adapter -->
+  <path d="M 145 185 L 145 260" stroke="#C26D38" stroke-width="2" marker-end="url(#arr-rust)"/>
+
+  <!-- Virtual Network (Middle - Warm Honey Amber) -->
+  <rect x="305" y="255" width="200" height="85" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="2" filter="url(#shadow-autumn)"/>
+  <text x="320" y="285" font-size="13" font-weight="700" fill="#78350F">Oracle VirtualBox</text>
+  <text x="320" y="305" font-size="11" fill="#92400E">Host-Only Network</text>
+  <text x="320" y="322" font-size="11" font-weight="600" fill="#78350F">192.168.56.0 / 24</text>
+
+  <!-- Connector: Adapter -> Virtual Network -->
+  <path d="M 240 297 L 305 297" stroke="#8C7A6B" stroke-width="2" marker-end="url(#arr-taupe)"/>
+
+  <!-- VM Container (Terracotta Tint) -->
+  <rect x="550" y="55" width="340" height="360" rx="10" fill="#FDF3EC" stroke="#D96B27" stroke-width="2"/>
+  <text x="565" y="85" font-size="13" font-weight="700" fill="#6E2800">Windows Server Lab (VM)</text>
+  <text x="780" y="85" font-size="11" font-weight="600" fill="#8F3900">192.168.56.50</text>
+
+  <!-- Firewall (Auburn / Deep Red) -->
+  <rect x="580" y="105" width="280" height="50" rx="6" fill="#FFFFFF" stroke="#A33B4E" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <text x="595" y="127" font-size="12" font-weight="700" fill="#581423">Windows Firewall</text>
+  <text x="595" y="143" font-size="10.5" fill="#2D6A4F">Port 80 Inbound Allowed</text>
+
+  <!-- Connector: Virtual Network -> Firewall -->
+  <path d="M 505 297 L 535 297 L 535 130 L 580 130" stroke="#8C7A6B" stroke-width="2" fill="none" marker-end="url(#arr-taupe)"/>
+
+  <!-- IIS Web Server (Amber Gold) -->
+  <rect x="580" y="180" width="280" height="55" rx="6" fill="#FFFFFF" stroke="#D97706" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <text x="595" y="203" font-size="12" font-weight="700" fill="#78350F">IIS Web Server (Reverse Proxy)</text>
+  <text x="595" y="221" font-size="10.5" fill="#92400E">Port 80 (HTTP Gateway)</text>
+
+  <!-- Connector: Firewall -> IIS -->
+  <path d="M 720 155 L 720 180" stroke="#4D7C54" stroke-width="2" marker-end="url(#arr-green)"/>
+
+  <!-- Next.js App (Forest Sage) -->
+  <rect x="580" y="260" width="280" height="55" rx="6" fill="#FFFFFF" stroke="#4D7C54" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <text x="595" y="283" font-size="12" font-weight="700" fill="#1E3A24">Next.js Web Application</text>
+  <text x="595" y="301" font-size="10.5" fill="#2D6A4F">Node.js Server (Port 3000)</text>
+
+  <!-- Connector: IIS -> Next.js -->
+  <path d="M 720 235 L 720 260" stroke="#D97706" stroke-width="2" marker-end="url(#arr-amber)"/>
+
+  <!-- PostgreSQL (Warm Rust) -->
+  <rect x="580" y="340" width="280" height="55" rx="6" fill="#FFFFFF" stroke="#C26D38" stroke-width="1.5" filter="url(#shadow-autumn)"/>
+  <text x="595" y="363" font-size="12" font-weight="700" fill="#6B3512">PostgreSQL Database</text>
+  <text x="595" y="381" font-size="10.5" fill="#8F3900">Database: salarizedb (Port 5432)</text>
+
+  <!-- Connector: Next.js -> PostgreSQL -->
+  <path d="M 720 315 L 720 340" stroke="#C26D38" stroke-width="2" marker-end="url(#arr-rust)"/>
+</svg>

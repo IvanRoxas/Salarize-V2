@@ -1,0 +1,75 @@
+<mxfile host="app.diagrams.net" modified="2026-10-25T16:00:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="network-topology-diagram" name="2.2 Network Diagram">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="600" background="#FAF7F2" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- HOST MACHINE (WARM TAUPE) -->
+        <mxCell id="host_box" value="&lt;b&gt;Host Machine (Physical PC)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EBE0;strokeColor=#8C7A6B;strokeWidth=2;verticalAlign=top;spacingTop=10;fontSize=14;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="240" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="browser" value="&lt;b&gt;Web Browser&lt;/b&gt;&lt;br&gt;&lt;font color='#8C5E3C'&gt;http://192.168.56.50&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.5;fontSize=12;fontColor=#6B3512;" vertex="1" parent="1">
+          <mxGeometry x="65" y="120" width="190" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="host_adapter" value="&lt;b&gt;Host-Only Adapter&lt;/b&gt;&lt;br&gt;&lt;font color='#8C5E3C'&gt;IP: 192.168.56.1&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.5;fontSize=12;fontColor=#6B3512;" vertex="1" parent="1">
+          <mxGeometry x="65" y="270" width="190" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_browser_adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="browser" target="host_adapter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- VIRTUAL NETWORK (WARM AMBER / GOLD) -->
+        <mxCell id="vnet_box" value="&lt;b&gt;Oracle VirtualBox&lt;/b&gt;&lt;br&gt;&lt;font color='#78350F'&gt;Host-Only Network&lt;br&gt;(192.168.56.0 / 24)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=13;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="340" y="260" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_adapter_vnet" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#8C7A6B;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="host_adapter" target="vnet_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- VM: WINDOWS SERVER LAB (TERRACOTTA / CEDAR) -->
+        <mxCell id="vm_box" value="&lt;b&gt;Windows Server Lab (VM)&lt;/b&gt;&lt;br&gt;&lt;font color='#8F3900'&gt;IP: 192.168.56.50&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF3EC;strokeColor=#D96B27;strokeWidth=2;verticalAlign=top;spacingTop=10;fontSize=14;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="580" y="60" width="360" height="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="firewall" value="&lt;b&gt;Windows Firewall&lt;/b&gt;&lt;br&gt;&lt;font color='#2D6A4F'&gt;Port 80 Allowed&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A33B4E;strokeWidth=1.5;fontSize=12;fontColor=#581423;" vertex="1" parent="1">
+          <mxGeometry x="640" y="120" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="iis" value="&lt;b&gt;IIS Web Server&lt;/b&gt;&lt;br&gt;&lt;font color='#8F3900'&gt;Port 80 (Reverse Proxy)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.5;fontSize=12;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="640" y="210" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nextjs" value="&lt;b&gt;Next.js Web App (Node.js)&lt;/b&gt;&lt;br&gt;&lt;font color='#2D6A4F'&gt;Port 3000&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.5;fontSize=12;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="640" y="310" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="postgres" value="&lt;b&gt;PostgreSQL Database&lt;/b&gt;&lt;br&gt;&lt;font color='#6B3512'&gt;Port 5432 (salarizedb)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.5;fontSize=12;fontColor=#6B3512;" vertex="1" parent="1">
+          <mxGeometry x="640" y="400" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- CONNECTORS -->
+        <mxCell id="edge_vnet_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#8C7A6B;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="vnet_box" target="firewall">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_fw_iis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="firewall" target="iis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_iis_app" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="iis" target="nextjs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_app_db" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="nextjs" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

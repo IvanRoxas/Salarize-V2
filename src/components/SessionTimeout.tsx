@@ -1,30 +1,53 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { logoutAction } from "@/app/actions/auth";
 
 const IDLE_TIMEOUT_MS = 180000; // 3 minutes
 const WARNING_DURATION_MS = 30000; // 30 seconds
+const STORAGE_KEY = 'salarize_last_activity';
 
 export default function SessionTimeout() {
   const router = useRouter();
   const [showWarning, setShowWarning] = useState(false);
   const [remainingTime, setRemainingTime] = useState(WARNING_DURATION_MS / 1000);
   
+  const showWarningRef = useRef(false);
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
   const warningInterval = useRef<NodeJS.Timeout | null>(null);
+  const lastUpdate = useRef(0);
 
-  const resetIdleTimer = () => {
-    if (showWarning) return; // Do not reset if warning is already showing
+  useEffect(() => {
+    showWarningRef.current = showWarning;
+  }, [showWarning]);
 
+  const scheduleIdleCheck = useCallback(() => {
     if (idleTimer.current) clearTimeout(idleTimer.current);
     
-    idleTimer.current = setTimeout(() => {
+    const lastActivityStr = localStorage.getItem(STORAGE_KEY);
+    const lastActivity = lastActivityStr ? parseInt(lastActivityStr, 10) : Date.now();
+    const timeSinceLastActivity = Date.now() - lastActivity;
+    const remainingIdleTime = IDLE_TIMEOUT_MS - timeSinceLastActivity;
+
+    if (remainingIdleTime <= 0) {
       setShowWarning(true);
       setRemainingTime(WARNING_DURATION_MS / 1000);
-    }, IDLE_TIMEOUT_MS);
-  };
+    } else {
+      idleTimer.current = setTimeout(scheduleIdleCheck, remainingIdleTime);
+    }
+  }, []);
+
+  const handleActivity = useCallback(() => {
+    if (showWarningRef.current) return;
+    const now = Date.now();
+    // Throttle to 1 second
+    if (now - lastUpdate.current > 1000) {
+      localStorage.setItem(STORAGE_KEY, now.toString());
+      lastUpdate.current = now;
+      scheduleIdleCheck();
+    }
+  }, [scheduleIdleCheck]);
 
   const handleLogout = async () => {
     await logoutAction();
@@ -33,21 +56,37 @@ export default function SessionTimeout() {
 
   const handleStaySignedIn = () => {
     setShowWarning(false);
-    resetIdleTimer();
+    localStorage.setItem(STORAGE_KEY, Date.now().toString());
+    scheduleIdleCheck();
   };
 
   useEffect(() => {
-    const events = ['mousemove', 'keydown', 'click', 'scroll'];
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, Date.now().toString());
+    }
     
-    events.forEach(event => document.addEventListener(event, resetIdleTimer));
-    resetIdleTimer();
+    const events = ['mousemove', 'keydown', 'click', 'scroll'];
+    events.forEach(event => document.addEventListener(event, handleActivity));
+    
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY) {
+        if (showWarningRef.current) {
+          setShowWarning(false);
+        }
+        scheduleIdleCheck();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    scheduleIdleCheck();
 
     return () => {
-      events.forEach(event => document.removeEventListener(event, resetIdleTimer));
+      events.forEach(event => document.removeEventListener(event, handleActivity));
+      window.removeEventListener('storage', handleStorageChange);
       if (idleTimer.current) clearTimeout(idleTimer.current);
       if (warningInterval.current) clearInterval(warningInterval.current);
     };
-  }, [showWarning]);
+  }, [handleActivity, scheduleIdleCheck]);
 
   useEffect(() => {
     if (showWarning) {

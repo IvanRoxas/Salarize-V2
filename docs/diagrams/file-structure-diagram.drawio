@@ -1,0 +1,135 @@
+<mxfile host="app.diagrams.net" modified="2026-10-26T00:35:00.000Z" agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="file-structure-diagram" name="5.2 File and Folder Structure">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="600" background="#FAF7F2" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ROOT NODE -->
+        <mxCell id="root_node" value="&lt;b&gt;salarize-v2 /&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EBE0;strokeColor=#8C7A6B;strokeWidth=2;fontSize=13;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="360" y="30" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 1: src / app / -->
+        <mxCell id="branch_app" value="&lt;b&gt;src / app /&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=1.8;fontSize=12;fontColor=#78350F;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="app_auth" value="(auth) /" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.2;fontSize=11;fontColor=#92400E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="app_dash" value="(dashboard) /" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.2;fontSize=11;fontColor=#92400E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="205" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="app_actions" value="actions /" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.2;fontSize=11;fontColor=#92400E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="250" width="180" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 2: src / components / -->
+        <mxCell id="branch_comp" value="&lt;b&gt;src / components /&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F7F2;strokeColor=#4D7C54;strokeWidth=1.8;fontSize=12;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="250" y="110" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_dash" value="dashboards /" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="250" y="160" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ui" value="ui /" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="250" y="205" width="180" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 3: src / lib / -->
+        <mxCell id="branch_lib" value="&lt;b&gt;src / lib /&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F7F2;strokeColor=#4D7C54;strokeWidth=1.8;fontSize=12;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="460" y="110" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="lib_prisma" value="prisma.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="460" y="160" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="lib_security" value="security.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="460" y="205" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="lib_email" value="email.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D7C54;strokeWidth=1.2;fontSize=11;fontColor=#1E3A24;" vertex="1" parent="1">
+          <mxGeometry x="460" y="250" width="180" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 4: prisma / -->
+        <mxCell id="branch_prisma" value="&lt;b&gt;prisma /&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF3EC;strokeColor=#C26D38;strokeWidth=1.8;fontSize=12;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="670" y="110" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="prisma_schema" value="schema.prisma" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.2;fontSize=11;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="670" y="160" width="180" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="prisma_seed" value="seed.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C26D38;strokeWidth=1.2;fontSize=11;fontColor=#6E2800;" vertex="1" parent="1">
+          <mxGeometry x="670" y="205" width="180" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- BOTTOM: ROOT CONFIGURATION CONTAINER -->
+        <mxCell id="config_container" value="&lt;b&gt;Root Configuration and Gateways&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EBE0;strokeColor=#8C7A6B;strokeWidth=1.8;verticalAlign=top;spacingTop=8;fontSize=12;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="810" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="cfg_web" value="web.config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C7A6B;strokeWidth=1.2;fontSize=11;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="60" y="355" width="175" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="cfg_next" value="next.config.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C7A6B;strokeWidth=1.2;fontSize=11;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="255" y="355" width="175" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="cfg_mid" value="src / middleware.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C7A6B;strokeWidth=1.2;fontSize=11;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="450" y="355" width="175" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="cfg_env" value=".env.example" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C7A6B;strokeWidth=1.2;fontSize=11;fontColor=#3D2E24;" vertex="1" parent="1">
+          <mxGeometry x="645" y="355" width="185" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- CONNECTORS FROM ROOT -->
+        <mxCell id="edge_root_app" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=1.8;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="root_node" target="branch_app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_comp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.8;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="root_node" target="branch_comp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_lib" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.8;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="root_node" target="branch_lib">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_root_prisma" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=1.8;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="root_node" target="branch_prisma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 1 CONNECTORS -->
+        <mxCell id="e_app_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="branch_app" target="app_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_auth_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="app_auth" target="app_dash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dash_act" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="app_dash" target="app_actions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 2 CONNECTORS -->
+        <mxCell id="e_comp_dash" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="branch_comp" target="comp_dash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dash_ui" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="comp_dash" target="comp_ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 3 CONNECTORS -->
+        <mxCell id="e_lib_prisma" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="branch_lib" target="lib_prisma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_prisma_sec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="lib_prisma" target="lib_security">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sec_email" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4D7C54;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="lib_security" target="lib_email">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 4 CONNECTORS -->
+        <mxCell id="e_prisma_sch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="branch_prisma" target="prisma_schema">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sch_seed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C26D38;strokeWidth=1.2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="prisma_schema" target="prisma_seed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
